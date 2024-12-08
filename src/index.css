@@ -1,4 +1,12 @@
+@font-face {
+  font-family: "Inter";
+  src: local("Inter"),
+    url("./assets/fonts/Inter/Inter_18pt-Regular.ttf") format("truetype");
+}
+
 body {
+  font-family: "Inter", sans-serif;
   background: #f6f7f8;
-  color: black;
+  color: #000000;
+  margin: unset;
 }
