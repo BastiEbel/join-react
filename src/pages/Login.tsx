@@ -10,7 +10,9 @@ export default function Login() {
         <img className="logo-img" src={logo} alt="Logo Image" />
         <div className="container-signup">
           <p>Not a Join user?</p>
-          <Button valueText="Sign up" href="/signup" className="btn-style" />
+          <Button href="/signup" className="btn-style">
+            Sign up
+          </Button>
         </div>
       </header>
       <Form oversign="Log in" isLogIn={true} />

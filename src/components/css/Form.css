@@ -5,11 +5,11 @@ form {
   align-items: center;
   flex-direction: column;
   width: 652px;
-  height: 449px;
   background: #ffffff;
   border-radius: 30px;
   box-shadow: 0px 0px 10px 0px rgba(121, 121, 121, 0.8);
   padding: 48px 115px;
+  position: relative;
 }
 
 @keyframes login-animate {
@@ -18,6 +18,22 @@ form {
   }
   100% {
     opacity: 1;
+  }
+}
+
+.arrow-left {
+  width: 21px;
+  height: 21px;
+  position: absolute;
+  top: 12%;
+  left: 8%;
+  &:hover {
+    cursor: pointer;
+    top: 11%;
+    left: 7%;
+    background: #e7e6e6;
+    border-radius: 50%;
+    padding: 8px;
   }
 }
 
@@ -46,7 +62,6 @@ form {
 
 .container-inputs {
   width: 422px;
-  height: 152px;
   gap: 20px;
   display: flex;
   justify-content: space-evenly;
@@ -57,7 +72,7 @@ form {
   width: 322px;
   height: 48px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-top: 48px;
 }
@@ -98,6 +113,7 @@ form {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 32px;
   &:hover {
     cursor: pointer;
     border-color: #29abe2;
