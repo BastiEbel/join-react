@@ -5,9 +5,15 @@ type ButtonProps = {
   className: string;
   href: string;
   children: ReactNode;
+  disabled: boolean;
 };
 
-export default function Button({ className, href, children }: ButtonProps) {
+export default function Button({
+  className,
+  href,
+  disabled,
+  children,
+}: ButtonProps) {
   const navigate = useNavigate();
 
   function onClickHandler() {
@@ -15,7 +21,7 @@ export default function Button({ className, href, children }: ButtonProps) {
   }
 
   return (
-    <button className={className} onClick={onClickHandler}>
+    <button disabled={disabled} className={className} onClick={onClickHandler}>
       {children}
     </button>
   );

@@ -6,6 +6,7 @@ import lock from "../../assets/image/lock.png";
 import leftArrow from "../../assets/image/arrowLeft.png";
 import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
+import { ChangeEvent, useState } from "react";
 
 type FormProps = {
   oversign: string;
@@ -14,6 +15,14 @@ type FormProps = {
 
 export default function Form({ oversign, isLogIn }: FormProps) {
   const navigate = useNavigate();
+  const [checked, setChecked] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(true);
+
+  function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
+    const isChecked = event.target.checked;
+    setChecked(isChecked);
+    setDisabled(!isChecked);
+  }
 
   function onClickBackHandler() {
     navigate("/");
@@ -35,19 +44,22 @@ export default function Form({ oversign, isLogIn }: FormProps) {
       <div className="container-inputs">
         {!isLogIn && (
           <Input
+            className=""
             logoPath={person}
             placeholder="Name"
             type="text"
-            required={false}
+            required={true}
           />
         )}
         <Input
+          className=""
           logoPath={mail}
           placeholder="Email"
           type="email"
           required={true}
         />
         <Input
+          className=""
           logoPath={lock}
           placeholder="Password"
           type="password"
@@ -55,6 +67,7 @@ export default function Form({ oversign, isLogIn }: FormProps) {
         />
         {!isLogIn && (
           <Input
+            className=""
             logoPath={lock}
             placeholder="Confirm Password"
             type="password"
@@ -65,17 +78,39 @@ export default function Form({ oversign, isLogIn }: FormProps) {
       <div className="container-btn">
         {isLogIn ? (
           <>
-            <Button className="btn-login" href="">
+            <Button disabled={false} className="btn-login" href="">
               Log in
             </Button>
-            <Button className="btn-guest" href="">
+            <Button disabled={false} className="btn-guest" href="">
               Guest Log in
             </Button>
           </>
         ) : (
-          <Button className="btn-login" href="">
-            Sign up
-          </Button>
+          <div className="container-signUp">
+            <span className="police">
+              <label className="custom-checkbox">
+                <Input
+                  className="input"
+                  logoPath=""
+                  required={false}
+                  placeholder=""
+                  checked={checked}
+                  onChange={onChangeHandler}
+                  type="checkbox"
+                />
+                <span className="checkmark"></span>
+              </label>
+              <p>
+                <span>
+                  I accept the&nbsp;
+                  <a href="">Privacy police</a>
+                </span>
+              </p>
+            </span>
+            <Button disabled={disabled} className="btn-login" href="">
+              Sign up
+            </Button>
+          </div>
         )}
       </div>
     </form>
