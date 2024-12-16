@@ -176,7 +176,7 @@ form {
 }
 
 .btn-login:disabled {
-  background: #3c4d65;
+  background: #40526c;
   &:hover {
     cursor: default;
     box-shadow: unset;
