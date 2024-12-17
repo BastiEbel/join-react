@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import "../css/Navbar.css";
 import profilLogo from "../../assets/image/joinLogoVector.png";
+import DataProtection from "./DataProtection";
 
 export default function Navbar() {
   const [nav, setNav] = useState<boolean>(false);
@@ -15,7 +16,7 @@ export default function Navbar() {
       } */
   return (
     <header className="navbar">
-      <img src={profilLogo} alt="S.Ebel" className="logo" />
+      <img src={profilLogo} alt="Logo Join" className="logo" />
       <ul className="nav-links">
         <li>
           <a href="">Summary</a>
@@ -49,6 +50,7 @@ export default function Navbar() {
           </li>
         </ul>
       </nav>
+      <DataProtection />
     </header>
   );
 }

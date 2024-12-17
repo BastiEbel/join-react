@@ -1,6 +1,6 @@
 .navbar {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   flex-direction: column;
   padding: 64px 0px 64px 0px;
@@ -8,16 +8,21 @@
   position: fixed;
   height: 100vh;
   width: 232px;
+  gap: 15px;
   z-index: 4;
   top: 0px;
   left: 0px;
+  box-sizing: border-box;
 }
 
 .logo {
-  height: 80px;
+  width: 100px;
+  height: 122px;
+  margin-bottom: 64px;
 }
 
 .nav-links {
+  height: 229px;
   padding: unset;
   display: flex;
   list-style: none;
