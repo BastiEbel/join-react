@@ -15,42 +15,33 @@ export default function Navbar() {
         setNav(false);
       } */
   return (
-    <header className="navbar">
-      <img src={profilLogo} alt="Logo Join" className="logo" />
-      <ul className="nav-links">
-        <li>
-          <a href="">Summary</a>
-        </li>
-        <li>
-          <a href="">Add Task</a>
-        </li>
-        <li>
-          <a href="">Board</a>
-        </li>
-        <li>
-          <a href="">Contacts</a>
-        </li>
-      </ul>
-      <div onClick={toggleNav} className="menu-icon">
+    <>
+      <div
+        onClick={toggleNav}
+        className={nav ? "menu-icon active" : "menu-icon"}
+      >
         {nav ? <AiOutlineClose size={30} /> : <AiOutlineMenu size={30} />}
       </div>
       <nav className={nav ? "nav-menu active" : "nav-menu"}>
-        <ul>
-          <li>
-            <a href="">Summary</a>
-          </li>
-          <li>
-            <a href="">Add Task</a>
-          </li>
-          <li>
-            <a href="">Board</a>
-          </li>
-          <li>
-            <a href="">Contacts</a>
-          </li>
-        </ul>
+        <div className="navbar">
+          <img src={profilLogo} alt="Logo Join" className="logo" />
+          <ul>
+            <li>
+              <a href="">Summary</a>
+            </li>
+            <li>
+              <a href="">Add Task</a>
+            </li>
+            <li>
+              <a href="">Board</a>
+            </li>
+            <li>
+              <a href="">Contacts</a>
+            </li>
+          </ul>
+          <DataProtection />
+        </div>
       </nav>
-      <DataProtection />
-    </header>
+    </>
   );
 }

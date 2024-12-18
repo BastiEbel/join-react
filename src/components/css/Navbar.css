@@ -5,13 +5,12 @@
   flex-direction: column;
   padding: 64px 0px 64px 0px;
   background-color: #2a3647;
-  position: fixed;
+  position: absolute;
   height: 100vh;
   width: 232px;
   gap: 15px;
   z-index: 4;
-  top: 0px;
-  left: 0px;
+  top: -96px;
   box-sizing: border-box;
 }
 
@@ -55,29 +54,37 @@
 }
 
 .menu-icon {
-  display: none;
+  display: block;
+  position: absolute;
+  top: 36px;
+  left: 36px;
+  z-index: 20;
   cursor: pointer;
+  color: black;
+}
+
+.menu-icon.active {
+  top: 16px;
+  left: 180px;
   color: #ffffff;
 }
 
 .nav-menu {
   display: none;
-  position: fixed;
+  position: sticky;
   top: 0;
-  right: -100%;
+  left: -100%;
   height: 100%;
-  width: 100%;
-  background-color: #141d2f;
-  z-index: 20;
+  z-index: 4;
   transition: left 0.3s ease;
 }
 
 .nav-menu.active {
-  right: 0;
+  width: 232px;
+  left: 0;
   list-style: armenian;
-  display: unset;
-  top: 100px;
-  background-color: #141d2fcc;
+  display: block;
+  top: 0;
 }
 
 .nav-menu ul {
