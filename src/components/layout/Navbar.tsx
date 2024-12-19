@@ -5,7 +5,14 @@ import profilLogo from "../../assets/image/joinLogoVector.png";
 import DataProtection from "./DataProtection";
 
 export default function Navbar() {
-  const [nav, setNav] = useState<boolean>(false);
+  const [nav, setNav] = useState<boolean>(true);
+
+  const navItems = [
+    { name: "Summary", path: "/home/summary" },
+    { name: "Add Task", path: "/home/addTask" },
+    { name: "Board", path: "/home/board" },
+    { name: "Contacts", path: "/home/contacts" },
+  ];
 
   function toggleNav() {
     setNav(!nav);
@@ -25,20 +32,15 @@ export default function Navbar() {
       <nav className={nav ? "nav-menu active" : "nav-menu"}>
         <div className="navbar">
           <img src={profilLogo} alt="Logo Join" className="logo" />
-          <ul>
-            <li>
-              <a href="">Summary</a>
-            </li>
-            <li>
-              <a href="">Add Task</a>
-            </li>
-            <li>
-              <a href="">Board</a>
-            </li>
-            <li>
-              <a href="">Contacts</a>
-            </li>
-          </ul>
+          {nav && (
+            <ul>
+              {navItems.map((item) => (
+                <li key={item.name}>
+                  <a href={item.path}>{item.name}</a>
+                </li>
+              ))}
+            </ul>
+          )}
           <DataProtection />
         </div>
       </nav>
