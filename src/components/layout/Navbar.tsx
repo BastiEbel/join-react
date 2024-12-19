@@ -2,16 +2,22 @@ import { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import "../css/Navbar.css";
 import profilLogo from "../../assets/image/joinLogoVector.png";
+import summary from "../../assets/image/summary.png";
+import addTask from "../../assets/image/addTask.png";
+import board from "../../assets/image/board.png";
+import contacts from "../../assets/image/contacts.png";
 import DataProtection from "./DataProtection";
+import { useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const [nav, setNav] = useState<boolean>(true);
+  const location = useLocation();
 
   const navItems = [
-    { name: "Summary", path: "/home/summary" },
-    { name: "Add Task", path: "/home/addTask" },
-    { name: "Board", path: "/home/board" },
-    { name: "Contacts", path: "/home/contacts" },
+    { name: "Summary", path: "/home/summary", img: summary },
+    { name: "Add Task", path: "/home/addTask", img: addTask },
+    { name: "Board", path: "/home/board", img: board },
+    { name: "Contacts", path: "/home/contacts", img: contacts },
   ];
 
   function toggleNav() {
@@ -31,11 +37,22 @@ export default function Navbar() {
       </div>
       <nav className={nav ? "nav-menu active" : "nav-menu"}>
         <div className="navbar">
-          <img src={profilLogo} alt="Logo Join" className="logo" />
+          <img
+            style={{ width: "auto", height: "auto" }}
+            src={profilLogo}
+            alt="Logo Join"
+            className="logo"
+          />
           {nav && (
             <ul>
               {navItems.map((item) => (
-                <li key={item.name}>
+                <li
+                  className={
+                    location.pathname === item.path ? "selectedBG" : ""
+                  }
+                  key={item.name}
+                >
+                  <img src={item.img} alt={item.name} />
                   <a href={item.path}>{item.name}</a>
                 </li>
               ))}

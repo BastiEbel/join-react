@@ -1,0 +1,29 @@
+section {
+  padding: 110px 96px 110px 96px;
+  box-sizing: border-box;
+}
+.oversign {
+  width: 625px;
+  height: 73px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.oversign h1 {
+  font-size: 61px;
+  font-weight: 700;
+  line-height: 73.2px;
+}
+
+.oversign h2 {
+  font-size: 27px;
+  font-weight: 400;
+  line-height: 32.4px;
+  color: #2a3647;
+}
+
+.dash {
+  height: 59px;
+  border: 3px solid #29abe2;
+}
