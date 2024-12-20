@@ -5,7 +5,7 @@ import Form from "../components/layout/Form";
 
 export default function Login() {
   return (
-    <main>
+    <main className="login-main">
       <div>
         <img className="logo-img" src={logo} alt="Logo Image" />
         <div className="container-signup">
