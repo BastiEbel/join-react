@@ -2,7 +2,8 @@ import { ChangeEvent, InputHTMLAttributes } from "react";
 import "../css/Input.css";
 
 type InputProps = {
-  logoPath: string;
+  logoPath?: string;
+  labelText?: string;
   placeholder: string;
   className: string;
   required: boolean;
@@ -13,6 +14,7 @@ type InputProps = {
 
 export default function Input({
   logoPath,
+  labelText,
   placeholder,
   className,
   type,
@@ -34,6 +36,7 @@ export default function Input({
   } else {
     return (
       <div className="container-input">
+        {labelText && <label htmlFor={labelText}>{labelText}</label>}
         <input {...inputProps} />
         {logoPath && <img src={logoPath} alt="Logo for Input" />}
       </div>

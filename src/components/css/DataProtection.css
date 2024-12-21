@@ -13,4 +13,9 @@
   line-height: 19.2px;
   text-decoration: unset;
   color: #a8a8a8;
+  &:hover {
+    cursor: pointer;
+    color: #29abe2;
+    font-size: 18px;
+  }
 }

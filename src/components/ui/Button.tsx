@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 type ButtonProps = {
   className: string;
-  href: string;
+  href?: string;
   children: ReactNode;
-  disabled: boolean;
+  disabled?: boolean;
 };
 
 export default function Button({
@@ -17,7 +17,9 @@ export default function Button({
   const navigate = useNavigate();
 
   function onClickHandler() {
-    navigate(href);
+    if (href) {
+      navigate(href);
+    }
   }
 
   return (
