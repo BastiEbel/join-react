@@ -11,7 +11,8 @@ body {
   margin: unset;
 }
 
-input {
+input,
+select {
   outline: none;
   border: unset;
 }

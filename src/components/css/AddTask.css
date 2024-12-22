@@ -15,12 +15,60 @@
   align-items: center;
 }
 
+.input-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 440px;
+  height: 376px;
+}
+
 .input,
 .textArea {
+  display: flex;
+  box-sizing: border-box;
   width: 440px;
+  gap: 10px;
+  border: 2px solid #d1d1d1;
+  border-radius: 10px;
+  margin-top: 8px;
+
+  &::placeholder {
+    font-size: 20px;
+    font-weight: 400;
+  }
+}
+
+.input {
   height: 48px;
   padding: 12px 21px 12px 21px;
-  gap: 10px;
-  border-radius: 10px 0px 0px 0px;
-  border: 1px solid #000000;
+}
+
+.textArea {
+  height: 120px;
+  padding: 18px 16px 18px 16px;
+  &::placeholder {
+    position: absolute;
+    top: 12px;
+    left: 21px;
+  }
+}
+
+.select-container {
+  width: 440px;
+  height: 48px;
+  padding: 0px 16px 0px 16px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  margin-top: 8px;
+  border: 2px solid #d1d1d1;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  &:focus {
+    background-color: #ffffff;
+  }
+  &:hover {
+    cursor: pointer;
+  }
 }

@@ -1,12 +1,13 @@
-import { ChangeEvent, InputHTMLAttributes } from "react";
+import { ChangeEvent, InputHTMLAttributes, ReactNode } from "react";
 
 type InputProps = {
   icon?: string;
-  labelText?: string;
+  labelText?: ReactNode;
   placeholder: string;
   className: string;
   required: boolean;
   checked?: boolean;
+  textArea?: boolean;
   type: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 };
@@ -18,6 +19,7 @@ export default function Input({
   className,
   type,
   checked,
+  textArea,
   required,
   onChange,
 }: InputProps) {
@@ -32,13 +34,26 @@ export default function Input({
   if (type === "checkbox") {
     inputProps.checked = checked;
     return <input {...inputProps} style={{ display: "none" }} />;
-  } else {
+  } else if (!textArea) {
     return (
-      <>
-        {labelText && <label htmlFor={labelText}>{labelText}</label>}
+      <div>
+        {labelText && (
+          <label style={{ fontSize: "20px", fontWeight: "400" }}>
+            {labelText}
+          </label>
+        )}
         <input {...inputProps} />
         {icon && <img src={icon} alt="Logo for Input" />}
-      </>
+      </div>
     );
+  } else {
+    <div>
+      {labelText && (
+        <label style={{ fontSize: "20px", fontWeight: "400" }} htmlFor="text">
+          {labelText}
+        </label>
+      )}
+      <input {...inputProps} />
+    </div>;
   }
 }
