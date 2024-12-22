@@ -10,3 +10,19 @@ body {
   color: #000000;
   margin: unset;
 }
+
+input {
+  outline: none;
+  border: unset;
+}
+
+::placeholder {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: #d1d1d1;
+}
+
+.d-none {
+  display: none;
+}
