@@ -72,11 +72,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: auto;
-  height: auto;
   gap: 10px;
   border-radius: 10px;
-  border: 1px solid #d1d1d1;
+  border: 2px solid #d1d1d1;
   padding: 12px 21px;
   box-sizing: border-box;
   background: #ffffff;

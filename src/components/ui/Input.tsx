@@ -36,24 +36,38 @@ export default function Input({
     return <input {...inputProps} style={{ display: "none" }} />;
   } else if (!textArea) {
     return (
-      <div>
+      <>
         {labelText && (
           <label style={{ fontSize: "20px", fontWeight: "400" }}>
             {labelText}
           </label>
         )}
-        <input {...inputProps} />
-        {icon && <img src={icon} alt="Logo for Input" />}
-      </div>
+        {icon && labelText ? (
+          <div
+            style={{ marginTop: "8px", width: "440px" }}
+            className="container-input"
+          >
+            <input {...inputProps} />
+            <img src={icon} alt="Logo for Input" />
+          </div>
+        ) : (
+          <>
+            <input {...inputProps} />
+            {icon && <img src={icon} alt="Logo for Input" />}
+          </>
+        )}
+      </>
     );
   } else {
-    <div>
-      {labelText && (
-        <label style={{ fontSize: "20px", fontWeight: "400" }} htmlFor="text">
-          {labelText}
-        </label>
-      )}
-      <input {...inputProps} />
-    </div>;
+    return (
+      <>
+        {labelText && (
+          <label style={{ fontSize: "20px", fontWeight: "400" }} htmlFor="text">
+            {labelText}
+          </label>
+        )}
+        <input {...inputProps} />
+      </>
+    );
   }
 }

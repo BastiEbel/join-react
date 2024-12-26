@@ -49,7 +49,13 @@ export default function Container({
       className="summary-item"
     >
       {image && (
-        <img src={changeImage} alt={description} className="summary-image" />
+        <div style={{ background: "#FF3D00" }} className="summary-image">
+          <img
+            style={date ? { width: "34px", height: "25px" } : undefined}
+            src={changeImage}
+            alt={description}
+          />
+        </div>
       )}
       <div className="summary-content">
         <p className="amount">{amount}</p>

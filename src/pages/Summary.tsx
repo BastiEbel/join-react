@@ -2,7 +2,7 @@ import "../components/css/Summary.css";
 import Container from "../components/layout/Container";
 import pencilwhite from "../assets/image/pencilwhite.png";
 import hookwhite from "../assets/image/hookwhite.png";
-import urgent from "../assets/image/urgent.png";
+import urgentWhite from "../assets/image/urgentWhite.png";
 
 export default function Summary() {
   const summaryData = [
@@ -22,7 +22,7 @@ export default function Summary() {
     },
     {
       id: 3,
-      image: urgent,
+      image: urgentWhite,
       amount: 1,
       description: "Urgent",
       date: "20 December 2024",

@@ -15,11 +15,7 @@ export default function SelectBox({
 }: SelectBoxProps) {
   return (
     <div>
-      <label
-        style={{ fontSize: "20px", fontWeight: "400", marginBottom: "8px" }}
-      >
-        {labelText}
-      </label>
+      <label style={{ fontSize: "20px", fontWeight: "400" }}>{labelText}</label>
       <select className={className} id="select">
         <option>{text}</option>
         {children}

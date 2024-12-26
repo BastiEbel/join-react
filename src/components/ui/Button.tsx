@@ -1,29 +1,28 @@
-import { ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
+import { CSSProperties, ReactNode } from "react";
 
 type ButtonProps = {
   className: string;
   href?: string;
   children: ReactNode;
+  style?: CSSProperties;
   disabled?: boolean;
+  onClick: () => void;
 };
 
 export default function Button({
   className,
-  href,
   disabled,
+  style,
+  onClick,
   children,
 }: ButtonProps) {
-  const navigate = useNavigate();
-
-  function onClickHandler() {
-    if (href) {
-      navigate(href);
-    }
-  }
-
   return (
-    <button disabled={disabled} className={className} onClick={onClickHandler}>
+    <button
+      style={style}
+      disabled={disabled}
+      className={className}
+      onClick={onClick}
+    >
       {children}
     </button>
   );

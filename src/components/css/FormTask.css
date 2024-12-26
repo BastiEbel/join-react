@@ -1,0 +1,135 @@
+.form-addTask {
+  display: flex;
+  align-items: center;
+}
+
+.container-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 440px;
+  height: 376px;
+}
+
+.input,
+.textArea {
+  display: flex;
+  box-sizing: border-box;
+  width: 440px;
+  gap: 10px;
+  border: 2px solid #d1d1d1;
+  border-radius: 10px;
+  margin-top: 8px;
+
+  &::placeholder {
+    font-size: 20px;
+    font-weight: 400;
+  }
+}
+
+.input {
+  height: 48px;
+  padding: 12px 21px 12px 21px;
+}
+
+.input[type="date"]::before {
+  content: attr(placeholder);
+  color: #d1d1d1;
+}
+
+.textArea {
+  height: 120px;
+  padding: 18px 16px 18px 16px;
+  &::placeholder {
+    position: absolute;
+    top: 12px;
+    left: 21px;
+  }
+}
+
+.select-container {
+  width: 440px;
+  height: 48px;
+  padding: 0px 16px 0px 16px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  margin-top: 8px;
+  border: 2px solid #d1d1d1;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  &:focus {
+    background-color: #ffffff;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.spacer-addTask {
+  height: 424px;
+  margin: 0px 64px 0px 64px;
+  border: 3px solid #d1d1d1;
+}
+
+.container-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 440px;
+  height: 416px;
+}
+
+.selectDate {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 2px solid #d1d1d1;
+  border-radius: 10px;
+  width: 440px;
+  height: 48px;
+  padding: 12px 21px 12px 21px;
+  margin-top: 8px;
+}
+
+.title-prio {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  margin-bottom: 8px;
+}
+
+.container-btn-prio {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-prio {
+  width: 136px;
+  height: 56px;
+  padding: 16px 10px 16px 10px;
+  gap: 8px;
+  border-radius: 10px;
+  border: 2px solid #d1d1d1;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 0px 4px 5px -1px #d1d1d1;
+  }
+}
+
+.btn-prio img {
+  width: 20px;
+  height: 14.5px;
+  margin-left: 8px;
+}
+
+.input-subtask {
+  width: 100%;
+  height: 24px;
+}
