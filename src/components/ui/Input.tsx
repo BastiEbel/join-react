@@ -1,6 +1,7 @@
 import { ChangeEvent, InputHTMLAttributes, ReactNode } from "react";
 
 type InputProps = {
+  id?: string;
   icon?: string;
   labelText?: ReactNode;
   placeholder: string;
@@ -13,6 +14,7 @@ type InputProps = {
 };
 
 export default function Input({
+  id,
   icon,
   labelText,
   placeholder,
@@ -25,6 +27,7 @@ export default function Input({
 }: InputProps) {
   const inputProps: InputHTMLAttributes<HTMLInputElement> = {
     placeholder,
+    id,
     type,
     required,
     onChange,

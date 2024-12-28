@@ -1,6 +1,14 @@
 .form-addTask {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.container-task {
+  display: flex;
+  align-items: flex-start;
+  padding: unset;
 }
 
 .container-left {
@@ -30,11 +38,6 @@
 .input {
   height: 48px;
   padding: 12px 21px 12px 21px;
-}
-
-.input[type="date"]::before {
-  content: attr(placeholder);
-  color: #d1d1d1;
 }
 
 .textArea {
@@ -72,7 +75,7 @@
   border: 3px solid #d1d1d1;
 }
 
-.container-right {
+.priority-section {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -97,14 +100,14 @@
   font-size: 20px;
   font-weight: 400;
   line-height: 24px;
-  margin-bottom: 8px;
 }
 
-.container-btn-prio {
+.btn-group {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 8px;
 }
 
 .btn-prio {
@@ -132,4 +135,86 @@
 .input-subtask {
   width: 100%;
   height: 24px;
+}
+
+.form-footer {
+  width: 1010px;
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-footer label {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19.2px;
+  color: #959595;
+}
+
+.form-footer span {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19.2px;
+  color: red;
+}
+
+.submitting-btn {
+  width: 309px;
+  height: 59px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.clear-btn {
+  width: 110px;
+  height: 56px;
+  padding: 16px;
+  box-sizing: border-box;
+  gap: 4px;
+  border-radius: 10px;
+  border: 1px solid #2a3647;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  &:hover {
+    border: 1px solid #29abe2;
+    cursor: pointer;
+    color: #29abe2;
+  }
+}
+
+.clear-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+.create-btn {
+  width: 183px;
+  height: 56px;
+  padding: 16px;
+  gap: 4px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 25.2px;
+  color: #ffffff;
+  background: #2a3647;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  &:hover {
+    cursor: pointer;
+    background: #29abe2;
+  }
+
+  &:disabled {
+    background: #37465c;
+    cursor: default;
+  }
 }
