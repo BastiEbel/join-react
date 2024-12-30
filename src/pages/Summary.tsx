@@ -1,5 +1,5 @@
 import "../components/css/Summary.css";
-import Container from "../components/layout/Container";
+import ContainerSummary from "../components/layout/ContainerSummary";
 import pencilwhite from "../assets/image/pencilwhite.png";
 import hookwhite from "../assets/image/hookwhite.png";
 import urgentWhite from "../assets/image/urgentWhite.png";
@@ -70,7 +70,7 @@ export default function Summary() {
       <main className="container-summary">
         <div className="summary-grid">
           {summaryData.map((item) => (
-            <Container
+            <ContainerSummary
               key={item.id}
               image={item.image}
               amount={item.amount}

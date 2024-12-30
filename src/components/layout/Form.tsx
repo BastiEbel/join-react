@@ -48,6 +48,8 @@ export default function Form({ oversign, isLogIn }: FormProps) {
   function onClickBackHandler() {
     navigate("/");
   }
+
+  function onClickLoginHandler() {}
   return (
     <form className="form-signIn" action="">
       {!isLogIn && (
@@ -78,6 +80,7 @@ export default function Form({ oversign, isLogIn }: FormProps) {
               }`}
             >
               <Input
+                id={inputProp.placeholder}
                 className="input-signIn"
                 required
                 placeholder={inputProp.placeholder}
@@ -90,10 +93,18 @@ export default function Form({ oversign, isLogIn }: FormProps) {
       <div className="container-btn">
         {isLogIn ? (
           <>
-            <Button disabled={!isChecked} className="btn-login" href="">
+            <Button
+              onClick={onClickLoginHandler}
+              disabled={!isChecked}
+              className="btn-login"
+            >
               Log in
             </Button>
-            <Button disabled={!isChecked} className="btn-guest" href="">
+            <Button
+              onClick={onClickLoginHandler}
+              disabled={!isChecked}
+              className="btn-guest"
+            >
               Guest Log in
             </Button>
           </>
@@ -118,7 +129,12 @@ export default function Form({ oversign, isLogIn }: FormProps) {
                 </span>
               </p>
             </span>
-            <Button disabled={!isChecked} className="btn-login" href="">
+            <Button
+              onClick={onClickLoginHandler}
+              disabled={!isChecked}
+              className="btn-login"
+              href=""
+            >
               Sign up
             </Button>
           </div>

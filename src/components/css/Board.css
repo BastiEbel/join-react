@@ -1,0 +1,105 @@
+.container-board {
+  box-sizing: border-box;
+  padding: 64px 96px 0px 96px;
+}
+
+.header-board {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 208px;
+  width: 100%;
+}
+
+.header-board h1 {
+  font-size: 61px;
+  font-weight: 700;
+  line-height: 73.2px;
+  margin: unset;
+}
+
+.section-search-task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 504px;
+  height: 48px;
+  gap: 32px;
+}
+
+.input-findTask {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 312px;
+  height: 48px;
+  padding: 8px 16px 8px 16px;
+  gap: 10px;
+  border-radius: 10px;
+  border: 1px solid #d1d1d1;
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+.find-task {
+  width: 232px;
+  height: 32px;
+  border-right: 1px solid #d1d1d1;
+}
+
+.btn-addTask {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 160px;
+  height: 48px;
+  padding: 8px 12px 8px 12px;
+  gap: 4px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background: #2a3647;
+  color: #ffffff;
+  font-size: 21px;
+  line-height: 25.2px;
+  font-weight: 700;
+}
+
+.btn-addTask img {
+  width: 32px;
+  height: 32px;
+}
+
+.container-board-task {
+  width: 100%;
+  height: calc(100vh - 368px);
+  overflow-x: scroll;
+  padding: unset;
+  display: flex;
+  justify-content: space-between;
+}
+
+.prioTask {
+  width: 244px;
+  height: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0px 16px 0px 16px;
+}
+
+.prioTask label {
+  color: #42526e;
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.prioTask img {
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  padding: 3px;
+  gap: 10px;
+  border-radius: 8px;
+  border: 2px solid #2a3647;
+}

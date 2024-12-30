@@ -14,10 +14,10 @@ export default function Navbar() {
   const location = useLocation();
 
   const navItems = [
-    { name: "Summary", path: "/home/summary", img: summary },
-    { name: "Add Task", path: "/home/addTask", img: addTask },
-    { name: "Board", path: "/home/board", img: board },
-    { name: "Contacts", path: "/home/contacts", img: contacts },
+    { name: "Summary", path: "/summary", img: summary },
+    { name: "Add Task", path: "/addTask", img: addTask },
+    { name: "Board", path: "/board", img: board },
+    { name: "Contacts", path: "/contacts", img: contacts },
   ];
 
   function toggleNav() {
