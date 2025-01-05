@@ -34,13 +34,13 @@ export default function Board() {
       </header>
       <section className="container-board-task">
         {priorityItems.map((prioItem) => (
-          <>
+          <div key={prioItem.priority}>
             <div className="prioTask">
               <label>{prioItem.priority}</label>
               {prioItem.image !== "" && <img src={prioItem.image} alt="Plus" />}
             </div>
             <div className="board-task"></div>
-          </>
+          </div>
         ))}
       </section>
     </main>

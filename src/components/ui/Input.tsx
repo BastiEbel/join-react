@@ -41,7 +41,7 @@ export default function Input({
     return (
       <>
         {labelText && (
-          <label style={{ fontSize: "20px", fontWeight: "400" }}>
+          <label htmlFor={type} style={{ fontSize: "20px", fontWeight: "400" }}>
             {labelText}
           </label>
         )}
@@ -65,7 +65,7 @@ export default function Input({
     return (
       <>
         {labelText && (
-          <label style={{ fontSize: "20px", fontWeight: "400" }} htmlFor="text">
+          <label style={{ fontSize: "20px", fontWeight: "400" }} htmlFor={type}>
             {labelText}
           </label>
         )}

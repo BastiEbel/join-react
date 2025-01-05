@@ -62,6 +62,12 @@
   font-size: 21px;
   line-height: 25.2px;
   font-weight: 700;
+  &:hover {
+    cursor: pointer;
+    background: #29abe2;
+    border: unset;
+    box-shadow: 0px 6px 11px -4px rgba(0, 0, 0, 0.64);
+  }
 }
 
 .btn-addTask img {

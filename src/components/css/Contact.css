@@ -1,0 +1,98 @@
+.container-contacts {
+  width: 100%;
+  margin-top: 4px;
+  display: flex;
+}
+
+.nav-contacts {
+  overflow-x: scroll;
+  width: 456px;
+  height: calc(100vh - 100px);
+  background: #ffffff;
+  padding: 22.5px 0px 0px 0px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.btn-addPerson {
+  width: 352px;
+  height: 56px;
+  padding: 12px 0px 12px 0px;
+  gap: 16px;
+  border-radius: 10px;
+  background: #2a3647;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 25.2px;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    cursor: pointer;
+    background: #29abe2;
+    border: unset;
+    box-shadow: 0px 6px 11px -4px rgba(0, 0, 0, 0.64);
+  }
+}
+
+.btn-addPerson img {
+  width: 32px;
+  height: 32px;
+}
+
+.alphabet {
+  width: 352px;
+  height: 58px;
+  padding: 17px 36px 17px 36px;
+  box-sizing: border-box;
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 2px solid #d1d1d1;
+}
+
+.alphabet-letter {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.container-contact-info {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 456px);
+  padding: 96px 0px 0px 32px;
+  box-sizing: border-box;
+}
+
+.contact-info {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 569px;
+  max-height: 73px;
+}
+
+.contact-info h1 {
+  font-size: 61px;
+  font-weight: 700;
+  line-height: 73.2px;
+  color: #000000;
+  margin: unset;
+}
+
+.contact-info div {
+  height: 59px;
+  border: 3px solid #29abe2;
+}
+
+.contact-info h2 {
+  font-size: 27px;
+  font-weight: 400;
+  line-height: 32.4px;
+  color: #2a3647;
+  margin: unset;
+}

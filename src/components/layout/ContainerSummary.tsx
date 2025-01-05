@@ -1,7 +1,7 @@
 import { useState } from "react";
 import hookblack from "../../assets/image/hookblack.png";
 import pencilblack from "../../assets/image/pencilblack.png";
-import "../css/Container.css";
+import "../css/ContainerSummary.css";
 
 type ContainerProps = {
   width: string;
