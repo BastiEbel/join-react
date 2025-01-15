@@ -96,7 +96,6 @@ export default function FormTask() {
         <div className="container-left">
           <div>
             <Input
-              id="taskTitle"
               className="input"
               required
               type="text"
@@ -131,7 +130,6 @@ export default function FormTask() {
         <div className="priority-section">
           <div>
             <Input
-              id="taskDueDate"
               className="selectDate"
               required={true}
               type="date"
@@ -172,7 +170,6 @@ export default function FormTask() {
           </SelectBox>
           <div>
             <Input
-              id="taskSubtask"
               required={false}
               labelText="Subtasks"
               icon={plusTask}

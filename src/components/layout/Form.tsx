@@ -1,47 +1,73 @@
 import "../css/Form.css";
 import Input from "../ui/Input";
-import person from "../../assets/image/person.png";
-import mail from "../../assets/image/mail.png";
-import lock from "../../assets/image/lock.png";
-import leftArrow from "../../assets/image/arrowLeft.png";
+import personIcon from "../../assets/image/person.png";
+import mailIcon from "../../assets/image/mail.png";
+import lockIcon from "../../assets/image/lock.png";
+import leftArrowIcon from "../../assets/image/arrowLeft.png";
 import Button from "../ui/Button";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
+import { useData } from "../../hooks/useData";
+import { FormData } from "../../store/dataSlice";
 
 type FormProps = {
   oversign: string;
   isLogIn: boolean;
 };
 
+type InputProp = {
+  icon: string;
+  placeholder: string;
+  type: string;
+  name: string;
+  error?: string;
+};
+
 export default function Form({ oversign, isLogIn }: FormProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { errors, signUp, setErrors } = useData();
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [inputData, setInputData] = useState<FormData>({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
-    setIsChecked(event.target.checked);
+    const { name, value } = event.target;
+    setInputData((prevData) => ({ ...prevData, [name]: value }));
   }
 
-  const inputProps = [
+  const inputFields: InputProp[] = [
     {
-      icon: person,
+      icon: personIcon,
       placeholder: "Name",
       type: "text",
+      name: "name",
+      error: errors.name,
     },
     {
-      icon: mail,
+      icon: mailIcon,
       placeholder: "Email",
       type: "email",
+      name: "email",
+      error: errors.email,
     },
     {
-      icon: lock,
+      icon: lockIcon,
       placeholder: "Password",
       type: "password",
+      name: "password",
+      error: errors.password,
     },
     {
-      icon: lock,
+      icon: lockIcon,
       placeholder: "Confirm Password",
       type: "password",
+      name: "confirmPassword",
+      error: errors.confirmPassword,
     },
   ];
 
@@ -49,14 +75,53 @@ export default function Form({ oversign, isLogIn }: FormProps) {
     navigate("/");
   }
 
-  function onClickLoginHandler() {}
+  function validateForm() {
+    const newErrors = {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
+
+    if (!isLogIn && !inputData.name) {
+      newErrors.name = "Name is required";
+    }
+    if (!inputData.email) {
+      newErrors.email = "Email is required";
+    }
+    if (!inputData.password) {
+      newErrors.password = "Password is required";
+    }
+    if (!isLogIn && inputData.password !== inputData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
+  }
+
+  async function onSubmittingHandler(event: React.FormEvent<EventTarget>) {
+    event.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+    try {
+      const response = await signUp(inputData);
+      if (response) {
+        const userId = response.userId;
+        navigate(`/summary/${userId}`);
+      }
+    } catch (error) {
+      console.error("Sign up failed:", error);
+    }
+  }
   return (
-    <form className="form-signIn" action="">
+    <form className="form-signIn" onSubmit={onSubmittingHandler} action="">
       {!isLogIn && (
         <img
           onClick={onClickBackHandler}
           className="arrow-left"
-          src={leftArrow}
+          src={leftArrowIcon}
           alt="left arrow"
         />
       )}
@@ -65,7 +130,7 @@ export default function Form({ oversign, isLogIn }: FormProps) {
         <div className="vector"></div>
       </div>
       <div className="container-inputs">
-        {inputProps
+        {inputFields
           .filter((inputProp) =>
             isLogIn
               ? inputProp.placeholder === "Email" ||
@@ -73,38 +138,35 @@ export default function Form({ oversign, isLogIn }: FormProps) {
               : true
           )
           .map((inputProp) => (
-            <div
-              key={inputProp.placeholder}
-              className={`container-input ${
-                location.pathname === "/" && isLogIn ? "d-none" : ""
-              }`}
-            >
-              <Input
-                id={inputProp.placeholder}
-                className="input-signIn"
-                required
-                placeholder={inputProp.placeholder}
-                type={inputProp.type}
-                icon={inputProp.icon}
-              />
+            <div key={inputProp.name}>
+              <div
+                className={`container-input ${
+                  location.pathname === "/" && isLogIn ? "d-none" : ""
+                }`}
+              >
+                <Input
+                  className="input-signIn"
+                  name={inputProp.name}
+                  required
+                  placeholder={inputProp.placeholder}
+                  type={inputProp.type}
+                  icon={inputProp.icon}
+                  onChange={(e) => onChangeHandler(e)}
+                />
+              </div>
+              {inputProp.error && (
+                <span className="error">{inputProp.error}</span>
+              )}
             </div>
           ))}
       </div>
       <div className="container-btn">
         {isLogIn ? (
           <>
-            <Button
-              onClick={onClickLoginHandler}
-              disabled={!isChecked}
-              className="btn-login"
-            >
+            <Button disabled={!isChecked} className="btn-login">
               Log in
             </Button>
-            <Button
-              onClick={onClickLoginHandler}
-              disabled={!isChecked}
-              className="btn-guest"
-            >
+            <Button disabled={!isChecked} className="btn-guest">
               Guest Log in
             </Button>
           </>
@@ -117,7 +179,7 @@ export default function Form({ oversign, isLogIn }: FormProps) {
                   required={false}
                   placeholder=""
                   checked={isChecked}
-                  onChange={onChangeHandler}
+                  onChange={(e) => setIsChecked(e.target.checked)}
                   type="checkbox"
                 />
                 <span className="checkmark"></span>
@@ -129,12 +191,7 @@ export default function Form({ oversign, isLogIn }: FormProps) {
                 </span>
               </p>
             </span>
-            <Button
-              onClick={onClickLoginHandler}
-              disabled={!isChecked}
-              className="btn-login"
-              href=""
-            >
+            <Button type="submit" disabled={!isChecked} className="btn-login">
               Sign up
             </Button>
           </div>

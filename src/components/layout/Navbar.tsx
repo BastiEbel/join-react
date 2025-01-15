@@ -7,17 +7,18 @@ import addTask from "../../assets/image/addTask.png";
 import board from "../../assets/image/board.png";
 import contacts from "../../assets/image/contacts.png";
 import DataProtection from "./DataProtection";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 export default function Navbar() {
   const [nav, setNav] = useState<boolean>(true);
   const location = useLocation();
+  const { id } = useParams();
 
   const navItems = [
-    { name: "Summary", path: "/summary", img: summary },
-    { name: "Add Task", path: "/addTask", img: addTask },
-    { name: "Board", path: "/board", img: board },
-    { name: "Contacts", path: "/contacts", img: contacts },
+    { name: "Summary", path: `/summary/${id}`, img: summary },
+    { name: "Add Task", path: `/addTask/${id}`, img: addTask },
+    { name: "Board", path: `/board/${id}`, img: board },
+    { name: "Contacts", path: `/contacts/${id}`, img: contacts },
   ];
 
   function toggleNav() {

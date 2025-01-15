@@ -7,6 +7,8 @@ import Summary from "./pages/Summary";
 import AddTask from "./pages/AddTask";
 import Board from "./pages/Board";
 import Contacts from "./pages/Contacts";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 const router = createBrowserRouter([
   {
@@ -23,16 +25,20 @@ const router = createBrowserRouter([
     element: <Home />,
     children: [
       { index: true, element: <Summary /> },
-      { path: "summary", element: <Summary /> },
-      { path: "addTask", element: <AddTask /> },
-      { path: "board", element: <Board /> },
-      { path: "contacts", element: <Contacts /> },
+      { path: "summary/:id", element: <Summary /> },
+      { path: "addTask/:id", element: <AddTask /> },
+      { path: "board/:id", element: <Board /> },
+      { path: "contacts/:id", element: <Contacts /> },
     ],
   },
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  );
 }
 
 export default App;

@@ -1,7 +1,7 @@
 import { ChangeEvent, InputHTMLAttributes, ReactNode } from "react";
 
 type InputProps = {
-  id?: string;
+  name?: string;
   icon?: string;
   labelText?: ReactNode;
   placeholder: string;
@@ -10,11 +10,12 @@ type InputProps = {
   checked?: boolean;
   textArea?: boolean;
   type: string;
+  value?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default function Input({
-  id,
+  name,
   icon,
   labelText,
   placeholder,
@@ -23,15 +24,18 @@ export default function Input({
   checked,
   textArea,
   required,
+  value,
   onChange,
 }: InputProps) {
   const inputProps: InputHTMLAttributes<HTMLInputElement> = {
+    name,
     placeholder,
-    id,
-    type,
-    required,
-    onChange,
     className,
+    type,
+    checked,
+    required,
+    value,
+    onChange,
   };
 
   if (type === "checkbox") {

@@ -6,7 +6,8 @@ type ButtonProps = {
   children: ReactNode;
   style?: CSSProperties;
   disabled?: boolean;
-  onClick: () => void;
+  type?: "submit" | "reset" | "button" | undefined;
+  onClick?: () => void;
   mouseOver?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   mouseLeave?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
@@ -15,6 +16,7 @@ export default function Button({
   className,
   disabled,
   style,
+  type,
   onClick,
   mouseOver,
   mouseLeave,
@@ -22,6 +24,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
+      type={type}
       onMouseOver={mouseOver}
       onMouseLeave={mouseLeave}
       style={style}

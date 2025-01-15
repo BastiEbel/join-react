@@ -32,3 +32,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .d-none {
   display: none;
 }
+
+.error {
+  font-size: 16px;
+  font-family: 400;
+  line-height: 19.2px;
+  color: red;
+}
