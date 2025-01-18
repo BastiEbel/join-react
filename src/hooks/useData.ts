@@ -1,16 +1,34 @@
-import { FormState, setErrors, signUp, FormData } from "../store/dataSlice";
+import {
+  FormState,
+  setErrors,
+  signUp,
+  FormData,
+  login,
+  LoginCredentials,
+} from "../store/dataSlice";
 import { useDataDispatch, useDataSelector } from "../store/hooks";
 import { RootState } from "../store/store";
 
 export function useData() {
   const dispatch = useDataDispatch();
   const formData = useDataSelector((state: RootState) => state.data.formData);
+  const loginCredentials = useDataSelector(
+    (state: RootState) => state.data.loginCredentials
+  );
   const errors = useDataSelector((state: RootState) => state.data.errors);
   const isChecked = useDataSelector((state: RootState) => state.data.isChecked);
 
-  const updateFormData = async (data: FormData) => {
+  const signUpFormData = async (data: FormData) => {
     const resultAction = await dispatch(signUp(data));
     if (signUp.fulfilled.match(resultAction)) {
+      return resultAction.payload;
+    }
+    return null;
+  };
+
+  const loginData = async (loginCredentials: LoginCredentials) => {
+    const resultAction = await dispatch(login(loginCredentials));
+    if (login.fulfilled.match(resultAction)) {
       return resultAction.payload;
     }
     return null;
@@ -22,9 +40,11 @@ export function useData() {
 
   return {
     formData,
+    loginCredentials,
     errors,
     isChecked,
-    signUp: updateFormData,
+    signUp: signUpFormData,
+    login: loginData,
     setErrors: updateErrors,
   };
 }

@@ -26,7 +26,7 @@ type InputProp = {
 export default function Form({ oversign, isLogIn }: FormProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { errors, signUp, setErrors } = useData();
+  const { errors, signUp, setErrors, login } = useData();
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [inputData, setInputData] = useState<FormData>({
     name: "",
@@ -105,14 +105,31 @@ export default function Form({ oversign, isLogIn }: FormProps) {
     if (!validateForm()) {
       return;
     }
-    try {
-      const response = await signUp(inputData);
-      if (response) {
-        const userId = response.userId;
-        navigate(`/summary/${userId}`);
+    if (!isLogIn) {
+      try {
+        const response = await signUp(inputData);
+        if (response) {
+          const userId = response.userId;
+          navigate(`/summary/${userId}`);
+        }
+      } catch (error) {
+        console.error("Sign up failed:", error);
       }
-    } catch (error) {
-      console.error("Sign up failed:", error);
+    } else {
+      try {
+        const response = await login({
+          email: inputData.email,
+          password: inputData.password,
+        });
+        console.log(response);
+
+        if (response) {
+          const userId = response.userId;
+          navigate(`/summary/${userId}`);
+        }
+      } catch (error) {
+        console.error("Login failed:", error);
+      }
     }
   }
   return (
@@ -163,12 +180,8 @@ export default function Form({ oversign, isLogIn }: FormProps) {
       <div className="container-btn">
         {isLogIn ? (
           <>
-            <Button disabled={!isChecked} className="btn-login">
-              Log in
-            </Button>
-            <Button disabled={!isChecked} className="btn-guest">
-              Guest Log in
-            </Button>
+            <Button className="btn-login">Log in</Button>
+            <Button className="btn-guest">Guest Log in</Button>
           </>
         ) : (
           <div className="container-signUp">
