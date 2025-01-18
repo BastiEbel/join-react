@@ -6,7 +6,7 @@ import lockIcon from "../../assets/image/lock.png";
 import leftArrowIcon from "../../assets/image/arrowLeft.png";
 import Button from "../ui/Button";
 import { useLocation, useNavigate } from "react-router-dom";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useData } from "../../hooks/useData";
 import { FormData } from "../../store/dataSlice";
 
@@ -26,8 +26,9 @@ type InputProp = {
 export default function Form({ oversign, isLogIn }: FormProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { errors, signUp, setErrors, login } = useData();
+  const { errors, signUp, setErrors, login, isAuthenticated } = useData();
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [userId, setUserId] = useState<string | null>(null);
   const [inputData, setInputData] = useState<FormData>({
     name: "",
     email: "",
@@ -70,6 +71,12 @@ export default function Form({ oversign, isLogIn }: FormProps) {
       error: errors.confirmPassword,
     },
   ];
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(`/summary/${userId}`);
+    }
+  }, [isAuthenticated, navigate, userId]);
 
   function onClickBackHandler() {
     navigate("/");
@@ -121,9 +128,9 @@ export default function Form({ oversign, isLogIn }: FormProps) {
           email: inputData.email,
           password: inputData.password,
         });
-        console.log(response);
 
         if (response) {
+          setUserId(response.userId);
           const userId = response.userId;
           navigate(`/summary/${userId}`);
         }

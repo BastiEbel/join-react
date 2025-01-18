@@ -17,6 +17,9 @@ export function useData() {
   );
   const errors = useDataSelector((state: RootState) => state.data.errors);
   const isChecked = useDataSelector((state: RootState) => state.data.isChecked);
+  const isAuthenticated = useDataSelector(
+    (state: RootState) => state.data.isAuthenticated
+  );
 
   const signUpFormData = async (data: FormData) => {
     const resultAction = await dispatch(signUp(data));
@@ -43,6 +46,7 @@ export function useData() {
     loginCredentials,
     errors,
     isChecked,
+    isAuthenticated,
     signUp: signUpFormData,
     login: loginData,
     setErrors: updateErrors,

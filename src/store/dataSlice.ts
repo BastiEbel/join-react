@@ -23,6 +23,7 @@ export interface FormState {
     confirmPassword: string;
   };
   isChecked: boolean;
+  isAuthenticated: boolean;
 }
 
 const initialState: FormState = {
@@ -43,6 +44,7 @@ const initialState: FormState = {
     confirmPassword: "",
   },
   isChecked: false,
+  isAuthenticated: false,
 };
 
 export const signUp = createAsyncThunk<
@@ -122,6 +124,7 @@ export const dataSlice = createSlice({
           }>
         ) => {
           state.loginCredentials = action.payload.loginCredentials;
+          state.isAuthenticated = true;
           state.errors = {
             name: "",
             email: "",

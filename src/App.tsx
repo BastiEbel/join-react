@@ -9,6 +9,7 @@ import Board from "./pages/Board";
 import Contacts from "./pages/Contacts";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import ProtectedRoute from "./services/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <Home />,
+    element: <ProtectedRoute element={<Home />} />,
     children: [
       { index: true, element: <Summary /> },
       { path: "summary/:id", element: <Summary /> },
