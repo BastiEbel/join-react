@@ -7,7 +7,7 @@ import addTask from "../../assets/image/addTask.png";
 import board from "../../assets/image/board.png";
 import contacts from "../../assets/image/contacts.png";
 import DataProtection from "./DataProtection";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 export default function Navbar() {
   const [nav, setNav] = useState<boolean>(true);
@@ -21,10 +21,15 @@ export default function Navbar() {
     { name: "Contacts", path: `/contacts/${id}`, img: contacts },
   ];
 
+  /* useEffect(() => {
+    if (id) {
+      authentication(true);
+    }
+  }, [id]); */
+
   function toggleNav() {
     setNav(!nav);
   }
-
   /* function closeNav() {
         setNav(false);
       } */
@@ -54,7 +59,7 @@ export default function Navbar() {
                   key={item.name}
                 >
                   <img src={item.img} alt={item.name} />
-                  <a href={item.path}>{item.name}</a>
+                  <Link to={item.path}>{item.name}</Link>
                 </li>
               ))}
             </ul>

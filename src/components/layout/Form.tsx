@@ -6,7 +6,7 @@ import lockIcon from "../../assets/image/lock.png";
 import leftArrowIcon from "../../assets/image/arrowLeft.png";
 import Button from "../ui/Button";
 import { useLocation, useNavigate } from "react-router-dom";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useData } from "../../hooks/useData";
 import { FormData } from "../../store/dataSlice";
 
@@ -26,10 +26,10 @@ type InputProp = {
 export default function Form({ oversign, isLogIn }: FormProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { errors, signUp, setErrors, login, isAuthenticated } = useData();
+  const { errors, signUp, setErrors, login, authentication } = useData();
   const [isChecked, setIsChecked] = useState<boolean>(false);
-  const [userId, setUserId] = useState<string | null>(null);
   const [inputData, setInputData] = useState<FormData>({
+    id: "",
     name: "",
     email: "",
     password: "",
@@ -72,12 +72,6 @@ export default function Form({ oversign, isLogIn }: FormProps) {
     },
   ];
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(`/summary/${userId}`);
-    }
-  }, [isAuthenticated, navigate, userId]);
-
   function onClickBackHandler() {
     navigate("/");
   }
@@ -112,31 +106,24 @@ export default function Form({ oversign, isLogIn }: FormProps) {
     if (!validateForm()) {
       return;
     }
-    if (!isLogIn) {
-      try {
-        const response = await signUp(inputData);
-        if (response) {
-          const userId = response.userId;
-          navigate(`/summary/${userId}`);
-        }
-      } catch (error) {
-        console.error("Sign up failed:", error);
-      }
-    } else {
-      try {
-        const response = await login({
-          email: inputData.email,
-          password: inputData.password,
-        });
 
-        if (response) {
-          setUserId(response.userId);
-          const userId = response.userId;
-          navigate(`/summary/${userId}`);
-        }
-      } catch (error) {
-        console.error("Login failed:", error);
+    try {
+      const response = isLogIn
+        ? await login({ email: inputData.email, password: inputData.password })
+        : await signUp(inputData);
+
+      if (response) {
+        const responseUser = {
+          id: response.user.id,
+          email: response.user.email,
+          name: response.user.name,
+          isAuthenticated: true,
+        };
+        authentication(responseUser);
+        navigate(`/summary/${response.id}`);
       }
+    } catch (error) {
+      console.error(`${isLogIn ? "Login" : "Sign up"} failed:`, error);
     }
   }
   return (

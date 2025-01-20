@@ -9,11 +9,11 @@ import Board from "./pages/Board";
 import Contacts from "./pages/Contacts";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-import ProtectedRoute from "./services/ProtectedRoute";
+import ProtectedRoute from "./components/protectionPages/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: <Login />,
     children: [{ index: true, element: <Login /> }],
   },

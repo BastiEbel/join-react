@@ -5,6 +5,8 @@ import {
   FormData,
   login,
   LoginCredentials,
+  authentication,
+  User,
 } from "../store/dataSlice";
 import { useDataDispatch, useDataSelector } from "../store/hooks";
 import { RootState } from "../store/store";
@@ -17,9 +19,7 @@ export function useData() {
   );
   const errors = useDataSelector((state: RootState) => state.data.errors);
   const isChecked = useDataSelector((state: RootState) => state.data.isChecked);
-  const isAuthenticated = useDataSelector(
-    (state: RootState) => state.data.isAuthenticated
-  );
+  const user = useDataSelector((state: RootState) => state.data.user);
 
   const signUpFormData = async (data: FormData) => {
     const resultAction = await dispatch(signUp(data));
@@ -37,6 +37,11 @@ export function useData() {
     return null;
   };
 
+  const updateAuth = (user: User) => {
+    const resultUser = dispatch(authentication({ user }));
+    return resultUser.payload.user;
+  };
+
   const updateErrors = (errorData: Partial<FormState["errors"]>) => {
     dispatch(setErrors(errorData));
   };
@@ -44,11 +49,12 @@ export function useData() {
   return {
     formData,
     loginCredentials,
+    user,
     errors,
     isChecked,
-    isAuthenticated,
     signUp: signUpFormData,
     login: loginData,
     setErrors: updateErrors,
+    authentication: updateAuth,
   };
 }

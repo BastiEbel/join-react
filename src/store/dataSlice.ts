@@ -2,13 +2,22 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { loginData, signUpData } from "../utils/auth";
 
 export interface FormData {
+  id: string;
   name: string;
   email: string;
   password: string;
   confirmPassword: string;
 }
 
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  isAuthenticated: boolean;
+}
+
 export interface LoginCredentials {
+  id?: string;
   email: string;
   password: string;
 }
@@ -16,6 +25,7 @@ export interface LoginCredentials {
 export interface FormState {
   formData: FormData;
   loginCredentials: LoginCredentials;
+  user: User;
   errors: {
     name: string;
     email: string;
@@ -23,17 +33,24 @@ export interface FormState {
     confirmPassword: string;
   };
   isChecked: boolean;
-  isAuthenticated: boolean;
 }
 
 const initialState: FormState = {
   formData: {
+    id: "",
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   },
+  user: {
+    id: "",
+    email: "",
+    name: "",
+    isAuthenticated: false,
+  },
   loginCredentials: {
+    id: "",
     email: "",
     password: "",
   },
@@ -44,11 +61,10 @@ const initialState: FormState = {
     confirmPassword: "",
   },
   isChecked: false,
-  isAuthenticated: false,
 };
 
 export const signUp = createAsyncThunk<
-  { userId: string; formData: FormData },
+  { id: string; formData: FormData; user: User },
   FormData,
   { rejectValue: Partial<FormState["errors"]> }
 >("data/signUp", async (formData: FormData, { rejectWithValue }) => {
@@ -68,7 +84,7 @@ export const signUp = createAsyncThunk<
 });
 
 export const login = createAsyncThunk<
-  { userId: string; loginCredentials: LoginCredentials },
+  { id: string; loginCredentials: LoginCredentials; user: User },
   LoginCredentials,
   { rejectValue: string }
 >("data/login", async (credentials, { rejectWithValue }) => {
@@ -91,15 +107,15 @@ export const dataSlice = createSlice({
     toggleChecked(state) {
       state.isChecked = !state.isChecked;
     },
+    authentication(state, action: PayloadAction<{ user: User }>) {
+      state.user = action.payload.user;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(
         signUp.fulfilled,
-        (
-          state,
-          action: PayloadAction<{ userId: string; formData: FormData }>
-        ) => {
+        (state, action: PayloadAction<{ formData: FormData; user: User }>) => {
           state.formData = action.payload.formData;
           state.errors = {
             name: "",
@@ -119,12 +135,11 @@ export const dataSlice = createSlice({
         (
           state,
           action: PayloadAction<{
-            userId: string;
             loginCredentials: LoginCredentials;
+            user: User;
           }>
         ) => {
           state.loginCredentials = action.payload.loginCredentials;
-          state.isAuthenticated = true;
           state.errors = {
             name: "",
             email: "",
@@ -141,4 +156,4 @@ export const dataSlice = createSlice({
   },
 });
 
-export const { setErrors, toggleChecked } = dataSlice.actions;
+export const { setErrors, toggleChecked, authentication } = dataSlice.actions;
