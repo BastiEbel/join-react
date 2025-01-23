@@ -1,3 +1,6 @@
+import { useLocation, useNavigate } from "react-router-dom";
+import React, { ChangeEvent, useState } from "react";
+import DOMPurify from "dompurify";
 import "../css/Form.css";
 import Input from "../ui/Input";
 import personIcon from "../../assets/image/person.png";
@@ -5,8 +8,7 @@ import mailIcon from "../../assets/image/mail.png";
 import lockIcon from "../../assets/image/lock.png";
 import leftArrowIcon from "../../assets/image/arrowLeft.png";
 import Button from "../ui/Button";
-import { useLocation, useNavigate } from "react-router-dom";
-import React, { ChangeEvent, useState } from "react";
+
 import { useData } from "../../hooks/useData";
 import { FormData } from "../../store/dataSlice";
 
@@ -76,6 +78,15 @@ export default function Form({ oversign, isLogIn }: FormProps) {
     navigate("/");
   }
 
+  function validateEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  function validatePassword(password: string): boolean {
+    return password.length >= 8;
+  }
+
   function validateForm() {
     const newErrors = {
       name: "",
@@ -87,10 +98,10 @@ export default function Form({ oversign, isLogIn }: FormProps) {
     if (!isLogIn && !inputData.name) {
       newErrors.name = "Name is required";
     }
-    if (!inputData.email) {
+    if (!inputData.email || !validateEmail(inputData.email)) {
       newErrors.email = "Email is required";
     }
-    if (!inputData.password) {
+    if (!inputData.password || !validatePassword(inputData.password)) {
       newErrors.password = "Password is required";
     }
     if (!isLogIn && inputData.password !== inputData.confirmPassword) {
@@ -107,10 +118,21 @@ export default function Form({ oversign, isLogIn }: FormProps) {
       return;
     }
 
+    const sanitizedInputData = {
+      ...inputData,
+      name: DOMPurify.sanitize(inputData.name),
+      email: DOMPurify.sanitize(inputData.email),
+      password: DOMPurify.sanitize(inputData.password),
+      confirmPassword: DOMPurify.sanitize(inputData.confirmPassword),
+    };
+
     try {
       const response = isLogIn
-        ? await login({ email: inputData.email, password: inputData.password })
-        : await signUp(inputData);
+        ? await login({
+            email: sanitizedInputData.email,
+            password: sanitizedInputData.password,
+          })
+        : await signUp(sanitizedInputData);
 
       if (response) {
         const responseUser = {
