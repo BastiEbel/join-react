@@ -21,12 +21,6 @@ export default function Navbar() {
     { name: "Contacts", path: `/contacts/${id}`, img: contacts },
   ];
 
-  /* useEffect(() => {
-    if (id) {
-      authentication(true);
-    }
-  }, [id]); */
-
   function toggleNav() {
     setNav(!nav);
   }

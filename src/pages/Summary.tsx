@@ -1,53 +1,10 @@
 import "../components/css/Summary.css";
 import ContainerSummary from "../components/layout/ContainerSummary";
-import pencilwhite from "../assets/image/pencilwhite.png";
-import hookwhite from "../assets/image/hookwhite.png";
-import urgentWhite from "../assets/image/urgentWhite.png";
+import { useData } from "../hooks/useData";
+import { summaryData } from "../utils/data";
 
 export default function Summary() {
-  const summaryData = [
-    {
-      id: 1,
-      image: pencilwhite,
-      amount: 1,
-      description: "To-do",
-      width: "264px",
-    },
-    {
-      id: 2,
-      image: hookwhite,
-      amount: 1,
-      description: "Done",
-      width: "264px",
-    },
-    {
-      id: 3,
-      image: urgentWhite,
-      amount: 1,
-      description: "Urgent",
-      date: "20 December 2024",
-      title: "Upcoming Deadline",
-      width: "560px",
-    },
-    {
-      id: 4,
-      amount: 5,
-      description: "Tasks in Board",
-      width: "168px",
-    },
-    {
-      id: 5,
-      amount: 2,
-      description: "Tasks in Progress",
-      width: "168px",
-    },
-    {
-      id: 6,
-      amount: 2,
-      description: "Awaiting Feedback",
-      width: "168px",
-    },
-  ];
+  const { user } = useData();
 
   function greetingHandler() {
     const hour = new Date().getHours();
@@ -84,7 +41,7 @@ export default function Summary() {
         </div>
         <div className="container-greeting">
           <h3>{greetingHandler()},</h3>
-          <h4>Sebastian Ebel</h4>
+          <h4>{user.name}</h4>
         </div>
       </main>
     </section>
