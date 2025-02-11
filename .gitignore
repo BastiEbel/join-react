@@ -24,5 +24,6 @@ dist-ssr
 *.sw?
 
 services
-backend
+backend/node_modules
+backend/*.env
 .codegpt
