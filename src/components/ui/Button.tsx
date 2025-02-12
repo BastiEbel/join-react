@@ -7,7 +7,7 @@ type ButtonProps = {
   style?: CSSProperties;
   disabled?: boolean;
   type?: "submit" | "reset" | "button" | undefined;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   mouseOver?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   mouseLeave?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
