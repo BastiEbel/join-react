@@ -1,6 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import DOMPurify from "dompurify";
+
 import "../css/Form.css";
 import Input from "../ui/Input";
 import personIcon from "../../assets/image/person.png";
@@ -37,6 +40,12 @@ export default function Form({ oversign, isLogIn }: FormProps) {
     password: "",
     confirmPassword: "",
   });
+
+  useEffect(() => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, []);
 
   function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
@@ -142,90 +151,107 @@ export default function Form({ oversign, isLogIn }: FormProps) {
           isAuthenticated: true,
         };
         authentication(responseUser);
-        navigate(`/summary/${response.id}`);
+
+        toast.success(`Welcome ${responseUser.name}!`, {
+          autoClose: 2000,
+          onClose: () => {
+            navigate(`/summary/${response.id}`);
+          },
+        });
       }
     } catch (error) {
       console.error(`${isLogIn ? "Login" : "Sign up"} failed:`, error);
+
+      const errorMessage = isLogIn
+        ? "Login failed. Please check your login details."
+        : "Registration failed. Please try again.";
+
+      toast.error(errorMessage, {
+        autoClose: 5000,
+      });
     }
   }
   return (
-    <form className="form-signIn" onSubmit={onSubmittingHandler} action="">
-      {!isLogIn && (
-        <img
-          onClick={onClickBackHandler}
-          className="arrow-left"
-          src={leftArrowIcon}
-          alt="left arrow"
-        />
-      )}
-      <div className="container-oversign">
-        <h1>{oversign}</h1>
-        <div className="vector"></div>
-      </div>
-      <div className="container-inputs">
-        {inputFields
-          .filter((inputProp) =>
-            isLogIn
-              ? inputProp.placeholder === "Email" ||
-                inputProp.placeholder === "Password"
-              : true
-          )
-          .map((inputProp) => (
-            <div key={inputProp.name}>
-              <div
-                className={`container-input ${
-                  location.pathname === "/" && isLogIn ? "d-none" : ""
-                }`}
-              >
-                <Input
-                  className="input-signIn"
-                  name={inputProp.name}
-                  required
-                  placeholder={inputProp.placeholder}
-                  type={inputProp.type}
-                  icon={inputProp.icon}
-                  onChange={(e) => onChangeHandler(e)}
-                />
-              </div>
-              {inputProp.error && (
-                <span className="error">{inputProp.error}</span>
-              )}
-            </div>
-          ))}
-      </div>
-      <div className="container-btn">
-        {isLogIn ? (
-          <>
-            <Button className="btn-login">Log in</Button>
-            <Button className="btn-guest">Guest Log in</Button>
-          </>
-        ) : (
-          <div className="container-signUp">
-            <span className="police">
-              <label className="custom-checkbox">
-                <Input
-                  className="input"
-                  required={false}
-                  placeholder=""
-                  checked={isChecked}
-                  onChange={(e) => setIsChecked(e.target.checked)}
-                  type="checkbox"
-                />
-                <span className="checkmark"></span>
-              </label>
-              <p>
-                <span>
-                  I accept the&nbsp;
-                  <a href="">Privacy police</a>
-                </span>
-              </p>
-            </span>
-            <Button type="submit" disabled={!isChecked} className="btn-login">
-              Sign up
-            </Button>
-          </div>
+    <>
+      <form className="form-signIn" onSubmit={onSubmittingHandler} action="">
+        {!isLogIn && (
+          <img
+            onClick={onClickBackHandler}
+            className="arrow-left"
+            src={leftArrowIcon}
+            alt="left arrow"
+          />
         )}
-      </div>
-    </form>
+        <div className="container-oversign">
+          <h1>{oversign}</h1>
+          <div className="vector"></div>
+        </div>
+        <div className="container-inputs">
+          {inputFields
+            .filter((inputProp) =>
+              isLogIn
+                ? inputProp.placeholder === "Email" ||
+                  inputProp.placeholder === "Password"
+                : true
+            )
+            .map((inputProp) => (
+              <div key={inputProp.name}>
+                <div
+                  className={`container-input ${
+                    location.pathname === "/" && isLogIn ? "d-none" : ""
+                  }`}
+                >
+                  <Input
+                    className="input-signIn"
+                    name={inputProp.name}
+                    required
+                    placeholder={inputProp.placeholder}
+                    type={inputProp.type}
+                    icon={inputProp.icon}
+                    onChange={(e) => onChangeHandler(e)}
+                  />
+                </div>
+                {inputProp.error && (
+                  <span className="error">{inputProp.error}</span>
+                )}
+              </div>
+            ))}
+        </div>
+        <div className="container-btn">
+          {isLogIn ? (
+            <>
+              <Button className="btn-login">Log in</Button>
+              <Button className="btn-guest">Guest Log in</Button>
+            </>
+          ) : (
+            <div className="container-signUp">
+              <span className="police">
+                <label className="custom-checkbox">
+                  <Input
+                    className="input"
+                    required={false}
+                    placeholder=""
+                    checked={isChecked}
+                    onChange={(e) => setIsChecked(e.target.checked)}
+                    type="checkbox"
+                  />
+                  <span className="checkmark"></span>
+                </label>
+                <p>
+                  <span>
+                    I accept the&nbsp;
+                    <a href="">Privacy police</a>
+                  </span>
+                </p>
+              </span>
+              <Button type="submit" disabled={!isChecked} className="btn-login">
+                Sign up
+              </Button>
+            </div>
+          )}
+        </div>
+      </form>
+      <ToastContainer position="top-center" hideProgressBar={true} />
+    </>
   );
 }

@@ -3,13 +3,15 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
-import Summary from "./pages/Summary";
-import AddTask from "./pages/AddTask";
-import Board from "./pages/Board";
-import Contacts from "./pages/Contacts";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import ProtectedRoute from "./components/protectionPages/ProtectedRoute";
+import { lazy, Suspense } from "react";
+
+const LazySummary = lazy(() => import("./pages/Summary"));
+const LazyAddTask = lazy(() => import("./pages/AddTask"));
+const LazyBoard = lazy(() => import("./pages/Board"));
+const LazyContacts = lazy(() => import("./pages/Contacts"));
 
 const router = createBrowserRouter([
   {
@@ -25,11 +27,46 @@ const router = createBrowserRouter([
     path: "/",
     element: <ProtectedRoute element={<Home />} />,
     children: [
-      { index: true, element: <Summary /> },
-      { path: "summary/:id", element: <Summary /> },
-      { path: "addTask/:id", element: <AddTask /> },
-      { path: "board/:id", element: <Board /> },
-      { path: "contacts/:id", element: <Contacts /> },
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <LazySummary />
+          </Suspense>
+        ),
+      },
+      {
+        path: "summary/:id",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <LazySummary />
+          </Suspense>
+        ),
+      },
+      {
+        path: "addTask/:id",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <LazyAddTask />
+          </Suspense>
+        ),
+      },
+      {
+        path: "board/:id",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <LazyBoard />
+          </Suspense>
+        ),
+      },
+      {
+        path: "contacts/:id",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <LazyContacts />
+          </Suspense>
+        ),
+      },
     ],
   },
 ]);
