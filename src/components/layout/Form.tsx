@@ -153,7 +153,7 @@ export default function Form({ oversign, isLogIn }: FormProps) {
         authentication(responseUser);
 
         toast.success(`Welcome ${responseUser.name}!`, {
-          autoClose: 2000,
+          autoClose: 1000,
           onClose: () => {
             navigate(`/summary/${response.id}`);
           },

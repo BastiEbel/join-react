@@ -20,7 +20,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 104px;
+  width: auto;
   height: 56px;
   gap: 16px;
 }
@@ -46,4 +46,18 @@
   border-radius: 50%;
   color: #29abe2;
   border: 3px solid #2a3647;
+}
+
+.fancy-button {
+  background-color: #2a3647;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.fancy-button:hover {
+  background-color: #29abe2;
 }

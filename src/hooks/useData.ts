@@ -7,6 +7,7 @@ import {
   LoginCredentials,
   authentication,
   User,
+  logout,
 } from "../store/dataSlice";
 import { useDataDispatch, useDataSelector } from "../store/hooks";
 import { RootState } from "../store/store";
@@ -46,6 +47,14 @@ export function useData() {
     dispatch(setErrors(errorData));
   };
 
+  const logoutUser = async () => {
+    const resultAction = await dispatch(logout());
+    if (logout.fulfilled.match(resultAction)) {
+      return resultAction.payload;
+    }
+    return null;
+  };
+
   return {
     formData,
     loginCredentials,
@@ -56,5 +65,6 @@ export function useData() {
     login: loginData,
     setErrors: updateErrors,
     authentication: updateAuth,
+    logout: logoutUser,
   };
 }

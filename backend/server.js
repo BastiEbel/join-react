@@ -109,7 +109,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post("/", async (req, res) => {
+app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -145,6 +145,15 @@ app.post("/", async (req, res) => {
     console.error("Error reading file:", error);
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
+  res.status(200).json({ message: "Logout successful" });
 });
 
 // Alle Todos abrufen

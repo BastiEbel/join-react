@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { loginData, signUpData } from "../utils/auth";
+import { loginData, logout as logoutAPI, signUpData } from "../utils/auth";
 
 export interface FormData {
   id: string;
@@ -97,6 +97,16 @@ export const login = createAsyncThunk<
   }
 });
 
+export const logout = createAsyncThunk("data/logout", async () => {
+  try {
+    const response = await logoutAPI();
+    return response;
+  } catch (error) {
+    console.error("Logout error", error);
+    throw error;
+  }
+});
+
 export const dataSlice = createSlice({
   name: "data",
   initialState,
@@ -152,6 +162,33 @@ export const dataSlice = createSlice({
         if (action.payload) {
           state.errors = { ...state.errors, password: action.payload };
         }
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = {
+          id: "",
+          email: "",
+          name: "",
+          isAuthenticated: false,
+        };
+        state.loginCredentials = {
+          id: "",
+          email: "",
+          password: "",
+        };
+        state.formData = {
+          id: "",
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        };
+        state.errors = {
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        };
+        state.isChecked = false;
       });
   },
 });
