@@ -1,6 +1,6 @@
 import logo from "../assets/image/joinLogo.png";
 import "../components/css/Login.css";
-import Form from "../components/layout/Form";
+import Form from "../components/layout/AuthForm";
 
 export default function SignUp() {
   return (

@@ -3,6 +3,7 @@ import Button from "../components/ui/Button";
 import imgContact from "../assets/image/person_add.png";
 import { useRef } from "react";
 import OpenModal, { ModalHandle } from "../components/ui/OpenModal";
+import AddOrEdit from "../components/layout/AddOrEdit";
 
 export default function Contacts() {
   const dialogRef = useRef<ModalHandle>(null);
@@ -16,9 +17,17 @@ export default function Contacts() {
       dialogRef.current.open();
     }
   }
+
+  function onCloseHandler() {
+    if (dialogRef.current) {
+      return dialogRef.current.close();
+    }
+  }
   return (
     <>
-      <OpenModal ref={dialogRef}>abc</OpenModal>
+      <OpenModal ref={dialogRef}>
+        <AddOrEdit onClose={onCloseHandler} />
+      </OpenModal>
       <div className="container-contacts">
         <nav className="nav-contacts">
           <Button onClick={onAddPersonHandler} className="btn-addPerson">

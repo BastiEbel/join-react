@@ -17,6 +17,11 @@ select {
   border: unset;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 0s 600000s !important;
+}
+
 input[type="date"]::-webkit-calendar-picker-indicator {
   position: relative;
   left: 280px;
@@ -27,6 +32,30 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: 20px;
   line-height: 24px;
   color: #d1d1d1;
+}
+
+dialog {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.dialog-open {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.dialog-close {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.container-input.focused {
+  border: 2px solid #29abe2;
+}
+
+.container-input.error-input {
+  border: 2px solid red;
 }
 
 .d-none {
