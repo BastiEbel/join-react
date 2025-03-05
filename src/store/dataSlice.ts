@@ -1,39 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { loginData, logout as logoutAPI, signUpData } from "../utils/auth";
-
-export interface FormData {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  isAuthenticated: boolean;
-}
-
-export interface LoginCredentials {
-  id?: string;
-  email: string;
-  password: string;
-}
-
-export interface FormState {
-  formData: FormData;
-  loginCredentials: LoginCredentials;
-  user: User;
-  errors: {
-    name: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-  };
-  isChecked: boolean;
-}
+import { FormData } from "../types/FormData";
+import { LoginCredentials } from "../types/Credentials";
+import { User } from "../types/User";
+import { FormState } from "../types/FormState";
 
 const initialState: FormState = {
   formData: {
@@ -57,6 +27,7 @@ const initialState: FormState = {
   errors: {
     name: "",
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   },
@@ -185,6 +156,7 @@ export const dataSlice = createSlice({
         state.errors = {
           name: "",
           email: "",
+          phone: "",
           password: "",
           confirmPassword: "",
         };

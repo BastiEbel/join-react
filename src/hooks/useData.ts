@@ -1,16 +1,16 @@
 import {
-  FormState,
   setErrors,
   signUp,
-  FormData,
   login,
-  LoginCredentials,
   authentication,
-  User,
   logout,
 } from "../store/dataSlice";
 import { useDataDispatch, useDataSelector } from "../store/hooks";
 import { RootState } from "../store/store";
+import { LoginCredentials } from "../types/Credentials";
+import { FormData } from "../types/FormData";
+import { FormState } from "../types/FormState";
+import { User } from "../types/User";
 
 export function useData() {
   const dispatch = useDataDispatch();
