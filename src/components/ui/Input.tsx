@@ -12,6 +12,8 @@ type InputProps = {
   type: string;
   value?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 };
 
 export default function Input({
@@ -26,6 +28,8 @@ export default function Input({
   required,
   value,
   onChange,
+  onFocus,
+  onBlur,
 }: InputProps) {
   const inputProps: InputHTMLAttributes<HTMLInputElement> = {
     name,
@@ -36,6 +40,8 @@ export default function Input({
     required,
     value,
     onChange,
+    onFocus,
+    onBlur,
   };
 
   if (type === "checkbox") {

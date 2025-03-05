@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DOMPurify from "dompurify";
 
-import "../css/Form.css";
+import "../css/AuthForm.css";
 import Input from "../ui/Input";
 import personIcon from "../../assets/image/person.png";
 import mailIcon from "../../assets/image/mail.png";
@@ -13,7 +13,7 @@ import leftArrowIcon from "../../assets/image/arrowLeft.png";
 import Button from "../ui/Button";
 
 import { useData } from "../../hooks/useData";
-import { FormData } from "../../store/dataSlice";
+import { FormData } from "../../types/FormData";
 
 type FormProps = {
   oversign: string;
@@ -33,6 +33,7 @@ export default function Form({ oversign, isLogIn }: FormProps) {
   const location = useLocation();
   const { errors, signUp, setErrors, login, authentication } = useData();
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [isFocused, setIsFocused] = useState<{ [key: string]: boolean }>({});
   const [inputData, setInputData] = useState<FormData>({
     id: "",
     name: "",
@@ -50,6 +51,14 @@ export default function Form({ oversign, isLogIn }: FormProps) {
   function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setInputData((prevData) => ({ ...prevData, [name]: value }));
+  }
+
+  function handleFocus(name: string) {
+    setIsFocused((prev) => ({ ...prev, [name]: true }));
+  }
+
+  function handleBlur(name: string) {
+    setIsFocused((prev) => ({ ...prev, [name]: false }));
   }
 
   const inputFields: InputProp[] = [
@@ -160,15 +169,15 @@ export default function Form({ oversign, isLogIn }: FormProps) {
         });
       }
     } catch (error) {
-      console.error(`${isLogIn ? "Login" : "Sign up"} failed:`, error);
+      if (error) {
+        const errorMessage = isLogIn
+          ? "Login failed. Please check your login details."
+          : "Registration failed. Please try again.";
 
-      const errorMessage = isLogIn
-        ? "Login failed. Please check your login details."
-        : "Registration failed. Please try again.";
-
-      toast.error(errorMessage, {
-        autoClose: 5000,
-      });
+        toast.error(errorMessage, {
+          autoClose: 5000,
+        });
+      }
     }
   }
   return (
@@ -198,6 +207,8 @@ export default function Form({ oversign, isLogIn }: FormProps) {
               <div key={inputProp.name}>
                 <div
                   className={`container-input ${
+                    inputProp.error ? "error-input" : ""
+                  } ${isFocused[inputProp.name] ? "focused" : ""} ${
                     location.pathname === "/" && isLogIn ? "d-none" : ""
                   }`}
                 >
@@ -209,6 +220,8 @@ export default function Form({ oversign, isLogIn }: FormProps) {
                     type={inputProp.type}
                     icon={inputProp.icon}
                     onChange={(e) => onChangeHandler(e)}
+                    onFocus={() => handleFocus(inputProp.name)}
+                    onBlur={() => handleBlur(inputProp.name)}
                   />
                 </div>
                 {inputProp.error && (
@@ -251,7 +264,11 @@ export default function Form({ oversign, isLogIn }: FormProps) {
           )}
         </div>
       </form>
-      <ToastContainer position="top-center" hideProgressBar={true} />
+      <ToastContainer
+        position="top-center"
+        hideProgressBar={true}
+        closeButton={false}
+      />
     </>
   );
 }

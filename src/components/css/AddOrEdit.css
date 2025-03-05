@@ -1,0 +1,143 @@
+.container-addOrEdit {
+  width: 1212px;
+  height: 592px;
+  border-radius: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 32px;
+  box-sizing: border-box;
+}
+
+.oversign {
+  width: 467px;
+  height: 594px;
+  padding: 66px 48px 66px 48px;
+  background: #2a3647;
+  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.contact-logo {
+  width: 54px;
+  height: 66px;
+  margin-bottom: 32px;
+}
+
+.title-name {
+  margin: unset;
+  font-weight: 700;
+  font-size: 61px;
+  line-height: 73.2px;
+  color: #ffffff;
+}
+
+.add-text {
+  margin: unset;
+  font-weight: 400;
+  font-size: 27px;
+  line-height: 32.4px;
+  color: #ffffff;
+}
+
+.contact-spacer {
+  width: 90px;
+  border: 3px solid #29abe2;
+}
+
+.profilImage {
+  width: 120px;
+  height: 120px;
+}
+
+.cancelImage {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 30px;
+  &:hover {
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    src: url();
+  }
+}
+
+.form-contact {
+  width: 422px;
+  height: 215px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.container-input {
+  width: 422px;
+  height: 50px;
+  gap: 8px;
+}
+.input-contact {
+  width: 380px;
+  height: 25px;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.container-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 364px;
+  height: 57px;
+  gap: 24px;
+}
+
+.cancel-btn {
+  width: 126px;
+  height: 56px;
+  gap: 4px;
+  border-radius: 10px;
+  border: 2px solid #2a3647;
+  padding: 16px;
+  background: #ffffff;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  &:hover {
+    cursor: pointer;
+    border: 2px solid #29abe2;
+    color: #29abe2;
+  }
+}
+
+.add-contact-btn {
+  width: 214px;
+  height: 57px;
+  gap: 4px;
+  border-radius: 10px;
+  padding: 16px;
+  color: #ffffff;
+  background: #2a3647;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  &:hover {
+    cursor: pointer;
+    background: #29abe2;
+  }
+  &:disabled {
+    cursor: default;
+    background: #40526c;
+  }
+}

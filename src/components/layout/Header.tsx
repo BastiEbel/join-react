@@ -19,7 +19,7 @@ export default function Header() {
       position: "top-center",
       autoClose: 1000,
       onClose: async () => {
-        navigate("/login");
+        navigate("/");
         await logout();
       },
     });
@@ -29,7 +29,7 @@ export default function Header() {
 
   return (
     <header className="containerHeader">
-      <ToastContainer hideProgressBar={true} />
+      <ToastContainer hideProgressBar={true} closeButton={false} />
       <h1>Kanban Project Management</h1>
       <div className="container-userInfo">
         <img src={help} alt="need help" />

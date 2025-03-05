@@ -45,8 +45,27 @@ const OpenModal = forwardRef<ModalHandle, OpenModalProps>(function OpenModal(
       }
     },
   }));
+
+  function onClickOutsideHandler(event: React.MouseEvent) {
+    if (event.target === dialog.current) {
+      dialog.current.close();
+      setIsOpen(false);
+    }
+  }
+
   const modalRoot = document.getElementById("modal");
+
   if (!modalRoot) return null;
-  return createPortal(<dialog ref={dialog}>{children}</dialog>, modalRoot);
+  return createPortal(
+    <dialog
+      className={isOpen ? "dialog-open" : "dialog-close"}
+      style={{ padding: "unset", borderRadius: "30px", marginRight: "100px" }}
+      onClick={onClickOutsideHandler}
+      ref={dialog}
+    >
+      {children}
+    </dialog>,
+    modalRoot
+  );
 });
 export default OpenModal;
