@@ -10,12 +10,22 @@ import "../css/AddOrEdit.css";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import { useState } from "react";
+import { useData } from "../../hooks/useData";
+import { ContactData } from "../../types/ContactData";
 
 interface AddOrEditProps {
   onClose: () => void;
 }
 function AddOrEdit({ onClose }: AddOrEditProps) {
   const [changeImage, setChangeImage] = useState<string>(clear);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const { setErrors } = useData();
+  const [inputData, setInputData] = useState<ContactData>({
+    userId: "",
+    name: "",
+    email: "",
+    phone: "",
+  });
   const [isFocused, setIsFocused] = useState<{ [key: string]: boolean }>({});
   const [buttonNane, setButtonName] = useState<string>("Create contact");
 
@@ -23,11 +33,58 @@ function AddOrEdit({ onClose }: AddOrEditProps) {
     onClose();
   }
 
+  function validateName(name: string): boolean {
+    const nameRegex = /^[a-zA-Z\s]*$/;
+    return nameRegex.test(name);
+  }
+
+  function validateEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  function validatePhone(phone: string): boolean {
+    const phoneRegex = /^\d+$/;
+    return phoneRegex.test(phone);
+  }
+
+  function validateForm() {
+    const newErrors = {
+      name: "",
+      email: "",
+      phone: "",
+    };
+
+    if (!inputData.name) {
+      newErrors.name = "Name is required";
+    } else if (!validateName(inputData.name)) {
+      newErrors.name = "Name can only contain letters and spaces";
+    }
+    if (!inputData.email || !validateEmail(inputData.email)) {
+      newErrors.email = "Email is required";
+    }
+    if (!inputData.phone || !validatePhone(inputData.phone)) {
+      newErrors.phone = "Phone can only contain numbers";
+    }
+
+    setErrors(newErrors);
+    setIsDisabled(Object.values(newErrors).some((error) => error !== ""));
+    return Object.values(newErrors).every((error) => error === "");
+  }
+
   function onContactHandler() {
+    if (!validateForm()) {
+      return;
+    }
     setButtonName("Contact added");
     setTimeout(() => {
       onClose();
     }, 1000);
+  }
+
+  function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setInputData((prevData) => ({ ...prevData, [name]: value }));
   }
 
   function onFocusHandler(name: string) {
@@ -82,6 +139,7 @@ function AddOrEdit({ onClose }: AddOrEditProps) {
                   field === "name" ? peron : field === "email" ? mail : phone
                 }
                 name={field}
+                onChange={onInputChangeHandler}
                 type={field === "email" ? "email" : "text"}
                 onFocus={() => onFocusHandler(field)}
                 onBlur={() => onBlurHandler(field)}
@@ -103,7 +161,7 @@ function AddOrEdit({ onClose }: AddOrEditProps) {
           </Button>
           <Button
             onClick={onContactHandler}
-            disabled
+            disabled={isDisabled}
             className="add-contact-btn"
           >
             {buttonNane}
