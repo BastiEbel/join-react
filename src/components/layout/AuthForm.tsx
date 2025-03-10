@@ -96,6 +96,10 @@ export default function Form({ oversign, isLogIn }: FormProps) {
     navigate("/");
   }
 
+  function validateName(name: string): boolean {
+    const nameRegex = /^[a-zA-Z\s]*$/;
+    return nameRegex.test(name);
+  }
   function validateEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -115,6 +119,8 @@ export default function Form({ oversign, isLogIn }: FormProps) {
 
     if (!isLogIn && !inputData.name) {
       newErrors.name = "Name is required";
+    } else if (!validateName(inputData.name)) {
+      newErrors.name = "Name can only contain letters and spaces";
     }
     if (!inputData.email || !validateEmail(inputData.email)) {
       newErrors.email = "Email is required";

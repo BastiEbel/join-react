@@ -17,9 +17,17 @@ interface AddOrEditProps {
 function AddOrEdit({ onClose }: AddOrEditProps) {
   const [changeImage, setChangeImage] = useState<string>(clear);
   const [isFocused, setIsFocused] = useState<{ [key: string]: boolean }>({});
+  const [buttonNane, setButtonName] = useState<string>("Create contact");
 
   function onCancelHandler() {
     onClose();
+  }
+
+  function onContactHandler() {
+    setButtonName("Contact added");
+    setTimeout(() => {
+      onClose();
+    }, 1000);
   }
 
   function onFocusHandler(name: string) {
@@ -93,8 +101,12 @@ function AddOrEdit({ onClose }: AddOrEditProps) {
             Cancel
             <img src={clear} alt="X" />
           </Button>
-          <Button disabled className="add-contact-btn">
-            Create contact
+          <Button
+            onClick={onContactHandler}
+            disabled
+            className="add-contact-btn"
+          >
+            {buttonNane}
             <img src={check} alt="X" />
           </Button>
         </div>
