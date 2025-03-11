@@ -12,6 +12,7 @@ import Input from "../ui/Input";
 import { useState } from "react";
 import { useData } from "../../hooks/useData";
 import { ContactData } from "../../types/ContactData";
+import CountryCodeSelector from "../ui/CountryCodeSelector";
 
 interface AddOrEditProps {
   onClose: () => void;
@@ -133,6 +134,7 @@ function AddOrEdit({ onClose }: AddOrEditProps) {
               key={field}
               className={`container-input ${isFocused[field] ? "focused" : ""}`}
             >
+              {field === "phone" && <CountryCodeSelector />}
               <Input
                 className="input-contact"
                 icon={

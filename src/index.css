@@ -41,6 +41,7 @@ dialog {
 }
 
 .dialog-open {
+  overflow: hidden;
   transform: translateX(0);
   opacity: 1;
 }
