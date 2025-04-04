@@ -9,17 +9,19 @@ import phone from "../../assets/image/call.png";
 import "../css/AddOrEdit.css";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useData } from "../../hooks/useData";
 import { ContactData } from "../../types/ContactData";
 import CountryCodeSelector from "../ui/CountryCodeSelector";
+import { useParams } from "react-router-dom";
 
 interface AddOrEditProps {
   onClose: () => void;
+  addContact: boolean;
 }
-function AddOrEdit({ onClose }: AddOrEditProps) {
+function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
+  const { id } = useParams();
   const [changeImage, setChangeImage] = useState<string>(clear);
-  const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const { setErrors } = useData();
   const [inputData, setInputData] = useState<ContactData>({
     userId: "",
@@ -27,10 +29,21 @@ function AddOrEdit({ onClose }: AddOrEditProps) {
     email: "",
     phone: "",
   });
+  const [countryCode, setCountryCode] = useState<string>("+49");
   const [isFocused, setIsFocused] = useState<{ [key: string]: boolean }>({});
-  const [buttonNane, setButtonName] = useState<string>("Create contact");
+  const [buttonNane, setButtonName] = useState<string>("");
+
+  useEffect(() => {
+    if (addContact) {
+      setCountryCode("+49");
+      setButtonName("Add Contact");
+    } else {
+      setButtonName("Edit Contact");
+    }
+  }, [addContact, inputData]);
 
   function onCancelHandler() {
+    onClearHandler();
     onClose();
   }
 
@@ -47,6 +60,12 @@ function AddOrEdit({ onClose }: AddOrEditProps) {
   function validatePhone(phone: string): boolean {
     const phoneRegex = /^\d+$/;
     return phoneRegex.test(phone);
+  }
+
+  function getZipCodeHandler(code: string) {
+    if (code !== countryCode) {
+      setCountryCode(code);
+    }
   }
 
   function validateForm() {
@@ -69,23 +88,19 @@ function AddOrEdit({ onClose }: AddOrEditProps) {
     }
 
     setErrors(newErrors);
-    setIsDisabled(Object.values(newErrors).some((error) => error !== ""));
     return Object.values(newErrors).every((error) => error === "");
-  }
-
-  function onContactHandler() {
-    if (!validateForm()) {
-      return;
-    }
-    setButtonName("Contact added");
-    setTimeout(() => {
-      onClose();
-    }, 1000);
   }
 
   function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
-    setInputData((prevData) => ({ ...prevData, [name]: value }));
+    if (name === "phone") {
+      setInputData((prevPhone) => ({
+        ...prevPhone,
+        phone: value,
+      }));
+    } else {
+      setInputData((prevData) => ({ ...prevData, [name]: value }));
+    }
   }
 
   function onFocusHandler(name: string) {
@@ -110,6 +125,44 @@ function AddOrEdit({ onClose }: AddOrEditProps) {
     }
   }
 
+  function onClearHandler() {
+    setInputData({
+      userId: "",
+      name: "",
+      email: "",
+      phone: "",
+    });
+    setIsFocused({});
+    setErrors({
+      name: "",
+      email: "",
+      phone: "",
+    });
+    setChangeImage(clear);
+    setButtonName("Add Contact");
+  }
+
+  function onAddContactHandler() {
+    if (!validateForm()) {
+      return;
+    }
+
+    const newContact = {
+      userId: id,
+      name: inputData.name,
+      email: inputData.email,
+      phone: `${countryCode}${inputData.phone}`,
+    };
+
+    console.log("New contact:", newContact);
+
+    setButtonName("Contact added");
+    onClearHandler();
+    setTimeout(() => {
+      onClose();
+    }, 1000);
+  }
+
   return (
     <div className="container-addOrEdit">
       <div className="oversign">
@@ -129,27 +182,40 @@ function AddOrEdit({ onClose }: AddOrEditProps) {
       />
       <div>
         <form className="form-contact" action="">
-          {["name", "email", "phone"].map((field) => (
-            <div
-              key={field}
-              className={`container-input ${isFocused[field] ? "focused" : ""}`}
-            >
-              {field === "phone" && <CountryCodeSelector />}
-              <Input
-                className="input-contact"
-                icon={
-                  field === "name" ? peron : field === "email" ? mail : phone
-                }
-                name={field}
-                onChange={onInputChangeHandler}
-                type={field === "email" ? "email" : "text"}
-                onFocus={() => onFocusHandler(field)}
-                onBlur={() => onBlurHandler(field)}
-                required={field !== "phone"}
-                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-              />
-            </div>
-          ))}
+          {(["name", "email", "phone"] as Array<keyof ContactData>).map(
+            (field) => (
+              <div
+                key={field}
+                className={`container-input ${
+                  isFocused[field] ? "focused" : ""
+                }`}
+              >
+                {field === "phone" && (
+                  <CountryCodeSelector
+                    zipCode={(code) => getZipCodeHandler(code)}
+                  />
+                )}
+                <Input
+                  className="input-contact"
+                  icon={
+                    field === "name" ? peron : field === "email" ? mail : phone
+                  }
+                  name={field}
+                  onChange={onInputChangeHandler}
+                  type={field === "email" ? "email" : "text"}
+                  onFocus={() => onFocusHandler(field)}
+                  onBlur={() => onBlurHandler(field)}
+                  required={field !== "phone"}
+                  value={inputData[field]}
+                  placeholder={
+                    field === "phone"
+                      ? "170 1234567"
+                      : field.charAt(0).toUpperCase() + field.slice(1)
+                  }
+                />
+              </div>
+            )
+          )}
         </form>
         <div className="container-btn">
           <Button
@@ -161,11 +227,7 @@ function AddOrEdit({ onClose }: AddOrEditProps) {
             Cancel
             <img src={clear} alt="X" />
           </Button>
-          <Button
-            onClick={onContactHandler}
-            disabled={isDisabled}
-            className="add-contact-btn"
-          >
+          <Button onClick={onAddContactHandler} className="add-contact-btn">
             {buttonNane}
             <img src={check} alt="X" />
           </Button>

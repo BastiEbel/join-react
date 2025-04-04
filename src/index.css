@@ -69,3 +69,7 @@ dialog {
   line-height: 19.2px;
   color: red;
 }
+
+.countryCode-zipCode {
+  min-width: fit-content;
+}
