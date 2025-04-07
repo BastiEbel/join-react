@@ -9,7 +9,7 @@ import phone from "../../assets/image/call.png";
 import "../css/AddOrEdit.css";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useData } from "../../hooks/useData";
 import { ContactData } from "../../types/ContactData";
 import CountryCodeSelector from "../ui/CountryCodeSelector";
@@ -34,33 +34,53 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
   const [buttonNane, setButtonName] = useState<string>("");
 
   useEffect(() => {
+    setButtonName(addContact ? "Add Contact" : "Edit Contact");
     if (addContact) {
       setCountryCode("+49");
-      setButtonName("Add Contact");
-    } else {
-      setButtonName("Edit Contact");
     }
-  }, [addContact, inputData]);
+  }, [addContact]);
+
+  const onClearHandler = useCallback(() => {
+    setInputData({
+      userId: "",
+      name: "",
+      email: "",
+      phone: "",
+    });
+    setIsFocused({});
+    setErrors({
+      name: "",
+      email: "",
+      phone: "",
+    });
+    setChangeImage(clear);
+    setButtonName("Add Contact");
+  }, [setErrors]);
 
   function onCancelHandler() {
     onClearHandler();
     onClose();
   }
 
-  function validateName(name: string): boolean {
-    const nameRegex = /^[a-zA-Z\s]*$/;
-    return nameRegex.test(name);
-  }
-
-  function validateEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  function validatePhone(phone: string): boolean {
-    const phoneRegex = /^\d+$/;
-    return phoneRegex.test(phone);
-  }
+  const validateField = useCallback(
+    (field: keyof ContactData, value: string): string => {
+      switch (field) {
+        case "name":
+          return /^[a-zA-Z\s]*$/.test(value)
+            ? ""
+            : "Name can only contain letters and spaces";
+        case "email":
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+            ? ""
+            : "Invalid email format";
+        case "phone":
+          return /^\d+$/.test(value) ? "" : "Phone can only contain numbers";
+        default:
+          return "";
+      }
+    },
+    []
+  );
 
   function getZipCodeHandler(code: string) {
     if (code !== countryCode) {
@@ -68,28 +88,16 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
     }
   }
 
-  function validateForm() {
+  const validateForm = useCallback(() => {
     const newErrors = {
-      name: "",
-      email: "",
-      phone: "",
+      name: validateField("name", inputData.name),
+      email: validateField("email", inputData.email),
+      phone: validateField("phone", inputData.phone || ""),
     };
-
-    if (!inputData.name) {
-      newErrors.name = "Name is required";
-    } else if (!validateName(inputData.name)) {
-      newErrors.name = "Name can only contain letters and spaces";
-    }
-    if (!inputData.email || !validateEmail(inputData.email)) {
-      newErrors.email = "Email is required";
-    }
-    if (!inputData.phone || !validatePhone(inputData.phone)) {
-      newErrors.phone = "Phone can only contain numbers";
-    }
 
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
-  }
+  }, [inputData, setErrors, validateField]);
 
   function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -125,23 +133,6 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
     }
   }
 
-  function onClearHandler() {
-    setInputData({
-      userId: "",
-      name: "",
-      email: "",
-      phone: "",
-    });
-    setIsFocused({});
-    setErrors({
-      name: "",
-      email: "",
-      phone: "",
-    });
-    setChangeImage(clear);
-    setButtonName("Add Contact");
-  }
-
   function onAddContactHandler() {
     if (!validateForm()) {
       return;
@@ -167,8 +158,10 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
     <div className="container-addOrEdit">
       <div className="oversign">
         <img className="contact-logo" src={joinLogoWhite} alt="Join Logo" />
-        <h1 className="title-name">Add Contact</h1>
-        <p className="add-text">Task are better with a Team!</p>
+        <h1 className="title-name">
+          {addContact ? "Add Contact" : "Edit Contact"}
+        </h1>
+        {addContact && <p className="add-text">Task are better with a Team!</p>}
         <div className="contact-spacer"></div>
       </div>
       <img className="profilImage" src={profilIcon} alt="Profil" />

@@ -17,8 +17,8 @@
 
 .container-signup {
   position: absolute;
-  top: 67px;
-  left: 78%;
+  top: 50px;
+  right: 50px;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -67,5 +67,133 @@
     position: absolute;
     left: 5.35%;
     top: 4.81%;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-main {
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .logo-img {
+    width: 8%;
+    left: 5%;
+    top: 5%;
+  }
+
+  .container-signup {
+    top: 20px;
+    left: auto;
+    right: 5%;
+    width: auto;
+    gap: 20px;
+    height: auto;
+  }
+
+  .container-signup p {
+    font-size: 16px;
+    line-height: 20px;
+    width: -webkit-fill-available;
+  }
+
+  .btn-style {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  @keyframes logo-animate {
+    0% {
+      width: 8%;
+      height: auto;
+      position: absolute;
+      left: calc(50% - 3%);
+      top: calc(50% - 4%);
+    }
+    100% {
+      width: 8%;
+      height: auto;
+      position: absolute;
+      left: 5%;
+      top: 5%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-img {
+    width: 10%;
+    top: 5%;
+    left: 10%;
+    transform: translateX(-50%);
+  }
+
+  .container-signup {
+    left: unset;
+    top: 4%;
+    width: auto;
+    padding: 0 10px;
+    gap: 10px;
+  }
+
+  .container-signup p {
+    font-size: 14px;
+  }
+
+  .btn-style {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  @keyframes logo-animate {
+    0% {
+      width: 10%;
+      height: auto;
+      position: absolute;
+      left: calc(50% - 3%);
+      top: calc(50% - 4%);
+    }
+    100% {
+      width: 10%;
+      height: auto;
+      position: absolute;
+      left: 10%;
+      top: 5%;
+    }
+  }
+}
+
+@media (max-width: 1000px) and (orientation: landscape) {
+  .login-main {
+    height: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+  }
+
+  .logo-img {
+    width: 6%;
+    left: 5%;
+    top: 5%;
+  }
+
+  .container-signup {
+    top: 5%;
+    right: 2%;
+    width: auto;
+    gap: 15px;
+    flex-direction: row;
+  }
+
+  .container-signup p {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .btn-style {
+    font-size: 12px;
+    padding: 8px 10px;
   }
 }
