@@ -22,10 +22,10 @@ model User {
 }
 
 model Contact {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  phone    String?
-  userId   String
-  user     User   @relation(fields: [userId], references: [id])
+  id     String  @id @default(uuid())
+  name   String
+  email  String
+  phone  String
+  userId String
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

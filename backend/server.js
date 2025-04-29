@@ -3,6 +3,7 @@ import cors from "cors";
 import bcrypt from "bcrypt";
 import session from "express-session";
 import { PrismaClient } from "@prisma/client";
+import pg from "pg";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -11,17 +12,7 @@ const app = express();
 const SALT_ROUNDS = 10;
 const PORT = 3000;
 const prisma = new PrismaClient();
-
-app.use(express.json());
-
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  })
-);
+const pgSession = (await import("connect-pg-simple")).default(session);
 
 app.use(
   cors({
@@ -34,9 +25,26 @@ app.use(
       }
     },
     methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
     allowedHeaders: ["Content-Type"],
   })
 );
+
+app.use(
+  session({
+    store: new pgSession({
+      conString: process.env.DATABASE_URL,
+      createTableIfMissing: true,
+      ttl: 3600,
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, httpOnly: true, maxAge: 3600000 },
+  })
+);
+
+app.use(express.json());
 
 app.post("/signup", async (req, res) => {
   const { email, password, name } = req.body;
@@ -89,6 +97,14 @@ app.post("/login", async (req, res) => {
       return res.status(400).json({ error: "Invalid credentials" });
     }
 
+    const pgClient = new pg.Client(process.env.DATABASE_URL);
+    await pgClient.connect();
+    const result = await pgClient.query(
+      "DELETE FROM session WHERE sess::jsonb->>'userId' = $1",
+      [user.id]
+    );
+    await pgClient.end();
+
     req.session.userId = user.id;
 
     res.json({
@@ -102,17 +118,13 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  });
-  res.status(200).json({ message: "Logout successful" });
-});
-
 app.post("/add-contact", async (req, res) => {
-  const { name, email, phone } = req.body;
+  const { name, email, phone, userId } = req.body;
+
+  req.session.userId = userId;
+  if (!req.session.userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
 
   try {
     const newContact = await prisma.contact.create({
@@ -120,7 +132,7 @@ app.post("/add-contact", async (req, res) => {
         name,
         email,
         phone,
-        userId: req.session.userId,
+        userId,
       },
     });
 
@@ -132,6 +144,29 @@ app.post("/add-contact", async (req, res) => {
     console.error("Error adding contact:", error);
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+app.get("/contacts/:userId", async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const contacts = await prisma.contact.findMany({
+      where: { userId: userId },
+    });
+
+    res.status(200).json(contacts);
+  } catch (error) {
+    console.error("Error fetching contacts:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
+  res.status(200).json({ message: "Logout successful" });
 });
 
 app.listen(PORT, () => {

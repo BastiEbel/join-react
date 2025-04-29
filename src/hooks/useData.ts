@@ -1,16 +1,21 @@
+import { useCallback } from "react";
 import {
   setErrors,
   signUp,
   login,
   authentication,
   logout,
+  addContactData,
+  setContactData,
 } from "../store/dataSlice";
 import { useDataDispatch, useDataSelector } from "../store/hooks";
 import { RootState } from "../store/store";
+import { ContactData } from "../types/ContactData";
 import { LoginCredentials } from "../types/Credentials";
 import { FormData } from "../types/FormData";
 import { FormState } from "../types/FormState";
 import { User } from "../types/User";
+import { getContact } from "../utils/addData";
 
 export function useData() {
   const dispatch = useDataDispatch();
@@ -21,6 +26,9 @@ export function useData() {
   const errors = useDataSelector((state: RootState) => state.data.errors);
   const isChecked = useDataSelector((state: RootState) => state.data.isChecked);
   const user = useDataSelector((state: RootState) => state.data.user);
+  const contactData = useDataSelector(
+    (state: RootState) => state.data.contactData
+  );
 
   const signUpFormData = async (data: FormData) => {
     const resultAction = await dispatch(signUp(data));
@@ -54,6 +62,36 @@ export function useData() {
     }
     return null;
   };
+  const addContactDataAsync = async (contactData: ContactData) => {
+    if (!contactData.phone) {
+      throw new Error("Phone number is required.");
+    }
+    const resultData = await dispatch(
+      addContactData(
+        contactData as {
+          userId: string;
+          name: string;
+          email: string;
+          phone: string;
+        }
+      )
+    );
+    if (addContactData.fulfilled.match(resultData)) {
+      return resultData.payload;
+    }
+    return null;
+  };
+
+  const loadContactData = useCallback(async () => {
+    try {
+      const contacts = await getContact(user.id);
+      console.log("Fetched contact data:", contacts);
+
+      dispatch(setContactData(contacts));
+    } catch (error) {
+      console.error("Error loading contact data:", error);
+    }
+  }, [dispatch, user.id]);
 
   return {
     formData,
@@ -61,10 +99,13 @@ export function useData() {
     user,
     errors,
     isChecked,
+    contactData,
     signUp: signUpFormData,
     login: loginData,
     setErrors: updateErrors,
     authentication: updateAuth,
     logout: logoutUser,
+    addContactData: addContactDataAsync,
+    loadContactData,
   };
 }

@@ -1,10 +1,12 @@
-import { FormData, LoginCredentials } from "../store/dataSlice";
+import { LoginCredentials } from "../types/Credentials";
+import { FormData } from "../types/FormData";
 
 export async function signUpData(formData: FormData) {
   try {
     const response = await fetch("http://localhost:3000/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify(formData),
     });
 
@@ -24,6 +26,7 @@ export async function loginData(credentials: LoginCredentials) {
     const response = await fetch("http://localhost:3000/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify(credentials),
     });
 
@@ -43,6 +46,7 @@ export async function logout() {
     const response = await fetch("http://localhost:3000/logout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
     });
 
     if (!response.ok) {

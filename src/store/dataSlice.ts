@@ -4,6 +4,8 @@ import { FormData } from "../types/FormData";
 import { LoginCredentials } from "../types/Credentials";
 import { User } from "../types/User";
 import { FormState } from "../types/FormState";
+import { addContact } from "../utils/addData";
+import { ContactData } from "../types/ContactData";
 
 const initialState: FormState = {
   formData: {
@@ -23,6 +25,12 @@ const initialState: FormState = {
     id: "",
     email: "",
     password: "",
+  },
+  contactData: {
+    userId: "",
+    name: "",
+    email: "",
+    phone: "",
   },
   errors: {
     name: "",
@@ -78,6 +86,21 @@ export const logout = createAsyncThunk("data/logout", async () => {
   }
 });
 
+export const addContactData = createAsyncThunk(
+  "data/addContact",
+  async (
+    contactData: { userId: string; name: string; email: string; phone: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response: ContactData = await addContact(contactData);
+      return response;
+    } catch {
+      return rejectWithValue("Failed to add contact");
+    }
+  }
+);
+
 export const dataSlice = createSlice({
   name: "data",
   initialState,
@@ -90,6 +113,9 @@ export const dataSlice = createSlice({
     },
     authentication(state, action: PayloadAction<{ user: User }>) {
       state.user = action.payload.user;
+    },
+    setContactData(state, action: PayloadAction<ContactData>) {
+      state.contactData = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -134,6 +160,9 @@ export const dataSlice = createSlice({
           state.errors = { ...state.errors, password: action.payload };
         }
       })
+      .addCase(addContactData.fulfilled, (state, action) => {
+        state.contactData = action.payload as ContactData;
+      })
       .addCase(logout.fulfilled, (state) => {
         state.user = {
           id: "",
@@ -165,4 +194,5 @@ export const dataSlice = createSlice({
   },
 });
 
-export const { setErrors, toggleChecked, authentication } = dataSlice.actions;
+export const { setErrors, toggleChecked, authentication, setContactData } =
+  dataSlice.actions;

@@ -21,6 +21,7 @@ interface AddOrEditProps {
 }
 function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
   const { id } = useParams();
+  const { addContactData } = useData();
   const [changeImage, setChangeImage] = useState<string>(clear);
   const { setErrors } = useData();
   const [inputData, setInputData] = useState<ContactData>({
@@ -138,6 +139,10 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
       return;
     }
 
+    if (!id) {
+      return;
+    }
+
     const newContact = {
       userId: id,
       name: inputData.name,
@@ -145,7 +150,7 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
       phone: `${countryCode}${inputData.phone}`,
     };
 
-    console.log("New contact:", newContact);
+    addContactData(newContact);
 
     setButtonName("Contact added");
     onClearHandler();
