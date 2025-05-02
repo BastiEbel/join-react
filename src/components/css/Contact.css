@@ -60,6 +60,48 @@
   font-weight: 400;
 }
 
+.contact {
+  gap: 16px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  padding: 0px 20px 0px 20px;
+  margin: 16px 0px 16px 0px;
+  box-sizing: border-box;
+  background: #f0f0f3;
+  border: 2px solid #c1c0c0;
+  box-shadow: 8px 8px 15px #d1d1d1, -8px -8px 15px #ffffff;
+}
+.contact:hover {
+  cursor: pointer;
+  box-shadow: 4px 4px 10px #d1d1d1, -4px -4px 10px #ffffff,
+    0px 0px 15px rgba(41, 171, 226, 0.5);
+  transform: translateY(-3px);
+  background: #e8e8ec;
+}
+.contact p {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  margin: 8px 0px 8px 0px;
+  color: #2a3647;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.contact-item {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 50%;
+  width: fit-content;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
 .container-contact-info {
   display: flex;
   flex-direction: column;

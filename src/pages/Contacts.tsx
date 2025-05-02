@@ -6,6 +6,7 @@ import OpenModal, { ModalHandle } from "../components/ui/OpenModal";
 import AddOrEditContact from "../components/layout/AddOrEditContact";
 import { ContactData } from "../types/ContactData";
 import { useData } from "../hooks/useData";
+import contactColors from "../styles/contactColors";
 
 export default function Contacts() {
   const dialogRef = useRef<ModalHandle>(null);
@@ -28,6 +29,7 @@ export default function Contacts() {
   function onCloseHandler() {
     if (dialogRef.current) {
       dialogRef.current.close();
+      loadContactData();
     }
   }
 
@@ -55,13 +57,29 @@ export default function Contacts() {
                           contact.name &&
                           contact.name.startsWith(letter)
                       )
-                      .map((contact) => (
-                        <div key={contact.id}>
-                          <p>{contact.name}</p>
-                          <p>{contact.email}</p>
-                          <p>{contact.phone}</p>
-                        </div>
-                      ))}
+                      .map((contact) => {
+                        const initialsContact: string = contact.name
+                          .split(" ")
+                          .map((name: string) => name.charAt(0))
+                          .join("");
+                        const letter = initialsContact.charAt(0).toUpperCase();
+                        return (
+                          <div key={contact.id} className="contact">
+                            <div
+                              className="contact-item"
+                              style={{ backgroundColor: contactColors[letter] }}
+                            >
+                              {initialsContact}
+                            </div>
+                            <p>
+                              {contact.name}{" "}
+                              <a href={`mailto:${contact.email}`}>
+                                {contact.email}
+                              </a>
+                            </p>
+                          </div>
+                        );
+                      })}
                   </div>
                 }
               </div>
