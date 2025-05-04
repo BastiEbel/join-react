@@ -4,7 +4,7 @@ import { FormData } from "../types/FormData";
 import { LoginCredentials } from "../types/Credentials";
 import { User } from "../types/User";
 import { FormState } from "../types/FormState";
-import { addContact } from "../utils/addData";
+import { addContact } from "../utils/contactData";
 import { ContactData } from "../types/ContactData";
 
 const initialState: FormState = {

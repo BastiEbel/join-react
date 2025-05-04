@@ -15,7 +15,7 @@ import { LoginCredentials } from "../types/Credentials";
 import { FormData } from "../types/FormData";
 import { FormState } from "../types/FormState";
 import { User } from "../types/User";
-import { getContact } from "../utils/addData";
+import { getContact } from "../utils/contactData";
 
 export function useData() {
   const dispatch = useDataDispatch();

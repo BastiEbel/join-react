@@ -160,6 +160,24 @@ app.get("/contacts/:userId", async (req, res) => {
   }
 });
 
+app.delete("/delete-contact", async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    const deletedContact = await prisma.contact.delete({
+      where: { id: parseInt(id) },
+    });
+
+    res.status(200).json({
+      message: "Contact deleted",
+      contact: deletedContact,
+    });
+  } catch (error) {
+    console.error("Error deleting contact:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.post("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
