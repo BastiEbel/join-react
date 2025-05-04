@@ -1,0 +1,59 @@
+.alphabet {
+  width: 352px;
+  padding: 17px 36px 17px 36px;
+  box-sizing: border-box;
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 2px solid #d1d1d1;
+}
+
+.alphabet-letter {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.contact {
+  gap: 16px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  padding: 0px 20px 0px 20px;
+  margin: 16px 0px 16px 0px;
+  box-sizing: border-box;
+  background: #f0f0f3;
+  border: 2px solid #c1c0c0;
+  box-shadow: 8px 8px 15px #d1d1d1, -8px -8px 15px #ffffff;
+  transition: all 0.3s ease-in-out;
+}
+.contact:hover {
+  cursor: pointer;
+  box-shadow: 0px 10px 20px rgba(41, 171, 226, 0.15),
+    0px 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px) scale(1.02);
+  background: linear-gradient(145deg, #e6e6ea, #ffffff);
+  border-color: #29abe2;
+}
+.contact span {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  margin: 8px 0px 8px 0px;
+  color: #2a3647;
+
+  p {
+    color: blue;
+  }
+}
+
+.contact-item {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 50%;
+  width: fit-content;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}

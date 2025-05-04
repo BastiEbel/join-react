@@ -1,4 +1,5 @@
 import { ContactData } from "../types/ContactData";
+import { User } from "../types/User";
 
 export async function addContact(contactData: ContactData) {
   try {
@@ -20,9 +21,9 @@ export async function addContact(contactData: ContactData) {
   }
 }
 
-export async function getContact(userId: string) {
+export async function getContact(user: User) {
   try {
-    const response = await fetch(`http://localhost:3000/contacts/${userId}`, {
+    const response = await fetch(`http://localhost:3000/contacts/${user.id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -34,7 +35,6 @@ export async function getContact(userId: string) {
       );
     }
     const data = await response.json();
-    console.log("Fetched contact data:", data);
 
     return data;
   } catch (error) {

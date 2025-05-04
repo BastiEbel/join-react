@@ -6,7 +6,7 @@ import { User } from "./User";
 export interface FormState {
   formData: FormData;
   loginCredentials: LoginCredentials;
-  contactData: ContactData;
+  contactData: ContactData[];
   user: User;
   errors: {
     name: string;

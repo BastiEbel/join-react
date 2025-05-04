@@ -26,12 +26,7 @@ const initialState: FormState = {
     email: "",
     password: "",
   },
-  contactData: {
-    userId: "",
-    name: "",
-    email: "",
-    phone: "",
-  },
+  contactData: [] as ContactData[], // Typisiere das leere Array explizit als ContactData[]
   errors: {
     name: "",
     email: "",
@@ -114,8 +109,8 @@ export const dataSlice = createSlice({
     authentication(state, action: PayloadAction<{ user: User }>) {
       state.user = action.payload.user;
     },
-    setContactData(state, action: PayloadAction<ContactData>) {
-      state.contactData = action.payload;
+    setContactData(state, action: PayloadAction<ContactData[]>) {
+      state.contactData = action.payload; // Speichere das Array im Zustand
     },
   },
   extraReducers: (builder) => {
@@ -161,7 +156,7 @@ export const dataSlice = createSlice({
         }
       })
       .addCase(addContactData.fulfilled, (state, action) => {
-        state.contactData = action.payload as ContactData;
+        state.contactData.push(action.payload as ContactData);
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = {
@@ -190,6 +185,7 @@ export const dataSlice = createSlice({
           confirmPassword: "",
         };
         state.isChecked = false;
+        state.contactData = [];
       });
   },
 });

@@ -84,14 +84,21 @@ export function useData() {
 
   const loadContactData = useCallback(async () => {
     try {
-      const contacts = await getContact(user.id);
-      console.log("Fetched contact data:", contacts);
+      const contacts = await getContact(user);
 
-      dispatch(setContactData(contacts));
+      if (!Array.isArray(contacts)) {
+        throw new Error("Invalid data format: Expected an array of contacts.");
+      }
+
+      const contactDataSorted = contacts
+        .filter((contact): contact is ContactData => contact && contact.name) // Typprüfung
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+      dispatch(setContactData(contactDataSorted)); // Übergibt ein Array von ContactData
     } catch (error) {
       console.error("Error loading contact data:", error);
     }
-  }, [dispatch, user.id]);
+  }, [dispatch, user]);
 
   return {
     formData,

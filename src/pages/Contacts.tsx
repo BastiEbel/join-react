@@ -1,23 +1,31 @@
 import "../components/css/Contact.css";
 import Button from "../components/ui/Button";
 import imgContact from "../assets/image/person_add.png";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import OpenModal, { ModalHandle } from "../components/ui/OpenModal";
 import AddOrEditContact from "../components/layout/AddOrEditContact";
 import { ContactData } from "../types/ContactData";
 import { useData } from "../hooks/useData";
-import contactColors from "../styles/contactColors";
+import ContactInfo from "../components/layout/ContactInfo";
+import ContactList from "../components/layout/ContactList";
 
 export default function Contacts() {
   const dialogRef = useRef<ModalHandle>(null);
-  const alphabet = Array.from(Array(26)).map((_, i) =>
-    String.fromCharCode(i + 65)
-  );
+
   const { loadContactData, contactData } = useData();
+  const [selectedContact, setSelectedContact] = useState<ContactData | null>(
+    contactData[0] || null
+  );
 
   useEffect(() => {
     loadContactData();
   }, [loadContactData]);
+
+  useEffect(() => {
+    if (contactData && contactData.length > 0) {
+      setSelectedContact(contactData[0]);
+    }
+  }, [contactData]);
 
   function onAddPersonHandler(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
@@ -33,6 +41,10 @@ export default function Contacts() {
     }
   }
 
+  function onContactClickHandler(contact: ContactData) {
+    setSelectedContact(contact);
+  }
+
   return (
     <>
       <OpenModal ref={dialogRef}>
@@ -44,46 +56,11 @@ export default function Contacts() {
             Add new contact <img src={imgContact} alt="Add Person" />
           </Button>
 
-          {contactData && Object.keys(contactData).length > 0 ? (
-            alphabet.map((letter) => (
-              <div key={letter} className="alphabet">
-                <span className="alphabet-letter">{letter}</span>
-                {
-                  <div>
-                    {Object.values(contactData)
-                      .filter(
-                        (contact: ContactData) =>
-                          contact &&
-                          contact.name &&
-                          contact.name.startsWith(letter)
-                      )
-                      .map((contact) => {
-                        const initialsContact: string = contact.name
-                          .split(" ")
-                          .map((name: string) => name.charAt(0))
-                          .join("");
-                        const letter = initialsContact.charAt(0).toUpperCase();
-                        return (
-                          <div key={contact.id} className="contact">
-                            <div
-                              className="contact-item"
-                              style={{ backgroundColor: contactColors[letter] }}
-                            >
-                              {initialsContact}
-                            </div>
-                            <p>
-                              {contact.name}{" "}
-                              <a href={`mailto:${contact.email}`}>
-                                {contact.email}
-                              </a>
-                            </p>
-                          </div>
-                        );
-                      })}
-                  </div>
-                }
-              </div>
-            ))
+          {contactData && contactData.length > 0 ? (
+            <ContactList
+              contacts={contactData}
+              onContactClick={onContactClickHandler}
+            />
           ) : (
             <p>No contact data found</p>
           )}
@@ -93,6 +70,19 @@ export default function Contacts() {
             <h1>Contacts</h1>
             <div></div>
             <h2>Better with a team</h2>
+          </div>
+          <div className="contact-info-text">
+            {selectedContact ? (
+              <ContactInfo
+                contactInfo={{
+                  name: selectedContact.name,
+                  email: selectedContact.email,
+                  phone: selectedContact.phone || "",
+                }}
+              />
+            ) : (
+              <p>Select a person to view details</p>
+            )}
           </div>
         </div>
       </div>
