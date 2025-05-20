@@ -13,6 +13,7 @@ import leftArrowIcon from "../../assets/image/arrowLeft.png";
 import Button from "../ui/Button";
 
 import { useData } from "../../hooks/useData";
+import { useAuthValidation } from "../../hooks/useAuthValidation";
 import { FormData } from "../../types/FormData";
 
 type FormProps = {
@@ -32,6 +33,7 @@ export default function Form({ oversign, isLogIn }: FormProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { errors, signUp, setErrors, login, authentication } = useData();
+  const { validateField, validateForm } = useAuthValidation(isLogIn);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<{ [key: string]: boolean }>({});
   const [inputData, setInputData] = useState<FormData>({
@@ -59,6 +61,13 @@ export default function Form({ oversign, isLogIn }: FormProps) {
 
   function handleBlur(name: string) {
     setIsFocused((prev) => ({ ...prev, [name]: false }));
+    setErrors({
+      [name]: validateField(
+        name as keyof FormData,
+        inputData[name as keyof FormData] || "",
+        inputData
+      ),
+    });
   }
 
   const inputFields: InputProp[] = [
@@ -96,50 +105,11 @@ export default function Form({ oversign, isLogIn }: FormProps) {
     navigate("/");
   }
 
-  function validateName(name: string): boolean {
-    const nameRegex = /^[a-zA-Z\s]*$/;
-    return nameRegex.test(name);
-  }
-
-  function validateEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  function validatePassword(password: string): boolean {
-    return password.length >= 8;
-  }
-
-  function validateForm() {
-    const newErrors = {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    };
-
-    if (!isLogIn && !inputData.name) {
-      newErrors.name = "Name is required";
-    } else if (!validateName(inputData.name)) {
-      newErrors.name = "Name can only contain letters and spaces";
-    }
-    if (!inputData.email || !validateEmail(inputData.email)) {
-      newErrors.email = "Email is required";
-    }
-    if (!inputData.password || !validatePassword(inputData.password)) {
-      newErrors.password = "Password is required";
-    }
-    if (!isLogIn && inputData.password !== inputData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
-
-    setErrors(newErrors);
-    return Object.values(newErrors).every((error) => error === "");
-  }
-
   async function onSubmittingHandler(event: React.FormEvent<EventTarget>) {
     event.preventDefault();
-    if (!validateForm()) {
+    const { isValid, errors } = validateForm(inputData);
+    setErrors(errors);
+    if (!isValid) {
       return;
     }
 

@@ -73,13 +73,7 @@ export default function Contacts() {
           </div>
           <div className="contact-info-text">
             {selectedContact ? (
-              <ContactInfo
-                contactInfo={{
-                  name: selectedContact.name,
-                  email: selectedContact.email,
-                  phone: selectedContact.phone || "",
-                }}
-              />
+              <ContactInfo contactInfo={selectedContact as ContactData} />
             ) : (
               <p>Select a person to view details</p>
             )}

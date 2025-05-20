@@ -59,7 +59,7 @@ const OpenModal = forwardRef<ModalHandle, OpenModalProps>(function OpenModal(
   return createPortal(
     <dialog
       className={isOpen ? "dialog-open" : "dialog-close"}
-      style={{ padding: "unset", borderRadius: "30px", marginRight: "100px" }}
+      style={{ padding: "unset", borderRadius: "30px", border: "unset" }}
       onClick={onClickOutsideHandler}
       ref={dialog}
     >

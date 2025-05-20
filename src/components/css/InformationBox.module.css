@@ -1,0 +1,100 @@
+.infoBox {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(41, 171, 226, 0.15);
+  padding: 32px 28px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e0e0e0;
+}
+
+.title {
+  border-bottom: 3px solid #29abe2;
+  padding-bottom: 8px;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  color: #222;
+}
+
+.description {
+  color: #e53935;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-align: center;
+  width: 100%;
+}
+
+.contactRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.contactLabel {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: #29abe2;
+}
+
+.contactName {
+  font-size: 1.1rem;
+  color: #222;
+}
+
+.buttonRow {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 8px;
+}
+
+.closeBtn {
+  min-width: 100px;
+  height: 32px;
+  border-radius: 10px;
+  border: 2px solid #2a3647;
+  background: #ffffff;
+  font-weight: 400;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  &:hover {
+    cursor: pointer;
+    border: 2px solid #29abe2;
+    color: #29abe2;
+  }
+}
+
+.actionBtn {
+  min-width: 100px;
+  height: 32px;
+  border-radius: 10px;
+  color: #ffffff;
+  background: #2a3647;
+  font-weight: 400;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  &:hover {
+    cursor: pointer;
+    background: #29abe2;
+    border-color: #29abe2;
+  }
+}

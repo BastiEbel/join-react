@@ -14,6 +14,7 @@ import { useData } from "../../hooks/useData";
 import { ContactData } from "../../types/ContactData";
 import CountryCodeSelector from "../ui/CountryCodeSelector";
 import { useParams } from "react-router-dom";
+import { useContactValidation } from "../../hooks/useValidation";
 
 interface AddOrEditProps {
   onClose: () => void;
@@ -33,6 +34,8 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
   const [countryCode, setCountryCode] = useState<string>("+49");
   const [isFocused, setIsFocused] = useState<{ [key: string]: boolean }>({});
   const [buttonNane, setButtonName] = useState<string>("");
+
+  const { validateField, validateForm } = useContactValidation();
 
   useEffect(() => {
     setButtonName(addContact ? "Add Contact" : "Edit Contact");
@@ -63,42 +66,11 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
     onClose();
   }
 
-  const validateField = useCallback(
-    (field: keyof ContactData, value: string): string => {
-      switch (field) {
-        case "name":
-          return /^[a-zA-Z\s]*$/.test(value)
-            ? ""
-            : "Name can only contain letters and spaces";
-        case "email":
-          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-            ? ""
-            : "Invalid email format";
-        case "phone":
-          return /^\d+$/.test(value) ? "" : "Phone can only contain numbers";
-        default:
-          return "";
-      }
-    },
-    []
-  );
-
   function getZipCodeHandler(code: string) {
     if (code !== countryCode) {
       setCountryCode(code);
     }
   }
-
-  const validateForm = useCallback(() => {
-    const newErrors = {
-      name: validateField("name", inputData.name),
-      email: validateField("email", inputData.email),
-      phone: validateField("phone", inputData.phone || ""),
-    };
-
-    setErrors(newErrors);
-    return Object.values(newErrors).every((error) => error === "");
-  }, [inputData, setErrors, validateField]);
 
   function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -118,6 +90,12 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
 
   function onBlurHandler(name: string) {
     setIsFocused((prevFocused) => ({ ...prevFocused, [name]: false }));
+    setErrors({
+      [name]: validateField(
+        name as keyof ContactData,
+        inputData[name as keyof ContactData] || ""
+      ),
+    });
   }
 
   function onMouseOverHandler(e: React.MouseEvent<HTMLElement>) {
@@ -135,23 +113,21 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
   }
 
   function onAddContactHandler() {
-    if (!validateForm()) {
+    const { isValid, errors } = validateForm(inputData);
+    setErrors(errors);
+    if (!isValid) {
       return;
     }
-
     if (!id) {
       return;
     }
-
     const newContact = {
       userId: id,
       name: inputData.name,
       email: inputData.email,
       phone: `${countryCode}${inputData.phone}`,
     };
-
     addContactData(newContact);
-
     setButtonName("Contact added");
     onClearHandler();
     setTimeout(() => {
@@ -161,7 +137,7 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
 
   return (
     <div className="container-addOrEdit">
-      <div className="oversign">
+      <div className="oversign-addOrEdit">
         <img className="contact-logo" src={joinLogoWhite} alt="Join Logo" />
         <h1 className="title-name">
           {addContact ? "Add Contact" : "Edit Contact"}

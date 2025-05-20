@@ -165,7 +165,7 @@ app.delete("/delete-contact", async (req, res) => {
 
   try {
     const deletedContact = await prisma.contact.delete({
-      where: { id: parseInt(id) },
+      where: { id: id },
     });
 
     res.status(200).json({

@@ -6,6 +6,7 @@ import {
   authentication,
   logout,
   addContactData,
+  deleteContactData,
   setContactData,
 } from "../store/dataSlice";
 import { useDataDispatch, useDataSelector } from "../store/hooks";
@@ -81,6 +82,10 @@ export function useData() {
     }
     return null;
   };
+  const deleteContact = (contactId: string) => {
+    dispatch(deleteContactData(contactId));
+    return null;
+  };
 
   const loadContactData = useCallback(async () => {
     try {
@@ -91,10 +96,10 @@ export function useData() {
       }
 
       const contactDataSorted = contacts
-        .filter((contact): contact is ContactData => contact && contact.name) // Typprüfung
+        .filter((contact): contact is ContactData => contact && contact.name)
         .sort((a, b) => a.name.localeCompare(b.name));
 
-      dispatch(setContactData(contactDataSorted)); // Übergibt ein Array von ContactData
+      dispatch(setContactData(contactDataSorted));
     } catch (error) {
       console.error("Error loading contact data:", error);
     }
@@ -113,6 +118,7 @@ export function useData() {
     authentication: updateAuth,
     logout: logoutUser,
     addContactData: addContactDataAsync,
+    deleteContactData: deleteContact,
     loadContactData,
   };
 }

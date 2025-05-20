@@ -2,16 +2,17 @@ import contactColors from "../../styles/contactColors";
 import edit from "../../assets/image/edit.png";
 import deleteItem from "../../assets/image/delete.png";
 import "../css/ContactInfo.css";
+import OpenModal, { ModalHandle } from "../ui/OpenModal";
+import { useRef } from "react";
+import InformationBox from "../ui/InformationBox";
+import { ContactData } from "../../types/ContactData";
 
 interface ContactInfoProps {
-  contactInfo: {
-    name: string;
-    email: string;
-    phone: string;
-  };
+  contactInfo: ContactData;
 }
 
 export default function ContactInfo({ contactInfo }: ContactInfoProps) {
+  const dialogRef = useRef<ModalHandle>(null);
   const initialsContact = contactInfo.name
     .split(" ")
     .map((name) => name.charAt(0))
@@ -20,12 +21,34 @@ export default function ContactInfo({ contactInfo }: ContactInfoProps) {
   function onEditHandler() {
     // Logic to edit the contact
   }
-  function onDeleteHandler() {
+  function onOpenDeleteHandler(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    if (dialogRef.current) {
+      dialogRef.current.open();
+    }
+  }
+  function onDeleteHandler(contactData: ContactData) {
+    console.log("Delete contact", contactData);
+
     // Logic to delete the contact
   }
 
   return (
     <>
+      <OpenModal ref={dialogRef}>
+        <InformationBox
+          onClose={() => {
+            if (dialogRef.current) {
+              dialogRef.current.close();
+            }
+          }}
+          title="Delete Contact"
+          description="You are sure do you want delete the contact?"
+          info={contactInfo}
+          btnName="Delete"
+          onClick={() => onDeleteHandler(contactInfo)}
+        />
+      </OpenModal>
       <div className="name-container">
         <div
           className="name-item"
@@ -43,7 +66,7 @@ export default function ContactInfo({ contactInfo }: ContactInfoProps) {
               <img src={edit} alt="Edit Contact" />
               Edit
             </span>
-            <span onClick={onDeleteHandler}>
+            <span onClick={onOpenDeleteHandler}>
               <img src={deleteItem} alt="Delete Contact" />
               Delete
             </span>
