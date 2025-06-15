@@ -19,11 +19,15 @@ export default function ContactList({
   const alphabet = Array.from(Array(26)).map((_, i) =>
     String.fromCharCode(i + 65)
   );
+  console.log("Contacts:", contacts);
+
   return (
     <>
       {alphabet
         .filter((letter) =>
-          contacts.some((contact) => contact.name.startsWith(letter))
+          contacts.some(
+            (contact) => contact.name && contact.name.startsWith(letter)
+          )
         )
         .map((letter) => (
           <div key={letter} className="alphabet">

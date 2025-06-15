@@ -43,13 +43,13 @@ export async function getContact(user: User) {
   }
 }
 
-export async function deleteContact(contactId: string) {
+export async function deleteContactToDB(id: string) {
   try {
     const response = await fetch(`http://localhost:3000/delete-contact`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ contactId }),
+      body: JSON.stringify({ id }),
     });
 
     if (!response.ok) {

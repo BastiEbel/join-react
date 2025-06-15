@@ -6,6 +6,8 @@ import OpenModal, { ModalHandle } from "../ui/OpenModal";
 import { useRef } from "react";
 import InformationBox from "../ui/InformationBox";
 import { ContactData } from "../../types/ContactData";
+import { useData } from "../../hooks/useData";
+import { deleteContactToDB } from "../../utils/contactData";
 
 interface ContactInfoProps {
   contactInfo: ContactData;
@@ -13,6 +15,7 @@ interface ContactInfoProps {
 
 export default function ContactInfo({ contactInfo }: ContactInfoProps) {
   const dialogRef = useRef<ModalHandle>(null);
+  const { loadContactData } = useData();
   const initialsContact = contactInfo.name
     .split(" ")
     .map((name) => name.charAt(0))
@@ -28,9 +31,15 @@ export default function ContactInfo({ contactInfo }: ContactInfoProps) {
     }
   }
   function onDeleteHandler(contactData: ContactData) {
-    console.log("Delete contact", contactData);
-
-    // Logic to delete the contact
+    if (!contactData.id) {
+      alert("Contact ID did not found.");
+      return;
+    }
+    deleteContactToDB(contactData.id);
+    if (dialogRef.current) {
+      dialogRef.current.close();
+    }
+    loadContactData();
   }
 
   return (

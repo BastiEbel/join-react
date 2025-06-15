@@ -132,7 +132,7 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
     onClearHandler();
     setTimeout(() => {
       onClose();
-    }, 1000);
+    }, 300);
   }
 
   return (

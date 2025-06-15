@@ -112,12 +112,6 @@ export const dataSlice = createSlice({
     setContactData(state, action: PayloadAction<ContactData[]>) {
       state.contactData = action.payload;
     },
-    deleteContactData(state, action: PayloadAction<string>) {
-      const contactId = action.payload;
-      state.contactData = state.contactData.filter(
-        (contact) => contact.userId !== contactId
-      );
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -196,10 +190,5 @@ export const dataSlice = createSlice({
   },
 });
 
-export const {
-  setErrors,
-  toggleChecked,
-  authentication,
-  setContactData,
-  deleteContactData,
-} = dataSlice.actions;
+export const { setErrors, toggleChecked, authentication, setContactData } =
+  dataSlice.actions;

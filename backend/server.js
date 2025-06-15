@@ -136,10 +136,7 @@ app.post("/add-contact", async (req, res) => {
       },
     });
 
-    res.status(201).json({
-      message: "Contact added",
-      contact: newContact,
-    });
+    res.status(200).json(newContact);
   } catch (error) {
     console.error("Error adding contact:", error);
     res.status(500).json({ error: "Internal server error" });

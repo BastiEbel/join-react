@@ -6,7 +6,6 @@ import {
   authentication,
   logout,
   addContactData,
-  deleteContactData,
   setContactData,
 } from "../store/dataSlice";
 import { useDataDispatch, useDataSelector } from "../store/hooks";
@@ -63,6 +62,7 @@ export function useData() {
     }
     return null;
   };
+
   const addContactDataAsync = async (contactData: ContactData) => {
     if (!contactData.phone) {
       throw new Error("Phone number is required.");
@@ -80,10 +80,6 @@ export function useData() {
     if (addContactData.fulfilled.match(resultData)) {
       return resultData.payload;
     }
-    return null;
-  };
-  const deleteContact = (contactId: string) => {
-    dispatch(deleteContactData(contactId));
     return null;
   };
 
@@ -118,7 +114,6 @@ export function useData() {
     authentication: updateAuth,
     logout: logoutUser,
     addContactData: addContactDataAsync,
-    deleteContactData: deleteContact,
     loadContactData,
   };
 }
