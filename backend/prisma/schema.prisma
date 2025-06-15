@@ -26,6 +26,7 @@ model Contact {
   name   String
   email  String
   phone  String
+  zipCode String
   userId String
   user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

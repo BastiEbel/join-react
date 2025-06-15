@@ -3,11 +3,12 @@ import edit from "../../assets/image/edit.png";
 import deleteItem from "../../assets/image/delete.png";
 import "../css/ContactInfo.css";
 import OpenModal, { ModalHandle } from "../ui/OpenModal";
-import { useRef } from "react";
+import React, { useRef, useState } from "react";
 import InformationBox from "../ui/InformationBox";
 import { ContactData } from "../../types/ContactData";
 import { useData } from "../../hooks/useData";
 import { deleteContactToDB } from "../../utils/contactData";
+import AddOrEdit from "./AddOrEditContact";
 
 interface ContactInfoProps {
   contactInfo: ContactData;
@@ -15,13 +16,20 @@ interface ContactInfoProps {
 
 export default function ContactInfo({ contactInfo }: ContactInfoProps) {
   const dialogRef = useRef<ModalHandle>(null);
+  const [onEditMode, setOnEditMode] = useState(false);
+  const [contactData, setContactData] = useState<ContactData>(contactInfo);
   const { loadContactData } = useData();
   const initialsContact = contactInfo.name
     .split(" ")
     .map((name) => name.charAt(0))
     .join("");
 
-  function onEditHandler() {
+  function onEditHandler(contact: ContactData) {
+    setOnEditMode(true);
+    if (dialogRef.current) {
+      dialogRef.current.open();
+    }
+    setContactData(contact);
     // Logic to edit the contact
   }
   function onOpenDeleteHandler(e: React.MouseEvent<HTMLButtonElement>) {
@@ -30,9 +38,15 @@ export default function ContactInfo({ contactInfo }: ContactInfoProps) {
       dialogRef.current.open();
     }
   }
+  function onCloseEditHandler() {
+    setOnEditMode(false);
+    if (dialogRef.current) {
+      dialogRef.current.close();
+    }
+  }
   function onDeleteHandler(contactData: ContactData) {
     if (!contactData.id) {
-      alert("Contact ID did not found.");
+      alert("Contact did not found.");
       return;
     }
     deleteContactToDB(contactData.id);
@@ -40,23 +54,32 @@ export default function ContactInfo({ contactInfo }: ContactInfoProps) {
       dialogRef.current.close();
     }
     loadContactData();
+    setOnEditMode(false);
   }
 
   return (
     <>
       <OpenModal ref={dialogRef}>
-        <InformationBox
-          onClose={() => {
-            if (dialogRef.current) {
-              dialogRef.current.close();
-            }
-          }}
-          title="Delete Contact"
-          description="You are sure do you want delete the contact?"
-          info={contactInfo}
-          btnName="Delete"
-          onClick={() => onDeleteHandler(contactInfo)}
-        />
+        {onEditMode ? (
+          <AddOrEdit
+            contactData={contactData}
+            onClose={onCloseEditHandler}
+            addContact={false}
+          />
+        ) : (
+          <InformationBox
+            onClose={() => {
+              if (dialogRef.current) {
+                dialogRef.current.close();
+              }
+            }}
+            title="Delete Contact"
+            description="You are sure do you want delete the contact?"
+            info={contactInfo}
+            btnName="Delete"
+            onClick={() => onDeleteHandler(contactInfo)}
+          />
+        )}
       </OpenModal>
       <div className="name-container">
         <div
@@ -71,7 +94,7 @@ export default function ContactInfo({ contactInfo }: ContactInfoProps) {
         <div className="name-info">
           <h1>{contactInfo.name}</h1>
           <div className="name-info-btn">
-            <span onClick={onEditHandler}>
+            <span onClick={() => onEditHandler(contactInfo)}>
               <img src={edit} alt="Edit Contact" />
               Edit
             </span>
@@ -90,7 +113,10 @@ export default function ContactInfo({ contactInfo }: ContactInfoProps) {
         </span>
         <span>
           <b>Phone:</b>
-          <p>{contactInfo.phone}</p>
+          <p>
+            {contactInfo.zipCode}
+            {contactInfo.phone}
+          </p>
         </span>
       </div>
     </>

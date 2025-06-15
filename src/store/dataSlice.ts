@@ -84,7 +84,13 @@ export const logout = createAsyncThunk("data/logout", async () => {
 export const addContactData = createAsyncThunk(
   "data/addContact",
   async (
-    contactData: { userId: string; name: string; email: string; phone: string },
+    contactData: {
+      userId: string;
+      name: string;
+      email: string;
+      phone: string;
+      zipCode?: string;
+    },
     { rejectWithValue }
   ) => {
     try {

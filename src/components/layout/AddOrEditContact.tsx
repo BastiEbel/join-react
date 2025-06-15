@@ -3,7 +3,7 @@ import profilIcon from "../../assets/image/profil.png";
 import clear from "../../assets/image/clear.png";
 import check from "../../assets/image/check.png";
 import hoverclear from "../../assets/image/hoverclear.png";
-import peron from "../../assets/image/person.png";
+import person from "../../assets/image/person.png";
 import mail from "../../assets/image/mail.png";
 import phone from "../../assets/image/call.png";
 import "../css/AddOrEdit.css";
@@ -19,8 +19,9 @@ import { useContactValidation } from "../../hooks/useValidation";
 interface AddOrEditProps {
   onClose: () => void;
   addContact: boolean;
+  contactData?: ContactData;
 }
-function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
+function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
   const { id } = useParams();
   const { addContactData } = useData();
   const [changeImage, setChangeImage] = useState<string>(clear);
@@ -30,8 +31,8 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
     name: "",
     email: "",
     phone: "",
+    zipCode: "+49",
   });
-  const [countryCode, setCountryCode] = useState<string>("+49");
   const [isFocused, setIsFocused] = useState<{ [key: string]: boolean }>({});
   const [buttonNane, setButtonName] = useState<string>("");
 
@@ -40,9 +41,23 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
   useEffect(() => {
     setButtonName(addContact ? "Add Contact" : "Edit Contact");
     if (addContact) {
-      setCountryCode("+49");
+      setInputData({
+        userId: id || "",
+        name: "",
+        email: "",
+        phone: "",
+        zipCode: "+49",
+      });
+    } else if (contactData) {
+      setInputData({
+        userId: contactData.userId,
+        name: contactData.name,
+        email: contactData.email,
+        phone: contactData.phone,
+        zipCode: contactData.zipCode || "+49",
+      });
     }
-  }, [addContact]);
+  }, [addContact, contactData, id]);
 
   const onClearHandler = useCallback(() => {
     setInputData({
@@ -67,21 +82,18 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
   }
 
   function getZipCodeHandler(code: string) {
-    if (code !== countryCode) {
-      setCountryCode(code);
-    }
+    setInputData((prevData) => ({
+      ...prevData,
+      zip: code,
+    }));
   }
 
   function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
-    if (name === "phone") {
-      setInputData((prevPhone) => ({
-        ...prevPhone,
-        phone: value,
-      }));
-    } else {
-      setInputData((prevData) => ({ ...prevData, [name]: value }));
-    }
+    setInputData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   }
 
   function onFocusHandler(name: string) {
@@ -125,7 +137,8 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
       userId: id,
       name: inputData.name,
       email: inputData.email,
-      phone: `${countryCode}${inputData.phone}`,
+      phone: inputData.phone,
+      zipCode: inputData.zipCode,
     };
     addContactData(newContact);
     setButtonName("Contact added");
@@ -172,7 +185,13 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
                 <Input
                   className="input-contact"
                   icon={
-                    field === "name" ? peron : field === "email" ? mail : phone
+                    field === "name"
+                      ? person
+                      : field === "email"
+                      ? mail
+                      : field === "phone"
+                      ? phone
+                      : undefined
                   }
                   name={field}
                   onChange={onInputChangeHandler}
@@ -180,7 +199,7 @@ function AddOrEdit({ onClose, addContact }: AddOrEditProps) {
                   onFocus={() => onFocusHandler(field)}
                   onBlur={() => onBlurHandler(field)}
                   required={field !== "phone"}
-                  value={inputData[field]}
+                  value={inputData[field] || ""}
                   placeholder={
                     field === "phone"
                       ? "170 1234567"

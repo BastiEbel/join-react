@@ -119,7 +119,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/add-contact", async (req, res) => {
-  const { name, email, phone, userId } = req.body;
+  const { name, email, phone, zipCode, userId } = req.body;
 
   req.session.userId = userId;
   if (!req.session.userId) {
@@ -132,6 +132,7 @@ app.post("/add-contact", async (req, res) => {
         name,
         email,
         phone,
+        zipCode,
         userId,
       },
     });

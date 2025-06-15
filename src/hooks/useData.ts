@@ -74,6 +74,7 @@ export function useData() {
           name: string;
           email: string;
           phone: string;
+          zipCode?: string;
         }
       )
     );
