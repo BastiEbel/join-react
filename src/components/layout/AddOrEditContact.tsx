@@ -54,7 +54,7 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
         name: contactData.name,
         email: contactData.email,
         phone: contactData.phone,
-        zipCode: contactData.zipCode || "+49",
+        zipCode: contactData.zipCode,
       });
     }
   }, [addContact, contactData, id]);
@@ -84,7 +84,7 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
   function getZipCodeHandler(code: string) {
     setInputData((prevData) => ({
       ...prevData,
-      zip: code,
+      zipCode: code,
     }));
   }
 
@@ -180,6 +180,7 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
                 {field === "phone" && (
                   <CountryCodeSelector
                     zipCode={(code) => getZipCodeHandler(code)}
+                    value={inputData.zipCode ?? ""}
                   />
                 )}
                 <Input

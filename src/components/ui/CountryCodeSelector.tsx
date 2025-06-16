@@ -4,10 +4,13 @@ import { useState } from "react";
 
 interface CountryCodeProps {
   zipCode: (code: string) => void;
+  value: string;
 }
 
-export default function CountryCodeSelector({ zipCode }: CountryCodeProps) {
-  const [countryCode, setCountryCode] = useState<string>("+49");
+export default function CountryCodeSelector({
+  zipCode,
+  value,
+}: CountryCodeProps) {
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const options = countryCodes.map((code) => ({
     value: code.code,
@@ -18,7 +21,6 @@ export default function CountryCodeSelector({ zipCode }: CountryCodeProps) {
     selectedOption: { value: string; label: string } | null
   ) {
     if (selectedOption) {
-      setCountryCode(selectedOption.value);
       zipCode(selectedOption.value);
     }
   }
@@ -27,7 +29,7 @@ export default function CountryCodeSelector({ zipCode }: CountryCodeProps) {
     <div className={menuIsOpen ? "" : "countryCode-zipCode"}>
       <Select
         options={options}
-        value={options.find((option) => option.value === countryCode) || null}
+        value={options.find((option) => option.value === value) || null}
         onChange={handleCountryCodeChange}
         onMenuOpen={() => setMenuIsOpen(true)}
         onMenuClose={() => setMenuIsOpen(false)}
@@ -35,7 +37,7 @@ export default function CountryCodeSelector({ zipCode }: CountryCodeProps) {
         formatOptionLabel={(option) => (
           <div>{menuIsOpen ? option.label : option.value}</div>
         )}
-        placeholder={countryCode}
+        placeholder={value}
         isSearchable={false}
         styles={{
           control: (provided) => ({
