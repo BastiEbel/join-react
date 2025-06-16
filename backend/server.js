@@ -144,6 +144,26 @@ app.post("/add-contact", async (req, res) => {
   }
 });
 
+app.put("/update-contact", async (req, res) => {
+  const { id, name, email, phone, zipCode } = req.body;
+  try {
+    const updatedContact = await prisma.contact.update({
+      where: { id: id },
+      data: {
+        name,
+        email,
+        phone,
+        zipCode,
+      },
+    });
+
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    console.error("Error updating contact:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.get("/contacts/:userId", async (req, res) => {
   const { userId } = req.params;
   try {

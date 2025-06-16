@@ -34,7 +34,7 @@ export default function ContactList({
             <div>
               {contacts
                 .filter((contact) => contact.name.startsWith(letter))
-                .map((contact) => {
+                .map((contact, idx) => {
                   const initialsContact = contact.name
                     .split(" ")
                     .map((name) => name.charAt(0))
@@ -43,7 +43,7 @@ export default function ContactList({
                   return (
                     <div
                       onClick={() => onContactClick(contact)}
-                      key={contact.email}
+                      key={contact.email + idx}
                       className="contact"
                     >
                       <div

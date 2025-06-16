@@ -7,6 +7,7 @@ import {
   logout,
   addContactData,
   setContactData,
+  updateContactDataDB,
 } from "../store/dataSlice";
 import { useDataDispatch, useDataSelector } from "../store/hooks";
 import { RootState } from "../store/store";
@@ -84,6 +85,33 @@ export function useData() {
     return null;
   };
 
+  const updateContactDataAsync = async (contactData: ContactData) => {
+    if (!contactData.phone) {
+      throw new Error("Phone number is required.");
+    }
+    try {
+      const resultUpdateDate = await dispatch(
+        updateContactDataDB(
+          contactData as {
+            id: string;
+            userId: string;
+            name: string;
+            email: string;
+            phone: string;
+            zipCode?: string;
+          }
+        )
+      );
+      if (updateContactDataDB.fulfilled.match(resultUpdateDate)) {
+        return resultUpdateDate.payload;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error updating contact data:", error);
+      throw error;
+    }
+  };
+
   const loadContactData = useCallback(async () => {
     try {
       const contacts = await getContact(user);
@@ -115,6 +143,7 @@ export function useData() {
     authentication: updateAuth,
     logout: logoutUser,
     addContactData: addContactDataAsync,
+    updateContactDataDB: updateContactDataAsync,
     loadContactData,
   };
 }

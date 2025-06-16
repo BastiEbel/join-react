@@ -23,7 +23,7 @@ interface AddOrEditProps {
 }
 function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
   const { id } = useParams();
-  const { addContactData } = useData();
+  const { addContactData, updateContactDataDB } = useData();
   const [changeImage, setChangeImage] = useState<string>(clear);
   const { setErrors } = useData();
   const [inputData, setInputData] = useState<ContactData>({
@@ -50,6 +50,7 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
       });
     } else if (contactData) {
       setInputData({
+        id: contactData.id,
         userId: contactData.userId,
         name: contactData.name,
         email: contactData.email,
@@ -133,14 +134,18 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
     if (!id) {
       return;
     }
-    const newContact = {
-      userId: id,
-      name: inputData.name,
-      email: inputData.email,
-      phone: inputData.phone,
-      zipCode: inputData.zipCode,
-    };
-    addContactData(newContact);
+    if (addContact) {
+      const newContact = {
+        userId: id,
+        name: inputData.name,
+        email: inputData.email,
+        phone: inputData.phone,
+        zipCode: inputData.zipCode,
+      };
+      addContactData(newContact);
+    } else {
+      updateContactDataDB(inputData);
+    }
     setButtonName("Contact added");
     onClearHandler();
     setTimeout(() => {

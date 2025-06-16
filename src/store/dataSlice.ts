@@ -4,7 +4,7 @@ import { FormData } from "../types/FormData";
 import { LoginCredentials } from "../types/Credentials";
 import { User } from "../types/User";
 import { FormState } from "../types/FormState";
-import { addContact } from "../utils/contactData";
+import { addContact, updateContact } from "../utils/contactData";
 import { ContactData } from "../types/ContactData";
 
 const initialState: FormState = {
@@ -102,6 +102,23 @@ export const addContactData = createAsyncThunk(
   }
 );
 
+export const updateContactDataDB = createAsyncThunk<
+  ContactData,
+  ContactData,
+  { rejectValue: string }
+>(
+  "data/updateContact",
+  async (contactData: ContactData, { rejectWithValue }) => {
+    try {
+      const response = await updateContact(contactData);
+      return response;
+    } catch (error) {
+      console.error("Update contact error", error);
+      return rejectWithValue("Failed to update contact");
+    }
+  }
+);
+
 export const dataSlice = createSlice({
   name: "data",
   initialState,
@@ -163,6 +180,14 @@ export const dataSlice = createSlice({
       })
       .addCase(addContactData.fulfilled, (state, action) => {
         state.contactData.push(action.payload as ContactData);
+      })
+      .addCase(updateContactDataDB.fulfilled, (state, action) => {
+        const index = state.contactData.findIndex(
+          (contact) => contact.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.contactData[index] = action.payload;
+        }
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = {

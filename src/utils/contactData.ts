@@ -21,6 +21,25 @@ export async function addContact(contactData: ContactData) {
   }
 }
 
+export async function updateContact(contactData: ContactData) {
+  try {
+    const response = await fetch("http://localhost:3000/update-contact", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(contactData),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error", error);
+    throw error;
+  }
+}
+
 export async function getContact(user: User) {
   try {
     const response = await fetch(`http://localhost:3000/contacts/${user.id}`, {
