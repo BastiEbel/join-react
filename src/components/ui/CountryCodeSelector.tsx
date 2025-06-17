@@ -38,7 +38,7 @@ export default function CountryCodeSelector({
           <div>{menuIsOpen ? option.label : option.value}</div>
         )}
         placeholder={value}
-        isSearchable={false}
+        isSearchable={true}
         styles={{
           control: (provided) => ({
             ...provided,
