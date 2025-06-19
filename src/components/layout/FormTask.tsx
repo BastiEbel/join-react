@@ -13,6 +13,7 @@ import clear from "../../assets/image/clear.png";
 import hoverclear from "../../assets/image/hoverclear.png";
 import check from "../../assets/image/check.png";
 import { useState } from "react";
+import { useData } from "../../hooks/useData";
 
 export default function FormTask() {
   const btnStyling = [
@@ -32,6 +33,7 @@ export default function FormTask() {
   ];
 
   const [changeStyling, setChangeStyling] = useState(btnStyling);
+  const { contactData } = useData();
 
   function onChangeBtnStyle(id: string) {
     const updateStyling = changeStyling.map((btnStyle) => {
@@ -91,11 +93,12 @@ export default function FormTask() {
   function onCreateTaskHandler() {}
 
   return (
-    <form className="form-addTask" action="post">
+    <form id="task" className="form-addTask" action="post">
       <section className="container-task">
         <div className="container-left">
           <div>
             <Input
+              name="title"
               className="input"
               required
               type="text"
@@ -109,6 +112,7 @@ export default function FormTask() {
           </div>
           <div>
             <Input
+              name="description"
               className="textArea"
               labelText="Description"
               required={false}
@@ -118,11 +122,16 @@ export default function FormTask() {
           </div>
           <div>
             <SelectBox
+              id="contacts"
               className="select-container"
               text="Select contacts to assign"
               labelText="Assigned to"
             >
-              <option value="1">Contact</option>
+              {contactData.map((contact) => (
+                <option key={contact.id} value={contact.id}>
+                  {contact.name}
+                </option>
+              ))}
             </SelectBox>
           </div>
         </div>
@@ -130,6 +139,7 @@ export default function FormTask() {
         <div className="priority-section">
           <div>
             <Input
+              name="dueDate"
               className="selectDate"
               required={true}
               type="date"
@@ -158,6 +168,7 @@ export default function FormTask() {
             </div>
           </div>
           <SelectBox
+            id="category"
             className="select-container"
             text="Select task category"
             labelText={

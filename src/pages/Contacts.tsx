@@ -19,13 +19,10 @@ export default function Contacts() {
 
   useEffect(() => {
     loadContactData();
-  }, [loadContactData]);
-
-  useEffect(() => {
     if (contactData && contactData.length > 0) {
       setSelectedContact(contactData[0]);
     }
-  }, [contactData]);
+  }, [loadContactData, contactData]);
 
   function onAddPersonHandler(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();

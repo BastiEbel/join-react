@@ -5,6 +5,7 @@ type SelectBoxProps = {
   labelText: ReactNode;
   className: string;
   text: string;
+  id: string;
 };
 
 export default function SelectBox({
@@ -12,11 +13,14 @@ export default function SelectBox({
   labelText,
   className,
   text,
+  id,
 }: SelectBoxProps) {
   return (
     <div>
-      <label style={{ fontSize: "20px", fontWeight: "400" }}>{labelText}</label>
-      <select className={className} id="select">
+      <label id={id} style={{ fontSize: "20px", fontWeight: "400" }}>
+        {labelText}
+      </label>
+      <select className={className} id={id} name={id}>
         <option>{text}</option>
         {children}
       </select>

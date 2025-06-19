@@ -31,7 +31,9 @@ export default function Input({
   onFocus,
   onBlur,
 }: InputProps) {
+  const inputId = name || placeholder || type;
   const inputProps: InputHTMLAttributes<HTMLInputElement> = {
+    id: inputId,
     name,
     placeholder,
     className,
@@ -51,7 +53,10 @@ export default function Input({
     return (
       <>
         {labelText && (
-          <label htmlFor={type} style={{ fontSize: "20px", fontWeight: "400" }}>
+          <label
+            htmlFor={inputId}
+            style={{ fontSize: "20px", fontWeight: "400" }}
+          >
             {labelText}
           </label>
         )}

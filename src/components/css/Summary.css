@@ -65,3 +65,99 @@ section {
   color: #29abe2;
   margin: 16px 0px 0px 0px;
 }
+
+/* Responsive Styles */
+@media (min-width: 1200px) and (max-width: 1440px) {
+  section {
+    padding: 64px 48px 0px 48px;
+  }
+}
+@media (max-width: 1240px) {
+  section {
+    padding: 48px 32px 0px 32px;
+  }
+  .oversign {
+    height: auto;
+    gap: 12px;
+  }
+  .summary-grid {
+    width: 100%;
+    height: 55vh;
+    overflow: scroll;
+    padding: 32px 16px;
+    box-sizing: border-box;
+    gap: 20px;
+  }
+  .container-greeting {
+    width: 100%;
+    height: auto;
+    margin-left: 32px;
+  }
+  .container-summary {
+    height: auto;
+  }
+  .summary-item {
+    width: 100% !important;
+    height: auto;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 900px) {
+  section {
+    padding: 32px 12px 0px 12px;
+  }
+  .oversign h1 {
+    font-size: 38px;
+    line-height: 1.1;
+  }
+  .oversign h2 {
+    font-size: 18px;
+    line-height: 1.2;
+  }
+  .container-summary {
+    flex-direction: column;
+    height: auto;
+    margin-top: 32px;
+    gap: 24px;
+  }
+  .summary-grid {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  section {
+    padding: 16px 4px 0px 4px;
+  }
+  .oversign h1 {
+    font-size: 28px;
+  }
+  .oversign h2 {
+    font-size: 14px;
+  }
+  .container-greeting h3 {
+    font-size: 24px;
+    line-height: 1.1;
+  }
+  .container-greeting h4 {
+    font-size: 32px;
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 400px) {
+  .oversign h1 {
+    font-size: 20px;
+  }
+  .oversign h2 {
+    font-size: 11px;
+  }
+  .container-greeting h3 {
+    font-size: 16px;
+  }
+  .container-greeting h4 {
+    font-size: 20px;
+  }
+}
