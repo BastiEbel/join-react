@@ -14,19 +14,42 @@ generator client {
 }
 
 model User {
-  id       String @id @default(uuid())
-  email    String @unique
-  password String
-  name     String
-  contacts Contact[]
+  id            String @id @default(uuid())
+  email         String @unique
+  password      String
+  name          String
+  contacts      Contact[]
+  createdTasks  AddTask[]   @relation("CreatedTasks")
+  visibleTasks  AddTask[]   @relation("VisibleTasks")
 }
 
 model Contact {
-  id     String  @id @default(uuid())
-  name   String
-  email  String
-  phone  String
+  id      String       @id @default(uuid())
+  name    String
+  email   String
+  phone   String
   zipCode String
-  userId String
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks   AddTask[]   @relation("TaskContacts")
+}
+
+model Category {
+  id        String @id @default(uuid())
+  category  String
+}
+
+model AddTask {
+  id              String @id @default(uuid())
+  title           String
+  description     String
+  dueDate         DateTime
+  prio            String
+  category        String
+  createdBy       User           @relation("CreatedTasks", fields: [createdById], references: [id])
+  createdById     String
+  contacts        Contact[]      @relation("TaskContacts")
+  relatedTasks    AddTask[]      @relation("RelatedTasks")
+  relatedByTasks  AddTask[]      @relation("RelatedTasks")
+  visibleFor      User[]         @relation("VisibleTasks")
 }

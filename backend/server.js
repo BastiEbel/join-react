@@ -46,6 +46,7 @@ app.use(
 
 app.use(express.json());
 
+//Signup and Login Routes
 app.post("/signup", async (req, res) => {
   const { email, password, name } = req.body;
 
@@ -118,6 +119,16 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
+  res.status(200).json({ message: "Logout successful" });
+});
+
+// Contact Management Routes
 app.post("/add-contact", async (req, res) => {
   const { name, email, phone, zipCode, userId } = req.body;
 
@@ -196,13 +207,31 @@ app.delete("/delete-contact", async (req, res) => {
   }
 });
 
-app.post("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  });
-  res.status(200).json({ message: "Logout successful" });
+// Category Management Routes
+app.post("/add-category", async (req, res) => {
+  const { name } = req.body;
+  try {
+    const newCategory = await prisma.category.create({
+      data: {
+        name,
+      },
+    });
+
+    res.status(200).json(newCategory);
+  } catch (error) {
+    console.error("Error adding category:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/categories", async (req, res) => {
+  try {
+    const categories = await prisma.category.findMany();
+    res.status(200).json(categories);
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.listen(PORT, () => {

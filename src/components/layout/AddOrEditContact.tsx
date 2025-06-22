@@ -34,7 +34,7 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
     zipCode: "+49",
   });
   const [isFocused, setIsFocused] = useState<{ [key: string]: boolean }>({});
-  const [buttonNane, setButtonName] = useState<string>("");
+  const [buttonName, setButtonName] = useState<string>("");
 
   const { validateField, validateForm } = useContactValidation();
 
@@ -227,7 +227,7 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
             <img src={clear} alt="X" />
           </Button>
           <Button onClick={onAddContactHandler} className="add-contact-btn">
-            {buttonNane}
+            {buttonName}
             <img src={check} alt="X" />
           </Button>
         </div>

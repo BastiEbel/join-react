@@ -1,7 +1,7 @@
 import "../components/css/Summary.css";
 import ContainerSummary from "../components/layout/ContainerSummary";
 import { useData } from "../hooks/useData";
-import { summaryData } from "../utils/data";
+import { summaryData } from "../types/data";
 
 export default function Summary() {
   const { user } = useData();

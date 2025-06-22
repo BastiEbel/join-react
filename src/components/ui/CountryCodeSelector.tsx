@@ -1,5 +1,5 @@
 import Select from "react-select";
-import { countryCodes } from "../../utils/countryCode";
+import { countryCodes } from "../../types/countryCode";
 import { useState } from "react";
 
 interface CountryCodeProps {
