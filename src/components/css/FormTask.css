@@ -69,6 +69,20 @@
   }
 }
 
+.add-category-btn {
+  color: #29abe2;
+  border: 2px solid #29abe2;
+  padding: 0px 8px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  &:hover {
+    cursor: pointer;
+    color: #ffffff;
+    background: #29abe2;
+    border: 2px solid #29abe2;
+  }
+}
+
 .spacer-addTask {
   height: 424px;
   margin: 0px 64px 0px 64px;

@@ -12,10 +12,12 @@ import plusTask from "../../assets/image/plus.png";
 import clear from "../../assets/image/clear.png";
 import hoverclear from "../../assets/image/hoverclear.png";
 import check from "../../assets/image/check.png";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useData } from "../../hooks/useData";
 import OpenModal, { ModalHandle } from "../ui/OpenModal";
 import AddCategory from "./AddCategory";
+import { Category } from "../../types/Category";
+import { getCategories } from "../../utils/categoryData";
 
 export default function FormTask() {
   const btnStyling = [
@@ -35,9 +37,26 @@ export default function FormTask() {
   ];
 
   const [changeStyling, setChangeStyling] = useState(btnStyling);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [categories, setCategories] = useState<Category[]>([]);
   const dialogRef = useRef<ModalHandle>(null);
   const { contactData } = useData();
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const data = await getCategories();
+        if (Array.isArray(data)) {
+          setCategories(data);
+        } else {
+          setCategories([]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+        setCategories([]);
+      }
+    }
+    fetchCategories();
+  }, [categories]);
 
   function onChangeBtnStyle(id: string) {
     const updateStyling = changeStyling.map((btnStyle) => {
@@ -92,17 +111,13 @@ export default function FormTask() {
     }
   }
 
-  function onClickCategoryHandler(e: React.ChangeEvent<HTMLSelectElement>) {
-    e.preventDefault();
-    setSelectedCategory(e.target.value);
-    if (dialogRef.current && e.target.value === "add") {
-      console.log("Category clicked", e.target.value);
+  function onClickCategoryHandler() {
+    if (dialogRef.current) {
       dialogRef.current.open();
     }
   }
 
   function onCloseCategoryHandler() {
-    setSelectedCategory("");
     if (dialogRef.current) {
       dialogRef.current.close();
     }
@@ -198,15 +213,32 @@ export default function FormTask() {
               id="category"
               className="select-container"
               text="Select task category"
-              onChange={onClickCategoryHandler}
-              value={selectedCategory}
               labelText={
-                <>
-                  Category<span style={{ color: "red" }}>*</span>
-                </>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <div>
+                    Category<span style={{ color: "red" }}>*</span>
+                  </div>
+                  <span
+                    onClick={onClickCategoryHandler}
+                    className="add-category-btn"
+                  >
+                    Add Category
+                  </span>
+                </div>
               }
             >
-              <option value="add">Add Category</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
             </SelectBox>
             <div>
               <Input

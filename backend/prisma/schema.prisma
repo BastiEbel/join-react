@@ -31,12 +31,12 @@ model Contact {
   zipCode String
   userId  String
   user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tasks   AddTask[]   @relation("TaskContacts")
+  tasks   AddTask[]    @relation("TaskContacts")
 }
 
 model Category {
-  id        String @id @default(uuid())
-  category  String
+  id   Int    @id @default(autoincrement())
+  name String
 }
 
 model AddTask {
