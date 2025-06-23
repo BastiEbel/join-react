@@ -17,6 +17,7 @@
 .contact {
   gap: 16px;
   width: 100%;
+  height: auto;
   display: flex;
   align-items: center;
   border-radius: 10px;
@@ -40,8 +41,10 @@
   font-size: 18px;
   line-height: 24px;
   font-weight: 400;
-  margin: 8px 0px 8px 0px;
+  margin: 8px 0px 0px 0px;
   color: #2a3647;
+  white-space: normal;
+  word-break: break-word;
 
   p {
     color: blue;

@@ -185,7 +185,7 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
                 {field === "phone" && (
                   <CountryCodeSelector
                     zipCode={(code) => getZipCodeHandler(code)}
-                    value={inputData.zipCode ?? ""}
+                    value={inputData.zipCode || "+49"}
                   />
                 )}
                 <Input

@@ -19,9 +19,6 @@ export default function Contacts() {
 
   useEffect(() => {
     loadContactData();
-    if (contactData && contactData.length > 0) {
-      setSelectedContact(contactData[0]);
-    }
   }, [loadContactData, contactData]);
 
   function onAddPersonHandler(event: React.MouseEvent<HTMLButtonElement>) {
