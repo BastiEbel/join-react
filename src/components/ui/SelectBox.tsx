@@ -1,11 +1,24 @@
-import { ReactNode } from "react";
+import { stylesSelect } from "../../styles/stylesSelect";
+import Select, { GroupBase, OptionsOrGroups } from "react-select";
 
 type SelectBoxProps = {
-  children: ReactNode;
-  labelText: ReactNode;
+  options?:
+    | OptionsOrGroups<
+        {
+          value: string | undefined;
+          label: string;
+        },
+        GroupBase<{
+          value: string | undefined;
+          label: string;
+        }>
+      >
+    | undefined;
   value?: string;
-  className: string;
-  text: string;
+  placeholder: string;
+  isMulti?: true | undefined;
+  isSearchable: boolean;
+  noOptionsMessage?: () => string;
   id: string;
   onChange?:
     | (() => void | undefined)
@@ -13,29 +26,22 @@ type SelectBoxProps = {
 };
 
 export default function SelectBox({
-  children,
-  labelText,
-  value,
-  className,
-  text,
+  options,
+  placeholder,
+  isMulti,
+  isSearchable,
+  noOptionsMessage,
   id,
-  onChange,
 }: SelectBoxProps) {
   return (
-    <div>
-      <label id={id} style={{ fontSize: "20px", fontWeight: "400" }}>
-        {labelText}
-      </label>
-      <select
-        value={value}
-        onChange={onChange}
-        className={className}
-        id={id}
-        name={id}
-      >
-        <option>{text}</option>
-        {children}
-      </select>
-    </div>
+    <Select
+      id={id}
+      options={options}
+      placeholder={placeholder}
+      isMulti={isMulti}
+      styles={stylesSelect}
+      isSearchable={isSearchable}
+      noOptionsMessage={noOptionsMessage}
+    />
   );
 }

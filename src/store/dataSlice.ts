@@ -6,6 +6,7 @@ import { User } from "../types/User";
 import { FormState } from "../types/FormState";
 import { addContact, updateContact } from "../utils/contactData";
 import { ContactData } from "../types/ContactData";
+import { Category } from "../types/Category";
 
 const initialState: FormState = {
   formData: {
@@ -26,7 +27,8 @@ const initialState: FormState = {
     email: "",
     password: "",
   },
-  contactData: [] as ContactData[], // Typisiere das leere Array explizit als ContactData[]
+  contactData: [] as ContactData[],
+  categories: [] as Category[],
   errors: {
     name: "",
     email: "",
@@ -135,6 +137,9 @@ export const dataSlice = createSlice({
     setContactData(state, action: PayloadAction<ContactData[]>) {
       state.contactData = action.payload;
     },
+    setCategories(state, action: PayloadAction<Category[]>) {
+      state.categories = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -221,5 +226,10 @@ export const dataSlice = createSlice({
   },
 });
 
-export const { setErrors, toggleChecked, authentication, setContactData } =
-  dataSlice.actions;
+export const {
+  setErrors,
+  toggleChecked,
+  authentication,
+  setContactData,
+  setCategories,
+} = dataSlice.actions;

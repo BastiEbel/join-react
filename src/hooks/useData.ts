@@ -8,6 +8,7 @@ import {
   addContactData,
   setContactData,
   updateContactDataDB,
+  setCategories,
 } from "../store/dataSlice";
 import { useDataDispatch, useDataSelector } from "../store/hooks";
 import { RootState } from "../store/store";
@@ -17,6 +18,7 @@ import { FormData } from "../types/FormData";
 import { FormState } from "../types/FormState";
 import { User } from "../types/User";
 import { getContact } from "../utils/contactData";
+import { getCategories } from "../utils/categoryData";
 
 export function useData() {
   const dispatch = useDataDispatch();
@@ -29,6 +31,9 @@ export function useData() {
   const user = useDataSelector((state: RootState) => state.data.user);
   const contactData = useDataSelector(
     (state: RootState) => state.data.contactData
+  );
+  const categories = useDataSelector(
+    (state: RootState) => state.data.categories
   );
 
   const signUpFormData = async (data: FormData) => {
@@ -130,6 +135,21 @@ export function useData() {
     }
   }, [dispatch, user]);
 
+  const loadCategories = useCallback(async () => {
+    try {
+      const response = await getCategories();
+      if (!Array.isArray(response)) {
+        throw new Error(
+          "Invalid data format: Expected an array of categories."
+        );
+      }
+      dispatch(setCategories(response));
+    } catch (error) {
+      console.error("Error loading categories:", error);
+      return [];
+    }
+  }, [dispatch]);
+
   return {
     formData,
     loginCredentials,
@@ -137,6 +157,9 @@ export function useData() {
     errors,
     isChecked,
     contactData,
+    loadContactData,
+    loadCategories,
+    categories,
     signUp: signUpFormData,
     login: loginData,
     setErrors: updateErrors,
@@ -144,6 +167,5 @@ export function useData() {
     logout: logoutUser,
     addContactData: addContactDataAsync,
     updateContactDataDB: updateContactDataAsync,
-    loadContactData,
   };
 }

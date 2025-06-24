@@ -1,3 +1,4 @@
+import { Category } from "./Category";
 import { ContactData } from "./ContactData";
 import { LoginCredentials } from "./Credentials";
 import { FormData } from "./FormData";
@@ -7,6 +8,7 @@ export interface FormState {
   formData: FormData;
   loginCredentials: LoginCredentials;
   contactData: ContactData[];
+  categories: Category[];
   user: User;
   errors: {
     name: string;

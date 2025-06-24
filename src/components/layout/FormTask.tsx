@@ -16,8 +16,8 @@ import { useEffect, useRef, useState } from "react";
 import { useData } from "../../hooks/useData";
 import OpenModal, { ModalHandle } from "../ui/OpenModal";
 import AddCategory from "./AddCategory";
-import { Category } from "../../types/Category";
-import { getCategories } from "../../utils/categoryData";
+import Select from "react-select";
+import { stylesSelect } from "../../styles/stylesSelect";
 
 export default function FormTask() {
   const btnStyling = [
@@ -37,26 +37,14 @@ export default function FormTask() {
   ];
 
   const [changeStyling, setChangeStyling] = useState(btnStyling);
-  const [categories, setCategories] = useState<Category[]>([]);
   const dialogRef = useRef<ModalHandle>(null);
-  const { contactData } = useData();
+  const { contactData, categories, loadContactData, loadCategories } =
+    useData();
 
   useEffect(() => {
-    async function fetchCategories() {
-      try {
-        const data = await getCategories();
-        if (Array.isArray(data)) {
-          setCategories(data);
-        } else {
-          setCategories([]);
-        }
-      } catch (error) {
-        console.error("Failed to fetch categories:", error);
-        setCategories([]);
-      }
-    }
-    fetchCategories();
-  }, [categories]);
+    loadCategories();
+    loadContactData();
+  }, [loadCategories, loadContactData]);
 
   function onChangeBtnStyle(id: string) {
     const updateStyling = changeStyling.map((btnStyle) => {
@@ -160,18 +148,24 @@ export default function FormTask() {
               />
             </div>
             <div>
-              <SelectBox
+              <label
                 id="contacts"
-                className="select-container"
-                text="Select contacts to assign"
-                labelText="Assigned to"
+                style={{ fontSize: "20px", fontWeight: "400" }}
               >
-                {contactData.map((contact) => (
-                  <option key={contact.id} value={contact.id}>
-                    {contact.name}
-                  </option>
-                ))}
-              </SelectBox>
+                Assigned to
+              </label>
+              <Select
+                id="contacts"
+                options={contactData.map((contact) => ({
+                  value: contact.id,
+                  label: contact.name,
+                }))}
+                placeholder="Select contacts to assign"
+                isMulti
+                styles={stylesSelect}
+                isSearchable={true}
+                noOptionsMessage={() => "No contacts found"}
+              />
             </div>
           </div>
           <div className="spacer-addTask"></div>
@@ -209,37 +203,41 @@ export default function FormTask() {
                 ))}
               </div>
             </div>
-            <SelectBox
-              id="category"
-              className="select-container"
-              text="Select task category"
-              labelText={
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    width: "100%",
-                  }}
-                >
-                  <div>
-                    Category<span style={{ color: "red" }}>*</span>
-                  </div>
-                  <span
-                    onClick={onClickCategoryHandler}
-                    className="add-category-btn"
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                <div>
+                  <label
+                    style={{ fontSize: "20px", fontWeight: "400" }}
+                    id="category"
                   >
-                    Add Category
-                  </span>
+                    Category
+                  </label>
+                  <span style={{ color: "red" }}>*</span>
                 </div>
-              }
-            >
-              {categories.map((category) => (
-                <option key={category.id} value={category.name}>
-                  {category.name}
-                </option>
-              ))}
-            </SelectBox>
+                <span
+                  onClick={onClickCategoryHandler}
+                  className="add-category-btn"
+                >
+                  Add Category
+                </span>
+              </div>
+              <SelectBox
+                id="category"
+                isSearchable={true}
+                options={categories.map((category) => ({
+                  value: category.name,
+                  label: category.name,
+                }))}
+                placeholder="Select task category"
+              />
+            </div>
             <div>
               <Input
                 required={false}
