@@ -1,5 +1,11 @@
 import { stylesSelect } from "../../styles/stylesSelect";
-import Select, { GroupBase, OptionsOrGroups } from "react-select";
+import Select, {
+  ActionMeta,
+  GroupBase,
+  MultiValue,
+  OptionsOrGroups,
+  SingleValue,
+} from "react-select";
 
 type SelectBoxProps = {
   options?:
@@ -14,15 +20,33 @@ type SelectBoxProps = {
         }>
       >
     | undefined;
-  value?: string;
+  value?:
+    | { value: string | undefined; label: string }
+    | { value: string | undefined; label: string }[]
+    | null
+    | undefined;
   placeholder: string;
   isMulti?: true | undefined;
   isSearchable: boolean;
   noOptionsMessage?: () => string;
   id: string;
   onChange?:
-    | (() => void | undefined)
-    | ((event: React.ChangeEvent<HTMLSelectElement>) => void);
+    | ((
+        newValue:
+          | MultiValue<{
+              value: string | undefined;
+              label: string;
+            }>
+          | SingleValue<{
+              value: string | undefined;
+              label: string;
+            }>,
+        actionMeta: ActionMeta<{
+          value: string | undefined;
+          label: string;
+        }>
+      ) => void)
+    | undefined;
 };
 
 export default function SelectBox({
@@ -31,12 +55,16 @@ export default function SelectBox({
   isMulti,
   isSearchable,
   noOptionsMessage,
+  onChange,
+  value,
   id,
 }: SelectBoxProps) {
   return (
     <Select
       id={id}
+      value={value}
       options={options}
+      onChange={onChange}
       placeholder={placeholder}
       isMulti={isMulti}
       styles={stylesSelect}

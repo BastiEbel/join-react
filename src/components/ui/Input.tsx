@@ -1,4 +1,5 @@
-import { ChangeEvent, InputHTMLAttributes, ReactNode } from "react";
+import { ChangeEvent, InputHTMLAttributes, ReactNode, useRef } from "react";
+import "../css/FormTask.css";
 
 type InputProps = {
   name?: string;
@@ -11,7 +12,9 @@ type InputProps = {
   textArea?: boolean;
   type: string;
   value?: string;
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   onFocus?: () => void;
   onBlur?: () => void;
 };
@@ -31,6 +34,7 @@ export default function Input({
   onFocus,
   onBlur,
 }: InputProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const inputId = name || placeholder || type;
   const inputProps: InputHTMLAttributes<HTMLInputElement> = {
     id: inputId,
@@ -63,15 +67,31 @@ export default function Input({
         {icon && labelText ? (
           <div
             style={{ marginTop: "8px", width: "440px" }}
-            className="container-input"
+            className={`container-input`}
           >
-            <input {...inputProps} />
+            <input ref={inputRef} {...inputProps} />
             <img src={icon} alt="Logo for Input" />
           </div>
         ) : (
           <>
-            <input {...inputProps} />
-            {icon && <img src={icon} alt="Logo for Input" />}
+            <input
+              ref={inputRef}
+              className={type === "date" ? "input-icon-date" : ""}
+              onClick={() => {
+                if (type === "date" && inputRef.current) {
+                  inputRef.current.focus();
+                  inputRef.current.showPicker?.();
+                }
+              }}
+              {...inputProps}
+            />
+            {icon && (
+              <img
+                className={type === "date" ? "input-icon-date" : ""}
+                src={icon}
+                alt="Logo for Input"
+              />
+            )}
           </>
         )}
       </>
@@ -80,11 +100,21 @@ export default function Input({
     return (
       <>
         {labelText && (
-          <label style={{ fontSize: "20px", fontWeight: "400" }} htmlFor={type}>
+          <label style={{ fontSize: "20px", fontWeight: "400" }} htmlFor={name}>
             {labelText}
           </label>
         )}
-        <input {...inputProps} />
+        <textarea
+          id={inputId}
+          name={name}
+          placeholder={placeholder}
+          className={className}
+          required={required}
+          value={value}
+          onChange={onChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+        />
       </>
     );
   }

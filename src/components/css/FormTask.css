@@ -30,7 +30,7 @@
   margin-top: 8px;
 
   &::placeholder {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 400;
   }
 }
@@ -38,16 +38,29 @@
 .input {
   height: 48px;
   padding: 12px 21px 12px 21px;
+  box-sizing: border-box;
+  font-size: 16px;
 }
 
 .textArea {
   height: 120px;
   padding: 18px 16px 18px 16px;
+  box-sizing: border-box;
+  resize: none;
+  font-size: 16px;
   &::placeholder {
     position: absolute;
     top: 12px;
     left: 21px;
   }
+}
+
+.input-icon-date:hover {
+  cursor: pointer;
+}
+
+input[type="date"] {
+  cursor: pointer;
 }
 
 .add-category-btn {
@@ -215,7 +228,7 @@
   }
 
   &:disabled {
-    background: #37465c;
+    background: #44546b;
     cursor: default;
   }
 }

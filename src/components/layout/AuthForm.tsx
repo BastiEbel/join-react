@@ -110,6 +110,9 @@ export default function Form({ oversign, isLogIn }: FormProps) {
     const { isValid, errors } = validateForm(inputData);
     setErrors(errors);
     if (!isValid) {
+      toast.error("Please fill in all required fields correctly.", {
+        autoClose: 3000,
+      });
       return;
     }
 

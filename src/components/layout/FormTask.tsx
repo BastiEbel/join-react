@@ -12,32 +12,46 @@ import plusTask from "../../assets/image/plus.png";
 import clear from "../../assets/image/clear.png";
 import hoverclear from "../../assets/image/hoverclear.png";
 import check from "../../assets/image/check.png";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useData } from "../../hooks/useData";
 import OpenModal, { ModalHandle } from "../ui/OpenModal";
 import AddCategory from "./AddCategory";
-import Select from "react-select";
-import { stylesSelect } from "../../styles/stylesSelect";
+import { MultiValue, SingleValue } from "react-select";
+import { AddTask, Contacts } from "../../types/AddTask";
 
 export default function FormTask() {
-  const btnStyling = [
-    {
-      name: "Urgent",
-      bgColor: "#ffffff",
-      color: "#000000",
-      image: urgent,
-    },
-    {
-      name: "Medium",
-      bgColor: "#ffffff",
-      color: "#000000",
-      image: medium,
-    },
-    { name: "Low", bgColor: "#ffffff", color: "#000000", image: low },
-  ];
+  const btnStyling = useMemo(
+    () => [
+      {
+        name: "Urgent",
+        bgColor: "#ffffff",
+        color: "#000000",
+        image: urgent,
+      },
+      {
+        name: "Medium",
+        bgColor: "#ffffff",
+        color: "#000000",
+        image: medium,
+      },
+      { name: "Low", bgColor: "#ffffff", color: "#000000", image: low },
+    ],
+    []
+  );
 
   const [changeStyling, setChangeStyling] = useState(btnStyling);
   const dialogRef = useRef<ModalHandle>(null);
+  const [showMsg, setShowMsg] = useState(false);
+  const [taskData, setTaskData] = useState<AddTask>({
+    userId: "",
+    title: "",
+    description: "",
+    dueDate: "",
+    contacts: [],
+    category: null,
+    priority: "",
+    subTasks: [],
+  });
   const { contactData, categories, loadContactData, loadCategories } =
     useData();
 
@@ -46,44 +60,51 @@ export default function FormTask() {
     loadContactData();
   }, [loadCategories, loadContactData]);
 
-  function onChangeBtnStyle(id: string) {
-    const updateStyling = changeStyling.map((btnStyle) => {
-      if (id === btnStyle.name) {
-        if (btnStyle.name === "Urgent") {
+  const onChangeBtnStyle = useCallback(
+    (id: string) => {
+      setChangeStyling((prev) =>
+        prev.map((btnStyle) => {
+          if (id === btnStyle.name) {
+            if (btnStyle.name === "Urgent") {
+              return {
+                ...btnStyle,
+                bgColor: "#FF3D00",
+                color: "#ffffff",
+                image: urgentWhite,
+              };
+            } else if (btnStyle.name === "Medium") {
+              return {
+                ...btnStyle,
+                bgColor: "#FFA800",
+                color: "#ffffff",
+                image: mediumWhite,
+              };
+            } else if (btnStyle.name === "Low") {
+              return {
+                ...btnStyle,
+                bgColor: "#7AE229",
+                color: "#ffffff",
+                image: lowWhite,
+              };
+            }
+          }
           return {
             ...btnStyle,
-            bgColor: "#FF3D00",
-            color: "#ffffff",
-            image: urgentWhite,
+            bgColor: "#ffffff",
+            color: "#000000",
+            image:
+              btnStyling.find((b) => b.name === btnStyle.name)?.image ||
+              btnStyle.image,
           };
-        } else if (btnStyle.name === "Medium") {
-          return {
-            ...btnStyle,
-            bgColor: "#FFA800",
-            color: "#ffffff",
-            image: mediumWhite,
-          };
-        } else if (btnStyle.name === "Low") {
-          return {
-            ...btnStyle,
-            bgColor: "#7AE229",
-            color: "#ffffff",
-            image: lowWhite,
-          };
-        }
-      }
-      return {
-        ...btnStyle,
-        bgColor: "#ffffff",
-        color: "#000000",
-        image:
-          btnStyling.find((b) => b.name === btnStyle.name)?.image ||
-          btnStyle.image,
-      };
-    });
-
-    setChangeStyling(updateStyling);
-  }
+        })
+      );
+      setTaskData((prev) => ({
+        ...prev,
+        priority: id,
+      }));
+    },
+    [btnStyling]
+  );
 
   function onMouseOverHandler(e: React.MouseEvent<HTMLButtonElement>) {
     const img = e.currentTarget.querySelector("img");
@@ -111,9 +132,108 @@ export default function FormTask() {
     }
   }
 
+  function onChangeContactHandler(
+    e:
+      | MultiValue<{ value: string | undefined; label: string }>
+      | SingleValue<{ value: string | undefined; label: string }>
+  ) {
+    let getValue: Contacts[] = [];
+    if (Array.isArray(e) && e.length > 0) {
+      e.map((item) => ({ value: item.value, label: item.label })).forEach(
+        (item) => getValue.push(item)
+      );
+      setTaskData((prev) => ({
+        ...prev,
+        contacts: getValue,
+      }));
+      setShowMsg(true);
+      return;
+    } else {
+      getValue = [];
+      setShowMsg(false);
+    }
+  }
+
+  function onChangeCategoryHandler(
+    e:
+      | MultiValue<{ value: string | undefined; label: string }>
+      | SingleValue<{ value: string | undefined; label: string }>
+  ) {
+    if (e && !Array.isArray(e)) {
+      const singleValue = e as { value: string | undefined; label: string };
+      setTaskData((prev) => ({
+        ...prev,
+        category: {
+          value: singleValue.value,
+          label: singleValue.label,
+        },
+      }));
+    } else {
+      setTaskData((prev) => ({
+        ...prev,
+        category: null,
+      }));
+    }
+  }
+
+  function onHandleTitleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    setTaskData((prev) => ({
+      ...prev,
+      title: e.target.value,
+    }));
+  }
+
+  function onHandleDescriptionChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    setTaskData((prev) => ({
+      ...prev,
+      description: e.target.value,
+    }));
+  }
+
+  function onHandleDueDateChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    setTaskData((prev) => ({
+      ...prev,
+      dueDate: e.target.value,
+    }));
+  }
+
   function onClearHandler() {}
 
-  function onCreateTaskHandler() {}
+  function onCreateTaskHandler(e: React.FormEvent) {
+    e.preventDefault();
+    if (
+      taskData.title.trim() === "" ||
+      taskData.dueDate.trim() === "" ||
+      taskData.category === null
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    console.log("Task created:", taskData);
+    onClearDataHandler();
+  }
+
+  function onClearDataHandler() {
+    setTaskData({
+      userId: "",
+      title: "",
+      description: "",
+      dueDate: "",
+      contacts: [],
+      category: null,
+      priority: "",
+      subTasks: [],
+    });
+    setChangeStyling(btnStyling);
+    setShowMsg(false);
+  }
 
   return (
     <>
@@ -129,6 +249,8 @@ export default function FormTask() {
                 className="input"
                 required
                 type="text"
+                value={taskData.title}
+                onChange={onHandleTitleChange}
                 placeholder="Enter a title"
                 labelText={
                   <>
@@ -142,7 +264,10 @@ export default function FormTask() {
                 name="description"
                 className="textArea"
                 labelText="Description"
+                textArea={true}
                 required={false}
+                onChange={onHandleDescriptionChange}
+                value={taskData.description}
                 type="text"
                 placeholder="Enter a description"
               />
@@ -154,18 +279,24 @@ export default function FormTask() {
               >
                 Assigned to
               </label>
-              <Select
+              <SelectBox
                 id="contacts"
                 options={contactData.map((contact) => ({
                   value: contact.id,
                   label: contact.name,
                 }))}
+                value={taskData.contacts || []}
                 placeholder="Select contacts to assign"
-                isMulti
-                styles={stylesSelect}
+                isMulti={true}
                 isSearchable={true}
                 noOptionsMessage={() => "No contacts found"}
+                onChange={onChangeContactHandler}
               />
+              {showMsg && (
+                <p style={{ color: "lightred" }}>
+                  You can select more then one contact
+                </p>
+              )}
             </div>
           </div>
           <div className="spacer-addTask"></div>
@@ -176,6 +307,8 @@ export default function FormTask() {
                 className="selectDate"
                 required={true}
                 type="date"
+                onChange={onHandleDueDateChange}
+                value={taskData.dueDate}
                 placeholder="dd/mm/yyyy"
                 labelText={
                   <>
@@ -189,6 +322,7 @@ export default function FormTask() {
               <div className="btn-group">
                 {changeStyling.map((btnItem) => (
                   <Button
+                    type="button"
                     onClick={() => onChangeBtnStyle(btnItem.name)}
                     key={btnItem.name}
                     style={{
@@ -230,12 +364,15 @@ export default function FormTask() {
               </div>
               <SelectBox
                 id="category"
-                isSearchable={true}
+                isSearchable={false}
                 options={categories.map((category) => ({
-                  value: category.name,
+                  value: category.id,
                   label: category.name,
                 }))}
+                value={taskData.category || null}
                 placeholder="Select task category"
+                onChange={onChangeCategoryHandler}
+                noOptionsMessage={() => "No categories found"}
               />
             </div>
             <div>
@@ -264,11 +401,7 @@ export default function FormTask() {
               Clear
               <img src={clear} alt="X" />
             </Button>
-            <Button
-              onClick={onCreateTaskHandler}
-              disabled
-              className="create-btn"
-            >
+            <Button onClick={onCreateTaskHandler} className="create-btn">
               Create Task
               <img src={check} alt="X" />
             </Button>
