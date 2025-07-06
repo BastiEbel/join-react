@@ -4,6 +4,7 @@ import search from "../assets/image/search.png";
 import add from "../assets/image/add.png";
 import plus from "../assets/image/plus.png";
 import "../components/css/Board.css";
+import BoardSection from "../components/layout/BoardSection";
 
 export default function Board() {
   const priorityItems = [
@@ -12,6 +13,7 @@ export default function Board() {
     { priority: "Await Feedback", image: plus },
     { priority: "Done", image: "" },
   ];
+
   function onClickHandler() {}
   return (
     <main className="container-board">
@@ -34,13 +36,11 @@ export default function Board() {
       </header>
       <section className="container-board-task">
         {priorityItems.map((prioItem) => (
-          <div key={prioItem.priority}>
-            <div className="prioTask">
-              <label>{prioItem.priority}</label>
-              {prioItem.image !== "" && <img src={prioItem.image} alt="Plus" />}
-            </div>
-            <div className="board-task"></div>
-          </div>
+          <BoardSection
+            priority={prioItem.priority}
+            image={prioItem.image}
+            key={prioItem.priority}
+          ></BoardSection>
         ))}
       </section>
     </main>

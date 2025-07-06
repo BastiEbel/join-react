@@ -275,7 +275,7 @@ app.get("/load-tasks", async (req, res) => {
   let where = {};
 
   if (userId) {
-    where = { ...where, createdBy: { id: userId } };
+    where = { ...where, createdById: userId };
   }
   if (contactId) {
     where = { ...where, contacts: { some: { id: contactId } } };

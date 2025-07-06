@@ -6,10 +6,11 @@ import {
   authentication,
   logout,
   addContactData,
-  getLoadContactData,
+  setContactData,
   updateContactDataDB,
-  getLoadCategories,
+  setCategories,
   addAsyncTask,
+  getAddTask,
 } from "../store/dataSlice";
 import { useDataDispatch, useDataSelector } from "../store/hooks";
 import { RootState } from "../store/store";
@@ -38,7 +39,9 @@ export function useData() {
   const categories = useDataSelector(
     (state: RootState) => state.data.categories
   );
-  //const addTask = useDataSelector((state: RootState) => state.data.addTask);
+  const addTasksLoad = useDataSelector(
+    (state: RootState) => state.data.addTask
+  );
 
   const signUpFormData = async (data: FormData) => {
     const resultAction = await dispatch(signUp(data));
@@ -133,7 +136,7 @@ export function useData() {
         .filter((contact): contact is ContactData => contact && contact.name)
         .sort((a, b) => a.name.localeCompare(b.name));
 
-      dispatch(getLoadContactData(contactDataSorted));
+      dispatch(setContactData(contactDataSorted));
     } catch (error) {
       console.error("Error loading contact data:", error);
     }
@@ -147,7 +150,7 @@ export function useData() {
           "Invalid data format: Expected an array of categories."
         );
       }
-      dispatch(getLoadCategories(response));
+      dispatch(setCategories(response));
     } catch (error) {
       console.error("Error loading categories:", error);
       return [];
@@ -157,11 +160,15 @@ export function useData() {
   const loadAsyncTasksData = useCallback(
     async (userId: string, contactId?: string) => {
       try {
-        const response = await loadTasks(userId, contactId);
+        const response: AddTask = await loadTasks(userId, contactId);
         if (!Array.isArray(response)) {
           throw new Error("Invalid data format: Expected an array of tasks.");
         }
-        dispatch(getLoadContactData(response));
+        if (response.length !== 0) {
+          dispatch(getAddTask(response));
+        }
+
+        return response;
       } catch (error) {
         console.error("Error loading tasks:", error);
         throw error;
@@ -209,6 +216,7 @@ export function useData() {
     errors,
     isChecked,
     contactData,
+    addTasksLoad,
     loadContactData,
     loadCategories,
     loadAsyncTasksData,

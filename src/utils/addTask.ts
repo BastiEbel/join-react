@@ -31,6 +31,9 @@ export async function loadTasks(userId: string, contactId?: string) {
 
     const response = await fetch(url.toString(), {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
       credentials: "include",
     });
 
@@ -39,6 +42,7 @@ export async function loadTasks(userId: string, contactId?: string) {
     }
 
     const data = await response.json();
+
     return data;
   } catch (error) {
     console.error("Error loading tasks:", error);

@@ -18,7 +18,7 @@ import OpenModal, { ModalHandle } from "../ui/OpenModal";
 import AddCategory from "./AddCategory";
 import { MultiValue, SingleValue } from "react-select";
 import { AddTask, Contacts } from "../../types/AddTask";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export default function FormTask() {
   const btnStyling = useMemo(
@@ -39,7 +39,7 @@ export default function FormTask() {
     ],
     []
   );
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [changeStyling, setChangeStyling] = useState(btnStyling);
   const dialogRef = useRef<ModalHandle>(null);
   const [showMsg, setShowMsg] = useState(false);
@@ -232,7 +232,9 @@ export default function FormTask() {
     try {
       const response = await addAsyncTask(taskData);
       if (response) {
-        navigate(`/board/${taskData.userId}`);
+        console.log("Task created successfully:", response);
+
+        //navigate(`/board/${taskData.userId}`);
       } else {
         alert("Failed to create task. Please try again.");
       }

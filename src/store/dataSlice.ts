@@ -39,7 +39,7 @@ const initialState: FormState = {
     category: null,
     dueDate: "",
     priority: "",
-  },
+  } as AddTask,
   errors: {
     name: "",
     email: "",
@@ -167,13 +167,13 @@ export const dataSlice = createSlice({
     authentication(state, action: PayloadAction<{ user: User }>) {
       state.user = action.payload.user;
     },
-    getLoadContactData(state, action: PayloadAction<ContactData[]>) {
+    setContactData(state, action: PayloadAction<ContactData[]>) {
       state.contactData = action.payload;
     },
-    getLoadCategories(state, action: PayloadAction<Category[]>) {
+    setCategories(state, action: PayloadAction<Category[]>) {
       state.categories = action.payload;
     },
-    getLoadAddTask(state, action: PayloadAction<AddTask>) {
+    getAddTask(state, action: PayloadAction<AddTask>) {
       state.addTask = action.payload;
     },
   },
@@ -271,7 +271,7 @@ export const {
   setErrors,
   toggleChecked,
   authentication,
-  getLoadContactData,
-  getLoadAddTask,
-  getLoadCategories,
+  setContactData,
+  setCategories,
+  getAddTask,
 } = dataSlice.actions;
