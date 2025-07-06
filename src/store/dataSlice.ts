@@ -7,6 +7,8 @@ import { FormState } from "../types/FormState";
 import { addContact, updateContact } from "../utils/contactData";
 import { ContactData } from "../types/ContactData";
 import { Category } from "../types/Category";
+import { addTask } from "../utils/addTask";
+import { AddTask, Category as AddTaskCategory } from "../types/AddTask";
 
 const initialState: FormState = {
   formData: {
@@ -29,6 +31,15 @@ const initialState: FormState = {
   },
   contactData: [] as ContactData[],
   categories: [] as Category[],
+  addTask: {
+    id: "",
+    userId: "",
+    title: "",
+    description: "",
+    category: null,
+    dueDate: "",
+    priority: "",
+  },
   errors: {
     name: "",
     email: "",
@@ -121,6 +132,28 @@ export const updateContactDataDB = createAsyncThunk<
   }
 );
 
+export const addAsyncTask = createAsyncThunk<
+  AddTask,
+  {
+    userId: string;
+    title: string;
+    description: string;
+    contacts?: { value: string; label: string }[];
+    category: AddTaskCategory;
+    dueDate: string;
+    priority: string;
+  },
+  { rejectValue: string }
+>("data/addTask", async (taskData, { rejectWithValue }) => {
+  try {
+    const response = await addTask(taskData);
+    return response as unknown as AddTask;
+  } catch (error) {
+    console.error("Add task error", error);
+    return rejectWithValue("Failed to add task");
+  }
+});
+
 export const dataSlice = createSlice({
   name: "data",
   initialState,
@@ -134,11 +167,14 @@ export const dataSlice = createSlice({
     authentication(state, action: PayloadAction<{ user: User }>) {
       state.user = action.payload.user;
     },
-    setContactData(state, action: PayloadAction<ContactData[]>) {
+    getLoadContactData(state, action: PayloadAction<ContactData[]>) {
       state.contactData = action.payload;
     },
-    setCategories(state, action: PayloadAction<Category[]>) {
+    getLoadCategories(state, action: PayloadAction<Category[]>) {
       state.categories = action.payload;
+    },
+    getLoadAddTask(state, action: PayloadAction<AddTask>) {
+      state.addTask = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -194,6 +230,11 @@ export const dataSlice = createSlice({
           state.contactData[index] = action.payload;
         }
       })
+      .addCase(addAsyncTask.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.addTask = action.payload;
+        }
+      })
       .addCase(logout.fulfilled, (state) => {
         state.user = {
           id: "",
@@ -230,6 +271,7 @@ export const {
   setErrors,
   toggleChecked,
   authentication,
-  setContactData,
-  setCategories,
+  getLoadContactData,
+  getLoadAddTask,
+  getLoadCategories,
 } = dataSlice.actions;

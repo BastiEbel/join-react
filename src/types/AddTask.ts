@@ -10,11 +10,10 @@ export interface Category {
 
 export interface SubTask {
   id?: string;
-  userId: string;
   title: string;
   description: string;
   contacts?: Contacts[];
-  category: Category | null;
+  category: Category | "";
   dueDate: string;
   priority: string;
 }

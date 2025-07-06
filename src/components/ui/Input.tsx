@@ -14,7 +14,7 @@ type InputProps = {
   value?: string;
   onChange?: (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  ) => void | undefined;
   onFocus?: () => void;
   onBlur?: () => void;
 };

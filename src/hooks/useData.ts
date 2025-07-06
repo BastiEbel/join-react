@@ -6,9 +6,10 @@ import {
   authentication,
   logout,
   addContactData,
-  setContactData,
+  getLoadContactData,
   updateContactDataDB,
-  setCategories,
+  getLoadCategories,
+  addAsyncTask,
 } from "../store/dataSlice";
 import { useDataDispatch, useDataSelector } from "../store/hooks";
 import { RootState } from "../store/store";
@@ -19,6 +20,8 @@ import { FormState } from "../types/FormState";
 import { User } from "../types/User";
 import { getContact } from "../utils/contactData";
 import { getCategories } from "../utils/categoryData";
+import { AddTask, Category } from "../types/AddTask";
+import { loadTasks } from "../utils/addTask";
 
 export function useData() {
   const dispatch = useDataDispatch();
@@ -35,6 +38,7 @@ export function useData() {
   const categories = useDataSelector(
     (state: RootState) => state.data.categories
   );
+  //const addTask = useDataSelector((state: RootState) => state.data.addTask);
 
   const signUpFormData = async (data: FormData) => {
     const resultAction = await dispatch(signUp(data));
@@ -129,7 +133,7 @@ export function useData() {
         .filter((contact): contact is ContactData => contact && contact.name)
         .sort((a, b) => a.name.localeCompare(b.name));
 
-      dispatch(setContactData(contactDataSorted));
+      dispatch(getLoadContactData(contactDataSorted));
     } catch (error) {
       console.error("Error loading contact data:", error);
     }
@@ -143,12 +147,60 @@ export function useData() {
           "Invalid data format: Expected an array of categories."
         );
       }
-      dispatch(setCategories(response));
+      dispatch(getLoadCategories(response));
     } catch (error) {
       console.error("Error loading categories:", error);
       return [];
     }
   }, [dispatch]);
+
+  const loadAsyncTasksData = useCallback(
+    async (userId: string, contactId?: string) => {
+      try {
+        const response = await loadTasks(userId, contactId);
+        if (!Array.isArray(response)) {
+          throw new Error("Invalid data format: Expected an array of tasks.");
+        }
+        dispatch(getLoadContactData(response));
+      } catch (error) {
+        console.error("Error loading tasks:", error);
+        throw error;
+      }
+    },
+    [dispatch]
+  );
+
+  const addNewTask = useCallback(
+    async (taskData: AddTask) => {
+      try {
+        const resultTask = await dispatch(
+          addAsyncTask({
+            userId: taskData.userId,
+            title: taskData.title,
+            description: taskData.description,
+            contacts: taskData.contacts
+              ? taskData.contacts.map((contact) => ({
+                  ...contact,
+                  value: contact.value ?? "",
+                  label: contact.label ?? "",
+                }))
+              : undefined,
+            category: taskData.category as Category,
+            dueDate: taskData.dueDate ?? "",
+            priority: taskData.priority,
+          })
+        );
+        if (addAsyncTask.fulfilled.match(resultTask)) {
+          return resultTask.payload;
+        }
+        throw new Error("Failed to add task");
+      } catch (error) {
+        console.error("Error adding task:", error);
+        throw error;
+      }
+    },
+    [dispatch]
+  );
 
   return {
     formData,
@@ -159,6 +211,7 @@ export function useData() {
     contactData,
     loadContactData,
     loadCategories,
+    loadAsyncTasksData,
     categories,
     signUp: signUpFormData,
     login: loginData,
@@ -167,5 +220,6 @@ export function useData() {
     logout: logoutUser,
     addContactData: addContactDataAsync,
     updateContactDataDB: updateContactDataAsync,
+    addAsyncTask: addNewTask,
   };
 }

@@ -199,7 +199,13 @@ export default function Form({ oversign, isLogIn }: FormProps) {
                     placeholder={inputProp.placeholder}
                     type={inputProp.type}
                     icon={inputProp.icon}
-                    onChange={(e) => onChangeHandler(e)}
+                    onChange={(e) => {
+                      if (e.target instanceof HTMLInputElement) {
+                        onChangeHandler(
+                          e as React.ChangeEvent<HTMLInputElement>
+                        );
+                      }
+                    }}
                     onFocus={() => handleFocus(inputProp.name)}
                     onBlur={() => handleBlur(inputProp.name)}
                   />
@@ -225,7 +231,13 @@ export default function Form({ oversign, isLogIn }: FormProps) {
                     required={false}
                     placeholder=""
                     checked={isChecked}
-                    onChange={(e) => setIsChecked(e.target.checked)}
+                    onChange={(
+                      e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                    ) => {
+                      if (e.target instanceof HTMLInputElement) {
+                        setIsChecked(e.target.checked);
+                      }
+                    }}
                     type="checkbox"
                   />
                   <span className="checkmark"></span>

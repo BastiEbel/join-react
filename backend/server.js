@@ -234,6 +234,65 @@ app.get("/categories", async (req, res) => {
   }
 });
 
+app.post("/add-task", async (req, res) => {
+  const { title, description, contacts, category, userId, dueDate, priority } =
+    req.body;
+
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const newTask = await prisma.addTask.create({
+      data: {
+        title,
+        description,
+        dueDate: new Date(dueDate),
+        prio: priority,
+        category: typeof category === "object" ? category.label : category,
+        contacts: {
+          connect: contacts.map((contact) => ({
+            id: contact.value,
+          })),
+        },
+        createdBy: { connect: { id: userId } },
+      },
+    });
+    res.json({ newTask, message: "Task successfully" });
+  } catch (error) {
+    console.error("Error adding task:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/load-tasks", async (req, res) => {
+  const { userId, contactId } = req.query;
+
+  if (!userId && !contactId) {
+    return res.status(400).json({ error: "userId or contactId required" });
+  }
+
+  let where = {};
+
+  if (userId) {
+    where = { ...where, createdBy: { id: userId } };
+  }
+  if (contactId) {
+    where = { ...where, contacts: { some: { id: contactId } } };
+  }
+  try {
+    const tasks = await prisma.addTask.findMany({ where });
+
+    if (tasks.length === 0) {
+      return res.status(404).json({ message: "No tasks found" });
+    }
+    res.status(200).json(tasks);
+  } catch (error) {
+    console.error("Error loading tasks:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

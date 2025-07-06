@@ -18,6 +18,7 @@ import OpenModal, { ModalHandle } from "../ui/OpenModal";
 import AddCategory from "./AddCategory";
 import { MultiValue, SingleValue } from "react-select";
 import { AddTask, Contacts } from "../../types/AddTask";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function FormTask() {
   const btnStyling = useMemo(
@@ -38,10 +39,11 @@ export default function FormTask() {
     ],
     []
   );
-
+  const navigate = useNavigate();
   const [changeStyling, setChangeStyling] = useState(btnStyling);
   const dialogRef = useRef<ModalHandle>(null);
   const [showMsg, setShowMsg] = useState(false);
+  const { id } = useParams();
   const [taskData, setTaskData] = useState<AddTask>({
     userId: "",
     title: "",
@@ -52,13 +54,24 @@ export default function FormTask() {
     priority: "",
     subTasks: [],
   });
-  const { contactData, categories, loadContactData, loadCategories } =
-    useData();
+  const {
+    contactData,
+    categories,
+    loadContactData,
+    loadCategories,
+    addAsyncTask,
+  } = useData();
 
   useEffect(() => {
     loadCategories();
     loadContactData();
-  }, [loadCategories, loadContactData]);
+    if (id) {
+      setTaskData((prev) => ({
+        ...prev,
+        userId: id,
+      }));
+    }
+  }, [loadCategories, loadContactData, id]);
 
   const onChangeBtnStyle = useCallback(
     (id: string) => {
@@ -205,7 +218,7 @@ export default function FormTask() {
 
   function onClearHandler() {}
 
-  function onCreateTaskHandler(e: React.FormEvent) {
+  async function onCreateTaskHandler(e: React.FormEvent) {
     e.preventDefault();
     if (
       taskData.title.trim() === "" ||
@@ -216,7 +229,19 @@ export default function FormTask() {
       return;
     }
 
-    console.log("Task created:", taskData);
+    try {
+      const response = await addAsyncTask(taskData);
+      if (response) {
+        navigate(`/board/${taskData.userId}`);
+      } else {
+        alert("Failed to create task. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error creating task:", error);
+      alert("Failed to create task. Please try again.");
+      return;
+    }
+
     onClearDataHandler();
   }
 
