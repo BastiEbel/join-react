@@ -51,7 +51,7 @@ export default function FormTask() {
     dueDate: "",
     contacts: [],
     category: null,
-    priority: "",
+    prio: "",
     subTasks: [],
   });
   const {
@@ -255,7 +255,7 @@ export default function FormTask() {
       dueDate: "",
       contacts: [],
       category: null,
-      priority: "",
+      prio: "",
       subTasks: [],
     });
     setChangeStyling(btnStyling);

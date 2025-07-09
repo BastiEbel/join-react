@@ -2,18 +2,10 @@ import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import search from "../assets/image/search.png";
 import add from "../assets/image/add.png";
-import plus from "../assets/image/plus.png";
 import "../components/css/Board.css";
 import BoardSection from "../components/layout/BoardSection";
 
 export default function Board() {
-  const priorityItems = [
-    { priority: "To Do", image: plus },
-    { priority: "In Progress", image: plus },
-    { priority: "Await Feedback", image: plus },
-    { priority: "Done", image: "" },
-  ];
-
   function onClickHandler() {}
   return (
     <main className="container-board">
@@ -35,13 +27,7 @@ export default function Board() {
         </div>
       </header>
       <section className="container-board-task">
-        {priorityItems.map((prioItem) => (
-          <BoardSection
-            priority={prioItem.priority}
-            image={prioItem.image}
-            key={prioItem.priority}
-          ></BoardSection>
-        ))}
+        <BoardSection />
       </section>
     </main>
   );

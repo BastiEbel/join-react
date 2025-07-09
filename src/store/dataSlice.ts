@@ -38,7 +38,7 @@ const initialState: FormState = {
     description: "",
     category: null,
     dueDate: "",
-    priority: "",
+    prio: "",
   } as AddTask,
   errors: {
     name: "",
@@ -141,7 +141,7 @@ export const addAsyncTask = createAsyncThunk<
     contacts?: { value: string; label: string }[];
     category: AddTaskCategory;
     dueDate: string;
-    priority: string;
+    prio: string;
   },
   { rejectValue: string }
 >("data/addTask", async (taskData, { rejectWithValue }) => {

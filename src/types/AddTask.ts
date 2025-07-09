@@ -15,7 +15,7 @@ export interface SubTask {
   contacts?: Contacts[];
   category: Category | "";
   dueDate: string;
-  priority: string;
+  prio: string;
 }
 
 export interface AddTask {
@@ -26,6 +26,6 @@ export interface AddTask {
   contacts?: Contacts[];
   category: Category | null;
   dueDate: string;
-  priority: string;
+  prio: string;
   subTasks?: SubTask[];
 }

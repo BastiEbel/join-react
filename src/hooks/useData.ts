@@ -194,7 +194,7 @@ export function useData() {
               : undefined,
             category: taskData.category as Category,
             dueDate: taskData.dueDate ?? "",
-            priority: taskData.priority,
+            prio: taskData.prio,
           })
         );
         if (addAsyncTask.fulfilled.match(resultTask)) {
