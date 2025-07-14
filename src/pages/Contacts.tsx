@@ -1,4 +1,4 @@
-import "../components/css/Contact.css";
+import styles from "../components/css/Contact.module.css";
 import Button from "../components/ui/Button";
 import imgContact from "../assets/image/person_add.png";
 import { useEffect, useRef, useState } from "react";
@@ -44,9 +44,12 @@ export default function Contacts() {
       <OpenModal ref={dialogRef}>
         <AddOrEditContact onClose={onCloseHandler} addContact={true} />
       </OpenModal>
-      <div className="container-contacts">
-        <nav className="nav-contacts">
-          <Button onClick={onAddPersonHandler} className="btn-addPerson">
+      <div className={styles["container-contacts"]}>
+        <nav className={styles["nav-contacts"]}>
+          <Button
+            onClick={onAddPersonHandler}
+            className={styles["btn-addPerson"]}
+          >
             Add new contact <img src={imgContact} alt="Add Person" />
           </Button>
 
@@ -59,17 +62,29 @@ export default function Contacts() {
             <p>No contact data found</p>
           )}
         </nav>
-        <div className="container-contact-info">
-          <div className="contact-info">
+        <div className={styles["container-contact-info"]}>
+          <div className={styles["contact-info"]}>
             <h1>Contacts</h1>
             <div></div>
             <h2>Better with a team</h2>
           </div>
-          <div className="contact-info-text">
+          <div className={styles["contact-info-text"]}>
             {selectedContact ? (
-              <ContactInfo contactInfo={selectedContact as ContactData} />
+              <ContactInfo
+                contactInfo={selectedContact as ContactData}
+                onDelete={() => setSelectedContact(null)}
+              />
             ) : (
-              <p>Select a person to view details</p>
+              <p
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  color: "lightgray",
+                  marginTop: "128px",
+                }}
+              >
+                Select a person to view details
+              </p>
             )}
           </div>
         </div>

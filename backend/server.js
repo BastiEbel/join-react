@@ -128,9 +128,11 @@ app.post("/logout", (req, res) => {
   res.status(200).json({ message: "Logout successful" });
 });
 
-// Contact Management Routes
 app.post("/add-contact", async (req, res) => {
   const { name, email, phone, zipCode, userId } = req.body;
+  if (!zipCode) {
+    return res.status(400).json({ error: "zipCode is required" });
+  }
 
   req.session.userId = userId;
   if (!req.session.userId) {
@@ -235,8 +237,16 @@ app.get("/categories", async (req, res) => {
 });
 
 app.post("/add-task", async (req, res) => {
-  const { title, description, contacts, category, userId, dueDate, priority } =
-    req.body;
+  const {
+    title,
+    description,
+    contacts,
+    category,
+    userId,
+    dueDate,
+    prio,
+    status,
+  } = req.body;
 
   if (!userId) {
     return res.status(401).json({ error: "Unauthorized" });
@@ -248,8 +258,9 @@ app.post("/add-task", async (req, res) => {
         title,
         description,
         dueDate: new Date(dueDate),
-        prio: priority,
+        prio: prio,
         category: typeof category === "object" ? category.label : category,
+        status: status || "To Do",
         contacts: {
           connect: contacts.map((contact) => ({
             id: contact.value,
@@ -257,6 +268,25 @@ app.post("/add-task", async (req, res) => {
         },
         createdBy: { connect: { id: userId } },
       },
+    });
+    // Endpoint to update task status (for drag and drop)
+    app.put("/update-task-status", async (req, res) => {
+      const { id, status } = req.body;
+      if (!id || !status) {
+        return res
+          .status(400)
+          .json({ error: "Task id and status are required" });
+      }
+      try {
+        const updatedTask = await prisma.addTask.update({
+          where: { id },
+          data: { status },
+        });
+        res.status(200).json({ updatedTask, message: "Status updated" });
+      } catch (error) {
+        console.error("Error updating task status:", error);
+        res.status(500).json({ error: "Internal server error" });
+      }
     });
     res.json({ newTask, message: "Task successfully" });
   } catch (error) {
@@ -267,29 +297,30 @@ app.post("/add-task", async (req, res) => {
 
 app.get("/load-tasks", async (req, res) => {
   const { userId, contactId } = req.query;
-
-  if (!userId && !contactId) {
-    return res.status(400).json({ error: "userId or contactId required" });
-  }
-
-  let where = {};
-
-  if (userId) {
-    where = { ...where, createdById: userId };
-  }
-  if (contactId) {
-    where = { ...where, contacts: { some: { id: contactId } } };
-  }
   try {
-    const tasks = await prisma.addTask.findMany({ where });
-
-    if (tasks.length === 0) {
-      return res.status(404).json({ message: "No tasks found" });
+    let tasks;
+    if (contactId) {
+      tasks = await prisma.addTask.findMany({
+        where: {
+          createdById: userId,
+          contacts: {
+            some: { id: contactId },
+          },
+        },
+      });
+    } else {
+      tasks = await prisma.addTask.findMany({
+        where: { createdById: userId },
+      });
     }
-    res.status(200).json(tasks);
+
+    if (!tasks || tasks.length === 0) {
+      return res.status(200).json([]);
+    }
+    res.json(tasks);
   } catch (error) {
     console.error("Error loading tasks:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Failed to load tasks" });
   }
 });
 

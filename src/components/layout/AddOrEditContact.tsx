@@ -66,6 +66,7 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
       name: "",
       email: "",
       phone: "",
+      zipCode: "+49",
     });
     setIsFocused({});
     setErrors({
@@ -89,7 +90,9 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
     }));
   }
 
-  function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
+  function onInputChangeHandler(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
     const { name, value } = e.target;
     setInputData((prevData) => ({
       ...prevData,

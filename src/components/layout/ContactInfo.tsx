@@ -1,7 +1,7 @@
 import contactColors from "../../styles/contactColors";
 import edit from "../../assets/image/edit.png";
 import deleteItem from "../../assets/image/delete.png";
-import "../css/ContactInfo.css";
+import styles from "../css/ContactInfo.module.css";
 import OpenModal, { ModalHandle } from "../ui/OpenModal";
 import React, { useRef, useState } from "react";
 import InformationBox from "../ui/InformationBox";
@@ -12,9 +12,13 @@ import AddOrEdit from "./AddOrEditContact";
 
 interface ContactInfoProps {
   contactInfo: ContactData;
+  onDelete?: () => void;
 }
 
-export default function ContactInfo({ contactInfo }: ContactInfoProps) {
+export default function ContactInfo({
+  contactInfo,
+  onDelete,
+}: ContactInfoProps) {
   const dialogRef = useRef<ModalHandle>(null);
   const [onEditMode, setOnEditMode] = useState(false);
   const [contactData, setContactData] = useState<ContactData>(contactInfo);
@@ -30,7 +34,6 @@ export default function ContactInfo({ contactInfo }: ContactInfoProps) {
       dialogRef.current.open();
     }
     setContactData(contact);
-    // Logic to edit the contact
   }
   function onOpenDeleteHandler(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -55,6 +58,7 @@ export default function ContactInfo({ contactInfo }: ContactInfoProps) {
     }
     loadContactData();
     setOnEditMode(false);
+    if (onDelete) onDelete();
   }
 
   return (
@@ -81,9 +85,9 @@ export default function ContactInfo({ contactInfo }: ContactInfoProps) {
           />
         )}
       </OpenModal>
-      <div className="name-container">
+      <div className={styles["name-container"]}>
         <div
-          className="name-item"
+          className={styles["name-item"]}
           style={{
             backgroundColor:
               contactColors[initialsContact.charAt(0).toUpperCase()],
@@ -91,9 +95,9 @@ export default function ContactInfo({ contactInfo }: ContactInfoProps) {
         >
           {initialsContact}
         </div>
-        <div className="name-info">
+        <div className={styles["name-info"]}>
           <h1>{contactInfo.name}</h1>
-          <div className="name-info-btn">
+          <div className={styles["name-info-btn"]}>
             <span onClick={() => onEditHandler(contactInfo)}>
               <img src={edit} alt="Edit Contact" />
               Edit
@@ -105,7 +109,7 @@ export default function ContactInfo({ contactInfo }: ContactInfoProps) {
           </div>
         </div>
       </div>
-      <div className="name-info-line">
+      <div className={styles["name-info-line"]}>
         <h2>Contact Information</h2>
         <span>
           <b>Email:</b>

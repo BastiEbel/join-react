@@ -8,7 +8,6 @@ import low from "../../assets/image/low.png";
 import urgentWhite from "../../assets/image/urgentWhite.png";
 import mediumWhite from "../../assets/image/mediumWhite.png";
 import lowWhite from "../../assets/image/lowWhite.png";
-import plusTask from "../../assets/image/plus.png";
 import clear from "../../assets/image/clear.png";
 import hoverclear from "../../assets/image/hoverclear.png";
 import check from "../../assets/image/check.png";
@@ -18,7 +17,7 @@ import OpenModal, { ModalHandle } from "../ui/OpenModal";
 import AddCategory from "./AddCategory";
 import { MultiValue, SingleValue } from "react-select";
 import { AddTask, Contacts } from "../../types/AddTask";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function FormTask() {
   const btnStyling = useMemo(
@@ -39,7 +38,7 @@ export default function FormTask() {
     ],
     []
   );
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [changeStyling, setChangeStyling] = useState(btnStyling);
   const dialogRef = useRef<ModalHandle>(null);
   const [showMsg, setShowMsg] = useState(false);
@@ -52,7 +51,7 @@ export default function FormTask() {
     contacts: [],
     category: null,
     prio: "",
-    subTasks: [],
+    status: "",
   });
   const {
     contactData,
@@ -69,6 +68,7 @@ export default function FormTask() {
       setTaskData((prev) => ({
         ...prev,
         userId: id,
+        status: "To Do",
       }));
     }
   }, [loadCategories, loadContactData, id]);
@@ -113,7 +113,7 @@ export default function FormTask() {
       );
       setTaskData((prev) => ({
         ...prev,
-        priority: id,
+        prio: id,
       }));
     },
     [btnStyling]
@@ -232,9 +232,7 @@ export default function FormTask() {
     try {
       const response = await addAsyncTask(taskData);
       if (response) {
-        console.log("Task created successfully:", response);
-
-        //navigate(`/board/${taskData.userId}`);
+        navigate(`/board/${taskData.userId}`);
       } else {
         alert("Failed to create task. Please try again.");
       }
@@ -256,7 +254,7 @@ export default function FormTask() {
       contacts: [],
       category: null,
       prio: "",
-      subTasks: [],
+      status: "",
     });
     setChangeStyling(btnStyling);
     setShowMsg(false);
@@ -400,16 +398,6 @@ export default function FormTask() {
                 placeholder="Select task category"
                 onChange={onChangeCategoryHandler}
                 noOptionsMessage={() => "No categories found"}
-              />
-            </div>
-            <div>
-              <Input
-                required={false}
-                labelText="Subtasks"
-                icon={plusTask}
-                placeholder="Add new subtask"
-                type="text"
-                className="input-subtask"
               />
             </div>
           </div>

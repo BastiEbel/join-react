@@ -142,6 +142,7 @@ export const addAsyncTask = createAsyncThunk<
     category: AddTaskCategory;
     dueDate: string;
     prio: string;
+    status: string;
   },
   { rejectValue: string }
 >("data/addTask", async (taskData, { rejectWithValue }) => {

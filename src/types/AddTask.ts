@@ -8,16 +8,6 @@ export interface Category {
   label: string;
 }
 
-export interface SubTask {
-  id?: string;
-  title: string;
-  description: string;
-  contacts?: Contacts[];
-  category: Category | "";
-  dueDate: string;
-  prio: string;
-}
-
 export interface AddTask {
   id?: string;
   userId: string;
@@ -27,5 +17,5 @@ export interface AddTask {
   category: Category | null;
   dueDate: string;
   prio: string;
-  subTasks?: SubTask[];
+  status: string;
 }

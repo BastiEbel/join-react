@@ -26,9 +26,9 @@ model User {
 model Contact {
   id      String       @id @default(uuid())
   name    String
-  email   String
+  email   String       @unique
   phone   String
-  zipCode String
+  zipCode String?
   userId  String
   user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   tasks   AddTask[]    @relation("TaskContacts")
@@ -46,6 +46,7 @@ model AddTask {
   dueDate         DateTime
   prio            String
   category        String
+  status          String
   createdBy       User           @relation("CreatedTasks", fields: [createdById], references: [id])
   createdById     String
   contacts        Contact[]      @relation("TaskContacts")

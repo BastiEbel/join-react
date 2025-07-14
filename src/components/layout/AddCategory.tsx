@@ -26,6 +26,7 @@ export default function AddCategory({ onClose }: AddCategoryProps) {
         <label className={styles.labelCategory}>Category Name:</label>
         <Input
           onChange={(e) => setCategoryName({ name: e.target.value })}
+          value={categoryName.name}
           className={styles.categoryInput}
           type="text"
           required={false}
