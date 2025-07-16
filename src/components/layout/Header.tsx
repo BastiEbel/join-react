@@ -1,4 +1,4 @@
-import "../css/Header.css";
+import styles from "../css/Header.module.css";
 import help from "../../assets/image/help.png";
 import { useData } from "../../hooks/useData";
 import Button from "../ui/Button";
@@ -28,13 +28,13 @@ export default function Header() {
   const intitials = user.name ? getInitials(user.name) : "";
 
   return (
-    <header className="containerHeader">
+    <header className={styles["containerHeader"]}>
       <ToastContainer hideProgressBar={true} closeButton={false} />
       <h1>Kanban Project Management</h1>
-      <div className="container-userInfo">
+      <div className={styles["container-userInfo"]}>
         <img src={help} alt="need help" />
         <p>{intitials}</p>
-        <Button onClick={onLogoutHandler} className="fancy-button">
+        <Button onClick={onLogoutHandler} className={styles["fancy-button"]}>
           Logout
         </Button>
       </div>

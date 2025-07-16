@@ -1,8 +1,5 @@
 import { useData } from "../../hooks/useData";
-import TaskCard from "./TaskCard";
-import plus from "../../assets/image/plus.png";
-import styles from "../css/BoardSection.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   DragDropContext,
@@ -10,6 +7,16 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
+
+import OpenModal, { ModalHandle } from "../ui/OpenModal";
+
+import FormTask from "./FormTask";
+import TaskCard from "./TaskCard";
+
+import plus from "../../assets/image/plus.png";
+
+import styles from "../css/BoardSection.module.css";
+
 import { AddTask } from "../../types/AddTask";
 import { updateTaskStatus } from "../../utils/addTask";
 
@@ -27,6 +34,7 @@ export default function BoardSection() {
     { priority: "Await Feedback", image: "" },
     { priority: "Done", image: "" },
   ];
+  const dialogRef = useRef<ModalHandle>(null);
   const { addTasksLoad, loadAsyncTasksData } = useData();
   const { id } = useParams();
 
@@ -70,6 +78,18 @@ export default function BoardSection() {
     }
   }, [addTasksLoad]);
 
+  function onOpenTaskHandler() {
+    if (dialogRef.current) {
+      dialogRef.current.open();
+    }
+  }
+
+  function onCloseTaskHandler() {
+    if (dialogRef.current) {
+      dialogRef.current.close();
+    }
+  }
+
   async function onDragEnd(result: DropResult) {
     const { destination, source } = result;
 
@@ -109,50 +129,60 @@ export default function BoardSection() {
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className={styles["board-section"]}>
-        {priorityItems.map((prioItem) => (
-          <Droppable droppableId={prioItem.priority} key={prioItem.priority}>
-            {(provided) => (
-              <div
-                className={styles["prioTask"]}
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                key={prioItem.priority}
-              >
-                <div className={styles["board-priority"]}>
-                  <label>{prioItem.priority}</label>
-                  {prioItem.image !== "" && (
-                    <img src={prioItem.image} alt="Plus" />
-                  )}
+    <>
+      <OpenModal ref={dialogRef}>
+        <FormTask onClose={onCloseTaskHandler} />
+      </OpenModal>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className={styles["board-section"]}>
+          {priorityItems.map((prioItem) => (
+            <Droppable droppableId={prioItem.priority} key={prioItem.priority}>
+              {(provided) => (
+                <div
+                  className={styles["prioTask"]}
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  key={prioItem.priority}
+                >
+                  <div className={styles["board-priority"]}>
+                    <label>{prioItem.priority}</label>
+                    {prioItem.image !== "" && (
+                      <img
+                        key={prioItem.image}
+                        onClick={onOpenTaskHandler}
+                        src={prioItem.image}
+                        alt="Plus"
+                      />
+                    )}
+                  </div>
+                  <div className={styles["board-task"]}>
+                    {(tasksStatus[prioItem.priority as StatusType] ?? []).map(
+                      (task: Task, idx: number) => (
+                        <Draggable
+                          draggableId={task.id}
+                          index={idx}
+                          key={task.id}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <TaskCard addTask={task.addTask[0]} />
+                            </div>
+                          )}
+                        </Draggable>
+                      )
+                    )}
+                    {provided.placeholder}
+                  </div>
                 </div>
-                <div className={styles["board-task"]}>
-                  {(tasksStatus[prioItem.priority as StatusType] ?? []).map(
-                    (task: Task, idx: number) => (
-                      <Draggable
-                        draggableId={task.id}
-                        index={idx}
-                        key={task.id}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <TaskCard addTask={task.addTask[0]} />
-                          </div>
-                        )}
-                      </Draggable>
-                    )
-                  )}
-                  {provided.placeholder}
-                </div>
-              </div>
-            )}
-          </Droppable>
-        ))}
-      </div>
-    </DragDropContext>
+              )}
+            </Droppable>
+          ))}
+        </div>
+      </DragDropContext>
+    </>
   );
 }

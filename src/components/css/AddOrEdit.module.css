@@ -76,9 +76,15 @@
 }
 
 .container-input {
-  width: 422px;
-  height: 50px;
-  gap: 8px;
+  display: flex;
+  height: 45px;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  border: 2px solid #d1d1d1;
+  padding: 8px 20px;
+  box-sizing: border-box;
+  background: #ffffff;
 }
 .input-contact {
   width: 380px;

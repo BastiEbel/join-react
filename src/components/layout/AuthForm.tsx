@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DOMPurify from "dompurify";
 
-import "../css/AuthForm.css";
+import styles from "../css/AuthForm.module.css";
 import Input from "../ui/Input";
 import personIcon from "../../assets/image/person.png";
 import mailIcon from "../../assets/image/mail.png";
@@ -162,20 +162,24 @@ export default function Form({ oversign, isLogIn }: FormProps) {
   }
   return (
     <>
-      <form className="form-signIn" onSubmit={onSubmittingHandler} action="">
+      <form
+        className={styles["form-signIn"]}
+        onSubmit={onSubmittingHandler}
+        action=""
+      >
         {!isLogIn && (
           <img
             onClick={onClickBackHandler}
-            className="arrow-left"
+            className={styles["arrow-left"]}
             src={leftArrowIcon}
             alt="left arrow"
           />
         )}
-        <div className="container-oversign">
+        <div className={styles["container-oversign"]}>
           <h1>{oversign}</h1>
-          <div className="vector"></div>
+          <div className={styles["vector"]}></div>
         </div>
-        <div className="container-inputs">
+        <div className={styles["container-inputs"]}>
           {inputFields
             .filter((inputProp) =>
               isLogIn
@@ -186,14 +190,14 @@ export default function Form({ oversign, isLogIn }: FormProps) {
             .map((inputProp) => (
               <div key={inputProp.name}>
                 <div
-                  className={`container-input ${
-                    inputProp.error ? "error-input" : ""
-                  } ${isFocused[inputProp.name] ? "focused" : ""} ${
-                    location.pathname === "/" && isLogIn ? "d-none" : ""
+                  className={`${styles["container-input"]} ${
+                    inputProp.error ? styles["error-input"] : ""
+                  } ${isFocused[inputProp.name] ? styles["focused"] : ""} ${
+                    location.pathname === "/" && isLogIn ? styles["d-none"] : ""
                   }`}
                 >
                   <Input
-                    className="input-signIn"
+                    className={styles["input-signIn"]}
                     name={inputProp.name}
                     required
                     placeholder={inputProp.placeholder}
@@ -211,23 +215,23 @@ export default function Form({ oversign, isLogIn }: FormProps) {
                   />
                 </div>
                 {inputProp.error && (
-                  <span className="error">{inputProp.error}</span>
+                  <span className={styles["error"]}>{inputProp.error}</span>
                 )}
               </div>
             ))}
         </div>
-        <div className="container-btn">
+        <div className={styles["container-btn"]}>
           {isLogIn ? (
             <>
-              <Button className="btn-login">Log in</Button>
-              <Button className="btn-guest">Guest Log in</Button>
+              <Button className={styles["btn-login"]}>Log in</Button>
+              <Button className={styles["btn-guest"]}>Guest Log in</Button>
             </>
           ) : (
-            <div className="container-signUp">
-              <span className="police">
-                <label className="custom-checkbox">
+            <div className={styles["container-signUp"]}>
+              <span className={styles["police"]}>
+                <label className={styles["custom-checkbox"]}>
                   <Input
-                    className="input"
+                    className={styles["input"]}
                     required={false}
                     placeholder=""
                     checked={isChecked}
@@ -240,7 +244,7 @@ export default function Form({ oversign, isLogIn }: FormProps) {
                     }}
                     type="checkbox"
                   />
-                  <span className="checkmark"></span>
+                  <span className={styles["checkmark"]}></span>
                 </label>
                 <p>
                   <span>
@@ -249,7 +253,11 @@ export default function Form({ oversign, isLogIn }: FormProps) {
                   </span>
                 </p>
               </span>
-              <Button type="submit" disabled={!isChecked} className="btn-login">
+              <Button
+                type="submit"
+                disabled={!isChecked}
+                className={styles["btn-login"]}
+              >
                 Sign up
               </Button>
             </div>

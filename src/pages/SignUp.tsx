@@ -1,12 +1,12 @@
 import logo from "../assets/image/joinLogo.png";
-import "../components/css/Login.css";
+import styles from "../components/css/Login.module.css";
 import Form from "../components/layout/AuthForm";
 
 export default function SignUp() {
   return (
-    <main className="login-main">
+    <main className={styles["login-main"]}>
       <div>
-        <img className="logo-img" src={logo} alt="Logo Image" />
+        <img className={styles["logo-img"]} src={logo} alt="Logo Image" />
       </div>
       <Form oversign="Sign up" isLogIn={false} />
     </main>

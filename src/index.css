@@ -38,6 +38,9 @@ dialog {
   transform: translateX(100%);
   opacity: 0;
   transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  padding: unset;
+  border: unset;
+  border-radius: 30px;
 }
 
 .dialog-open {

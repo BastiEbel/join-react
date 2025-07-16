@@ -1,7 +1,10 @@
-import "../css/FormTask.css";
+import styles from "../css/FormTask.module.css";
+
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import SelectBox from "../ui/SelectBox";
+import OpenModal, { ModalHandle } from "../ui/OpenModal";
+
 import urgent from "../../assets/image/urgent.png";
 import medium from "../../assets/image/medium.png";
 import low from "../../assets/image/low.png";
@@ -11,15 +14,20 @@ import lowWhite from "../../assets/image/lowWhite.png";
 import clear from "../../assets/image/clear.png";
 import hoverclear from "../../assets/image/hoverclear.png";
 import check from "../../assets/image/check.png";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useData } from "../../hooks/useData";
-import OpenModal, { ModalHandle } from "../ui/OpenModal";
-import AddCategory from "./AddCategory";
 import { MultiValue, SingleValue } from "react-select";
-import { AddTask, Contacts } from "../../types/AddTask";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function FormTask() {
+import AddCategory from "./AddCategory";
+import { AddTask, Contacts } from "../../types/AddTask";
+
+type MoadlTaskProps = {
+  onClose?: (() => void | undefined) | undefined;
+};
+
+export default function FormTask({ onClose }: MoadlTaskProps) {
   const btnStyling = useMemo(
     () => [
       {
@@ -133,7 +141,7 @@ export default function FormTask() {
     }
   }
 
-  function onClickCategoryHandler() {
+  function onOpenCategoryHandler() {
     if (dialogRef.current) {
       dialogRef.current.open();
     }
@@ -216,7 +224,14 @@ export default function FormTask() {
     }));
   }
 
-  function onClearHandler() {}
+  function onClearHandler() {
+    onClearDataHandler();
+    if (onClose) {
+      setTimeout(() => {
+        onClose();
+      }, 100);
+    }
+  }
 
   async function onCreateTaskHandler(e: React.FormEvent) {
     e.preventDefault();
@@ -246,16 +261,18 @@ export default function FormTask() {
   }
 
   function onClearDataHandler() {
-    setTaskData({
-      userId: "",
-      title: "",
-      description: "",
-      dueDate: "",
-      contacts: [],
-      category: null,
-      prio: "",
-      status: "",
-    });
+    if (taskData !== undefined) {
+      setTaskData({
+        userId: "",
+        title: "",
+        description: "",
+        dueDate: "",
+        contacts: [],
+        category: null,
+        prio: "",
+        status: "",
+      });
+    }
     setChangeStyling(btnStyling);
     setShowMsg(false);
   }
@@ -265,13 +282,13 @@ export default function FormTask() {
       <OpenModal ref={dialogRef}>
         <AddCategory onClose={onCloseCategoryHandler} />
       </OpenModal>
-      <form id="task" className="form-addTask" action="post">
-        <section className="container-task">
-          <div className="container-left">
+      <form id="task" className={styles["form-addTask"]} action="post">
+        <section className={styles["container-task"]}>
+          <div className={styles["container-left"]}>
             <div>
               <Input
                 name="title"
-                className="input"
+                className={styles["input"]}
                 required
                 type="text"
                 value={taskData.title}
@@ -287,7 +304,7 @@ export default function FormTask() {
             <div>
               <Input
                 name="description"
-                className="textArea"
+                className={styles["textArea"]}
                 labelText="Description"
                 textArea={true}
                 required={false}
@@ -324,12 +341,12 @@ export default function FormTask() {
               )}
             </div>
           </div>
-          <div className="spacer-addTask"></div>
-          <div className="priority-section">
+          <div className={styles["spacer-addTask"]}></div>
+          <div className={styles["priority-section"]}>
             <div>
               <Input
                 name="dueDate"
-                className="selectDate"
+                className={styles["selectDate"]}
                 required={true}
                 type="date"
                 onChange={onHandleDueDateChange}
@@ -343,8 +360,8 @@ export default function FormTask() {
               />
             </div>
             <div>
-              <label className="title-prio">Prio</label>
-              <div className="btn-group">
+              <label className={styles["title-prio"]}>Prio</label>
+              <div className={styles["btn-group"]}>
                 {changeStyling.map((btnItem) => (
                   <Button
                     type="button"
@@ -354,7 +371,7 @@ export default function FormTask() {
                       background: btnItem.bgColor,
                       color: btnItem.color,
                     }}
-                    className="btn-prio"
+                    className={styles["btn-prio"]}
                   >
                     {btnItem.name}
                     <img src={btnItem.image} alt={btnItem.name} />
@@ -381,8 +398,8 @@ export default function FormTask() {
                   <span style={{ color: "red" }}>*</span>
                 </div>
                 <span
-                  onClick={onClickCategoryHandler}
-                  className="add-category-btn"
+                  onClick={onOpenCategoryHandler}
+                  className={styles["add-category-btn"]}
                 >
                   Add Category
                 </span>
@@ -402,21 +419,24 @@ export default function FormTask() {
             </div>
           </div>
         </section>
-        <div className="form-footer">
+        <div className={styles["form-footer"]}>
           <label>
             <span>*</span>This field is required
           </label>
-          <div className="submitting-btn">
+          <div className={styles["submitting-btn"]}>
             <Button
               mouseOver={(e) => onMouseOverHandler(e)}
               mouseLeave={(e) => onMouseLeaveHandler(e)}
               onClick={onClearHandler}
-              className="clear-btn"
+              className={styles["clear-btn"]}
             >
               Clear
               <img src={clear} alt="X" />
             </Button>
-            <Button onClick={onCreateTaskHandler} className="create-btn">
+            <Button
+              onClick={onCreateTaskHandler}
+              className={styles["create-btn"]}
+            >
               Create Task
               <img src={check} alt="X" />
             </Button>

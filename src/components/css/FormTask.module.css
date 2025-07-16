@@ -3,6 +3,7 @@
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: column;
+  padding: 32px;
 }
 
 .container-task {
@@ -54,6 +55,12 @@
     top: 12px;
     left: 21px;
   }
+}
+
+.taskModal {
+  border-radius: 30px;
+  border: unset;
+  padding: 32px;
 }
 
 .input-icon-date:hover {

@@ -1,5 +1,5 @@
 import { ChangeEvent, InputHTMLAttributes, ReactNode, useRef } from "react";
-import "../css/FormTask.css";
+import styles from "../css/FormTask.module.css";
 
 type InputProps = {
   name?: string;
@@ -67,7 +67,7 @@ export default function Input({
         {icon && labelText ? (
           <div
             style={{ marginTop: "8px", width: "440px" }}
-            className={`container-input`}
+            className={styles["container-input"]}
           >
             <input ref={inputRef} {...inputProps} />
             <img src={icon} alt="Logo for Input" />

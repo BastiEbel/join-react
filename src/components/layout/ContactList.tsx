@@ -1,5 +1,5 @@
 import contactColors from "../../styles/contactColors";
-import "../css/ContactList.css";
+import styles from "../css/ContactList.module.css";
 
 interface Contact {
   userId: string;
@@ -29,8 +29,8 @@ export default function ContactList({
           )
         )
         .map((letter) => (
-          <div key={letter} className="alphabet">
-            <span className="alphabet-letter">{letter}</span>
+          <div key={letter} className={styles["alphabet"]}>
+            <span className={styles["alphabet-letter"]}>{letter}</span>
             <div>
               {contacts
                 .filter((contact) => contact.name.startsWith(letter))
@@ -44,10 +44,10 @@ export default function ContactList({
                     <div
                       onClick={() => onContactClick(contact)}
                       key={contact.email + idx}
-                      className="contact"
+                      className={styles["contact"]}
                     >
                       <div
-                        className="contact-item"
+                        className={styles["contact-item"]}
                         style={{
                           backgroundColor: contactColors[letter],
                         }}

@@ -66,7 +66,7 @@ export default function ContactInfo({
       <OpenModal ref={dialogRef}>
         {onEditMode ? (
           <AddOrEdit
-            contactData={contactData}
+            contactDataInfo={contactData}
             onClose={onCloseEditHandler}
             addContact={false}
           />

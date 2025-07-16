@@ -1,7 +1,7 @@
 import { useState } from "react";
 import hookblack from "../../assets/image/hookblack.png";
 import pencilblack from "../../assets/image/pencilblack.png";
-import "../css/ContainerSummary.css";
+import styles from "../css/ContainerSummary.module.css";
 
 type ContainerProps = {
   width: string;
@@ -46,10 +46,13 @@ export default function Container({
       onMouseLeave={onMouseLeaveHandler}
       onMouseOver={onChangeImage}
       style={{ width: width }}
-      className="summary-item"
+      className={styles["summary-item"]}
     >
       {image && (
-        <div style={{ background: "#FF3D00" }} className="summary-image">
+        <div
+          style={{ background: "#FF3D00" }}
+          className={styles["summary-image"]}
+        >
           <img
             style={date ? { width: "34px", height: "25px" } : undefined}
             src={changeImage}
@@ -57,16 +60,16 @@ export default function Container({
           />
         </div>
       )}
-      <div className="summary-content">
-        <p className="amount">{amount}</p>
-        <p className="description">{description}</p>
+      <div className={styles["summary-content"]}>
+        <p className={styles["amount"]}>{amount}</p>
+        <p className={styles["description"]}>{description}</p>
       </div>
       {date && (
         <>
-          <div className="spacer"></div>
-          <div className="summary-content">
-            <p className="dateTime">{date}</p>
-            <p className="dateTimeFinish">{title}</p>
+          <div className={styles["spacer"]}></div>
+          <div className={styles["summary-content"]}>
+            <p className={styles["dateTime"]}>{date}</p>
+            <p className={styles["dateTimeFinish"]}>{title}</p>
           </div>
         </>
       )}

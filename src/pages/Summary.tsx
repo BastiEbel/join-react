@@ -1,4 +1,4 @@
-import "../components/css/Summary.css";
+import styles from "../components/css/Summary.module.css";
 import ContainerSummary from "../components/layout/ContainerSummary";
 import { useData } from "../hooks/useData";
 import { summaryData } from "../types/data";
@@ -19,13 +19,13 @@ export default function Summary() {
 
   return (
     <section>
-      <header className="oversign">
+      <header className={styles["oversign"]}>
         <h1>Join 360</h1>
-        <div className="dash"></div>
+        <div className={styles["dash"]}></div>
         <h2>Key Metrics at a Glance</h2>
       </header>
-      <main className="container-summary">
-        <div className="summary-grid">
+      <main className={styles["container-summary"]}>
+        <div className={styles["summary-grid"]}>
           {summaryData.map((item) => (
             <ContainerSummary
               key={item.id}
@@ -35,11 +35,11 @@ export default function Summary() {
               date={item.date}
               title={item.title}
               width={item.width}
-              className="summary-item"
+              className={styles["summary-item"]}
             />
           ))}
         </div>
-        <div className="container-greeting">
+        <div className={styles["container-greeting"]}>
           <h3>{greetingHandler()},</h3>
           <h4>{user.name}</h4>
         </div>

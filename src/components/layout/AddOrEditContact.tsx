@@ -6,7 +6,7 @@ import hoverclear from "../../assets/image/hoverclear.png";
 import person from "../../assets/image/person.png";
 import mail from "../../assets/image/mail.png";
 import phone from "../../assets/image/call.png";
-import "../css/AddOrEdit.css";
+import styles from "../css/AddOrEdit.module.css";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import { useCallback, useEffect, useState } from "react";
@@ -19,13 +19,13 @@ import { useContactValidation } from "../../hooks/useValidation";
 interface AddOrEditProps {
   onClose: () => void;
   addContact: boolean;
-  contactData?: ContactData;
+  contactDataInfo?: ContactData;
 }
-function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
+function AddOrEdit({ onClose, addContact, contactDataInfo }: AddOrEditProps) {
   const { id } = useParams();
-  const { addContactData, updateContactDataDB } = useData();
+  const { addContactData, updateContactDataDB, setErrors, contactData } =
+    useData();
   const [changeImage, setChangeImage] = useState<string>(clear);
-  const { setErrors } = useData();
   const [inputData, setInputData] = useState<ContactData>({
     userId: "",
     name: "",
@@ -48,17 +48,17 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
         phone: "",
         zipCode: "+49",
       });
-    } else if (contactData) {
+    } else if (contactDataInfo) {
       setInputData({
-        id: contactData.id,
-        userId: contactData.userId,
-        name: contactData.name,
-        email: contactData.email,
-        phone: contactData.phone,
-        zipCode: contactData.zipCode,
+        id: contactDataInfo.id,
+        userId: contactDataInfo.userId,
+        name: contactDataInfo.name,
+        email: contactDataInfo.email,
+        phone: contactDataInfo.phone,
+        zipCode: contactDataInfo.zipCode,
       });
     }
-  }, [addContact, contactData, id]);
+  }, [addContact, contactDataInfo, id]);
 
   const onClearHandler = useCallback(() => {
     setInputData({
@@ -138,6 +138,18 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
       return;
     }
     if (addContact) {
+      const exists = contactData.some(
+        (contact) =>
+          contact.userId === id &&
+          contact.name === inputData.name &&
+          contact.email === inputData.email &&
+          contact.phone === inputData.phone &&
+          contact.zipCode === inputData.zipCode
+      );
+      if (exists) {
+        alert("Contact already exists.");
+        return;
+      }
       const newContact = {
         userId: id,
         name: inputData.name,
@@ -157,31 +169,37 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
   }
 
   return (
-    <div className="container-addOrEdit">
-      <div className="oversign-addOrEdit">
-        <img className="contact-logo" src={joinLogoWhite} alt="Join Logo" />
-        <h1 className="title-name">
+    <div className={styles["container-addOrEdit"]}>
+      <div className={styles["oversign-addOrEdit"]}>
+        <img
+          className={styles["contact-logo"]}
+          src={joinLogoWhite}
+          alt="Join Logo"
+        />
+        <h1 className={styles["title-name"]}>
           {addContact ? "Add Contact" : "Edit Contact"}
         </h1>
-        {addContact && <p className="add-text">Task are better with a Team!</p>}
-        <div className="contact-spacer"></div>
+        {addContact && (
+          <p className={styles["add-text"]}>Task are better with a Team!</p>
+        )}
+        <div className={styles["contact-spacer"]}></div>
       </div>
-      <img className="profilImage" src={profilIcon} alt="Profil" />
+      <img className={styles["profilImage"]} src={profilIcon} alt="Profil" />
       <img
         onClick={onCancelHandler}
         onMouseOver={() => setChangeImage(hoverclear)}
         onMouseLeave={() => setChangeImage(clear)}
-        className="cancelImage"
+        className={styles["cancelImage"]}
         src={changeImage}
         alt="Close"
       />
       <div>
-        <form className="form-contact" action="">
+        <form className={styles["form-contact"]} action="">
           {(["name", "email", "phone"] as Array<keyof ContactData>).map(
             (field) => (
               <div
                 key={field}
-                className={`container-input ${
+                className={`${styles["container-input"]} ${
                   isFocused[field] ? "focused" : ""
                 }`}
               >
@@ -192,7 +210,7 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
                   />
                 )}
                 <Input
-                  className="input-contact"
+                  className={styles["input-contact"]}
                   icon={
                     field === "name"
                       ? person
@@ -219,17 +237,20 @@ function AddOrEdit({ onClose, addContact, contactData }: AddOrEditProps) {
             )
           )}
         </form>
-        <div className="container-btn">
+        <div className={styles["container-btn"]}>
           <Button
             mouseOver={(e) => onMouseOverHandler(e)}
             mouseLeave={(e) => onMouseLeaveHandler(e)}
             onClick={onCancelHandler}
-            className="cancel-btn"
+            className={styles["cancel-btn"]}
           >
             Cancel
             <img src={clear} alt="X" />
           </Button>
-          <Button onClick={onAddContactHandler} className="add-contact-btn">
+          <Button
+            onClick={onAddContactHandler}
+            className={styles["add-contact-btn"]}
+          >
             {buttonName}
             <img src={check} alt="X" />
           </Button>
